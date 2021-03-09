@@ -80,7 +80,7 @@ if platform == "android":
     network_state = network_state()
     """To check if device has a data connection both for wifi and cellular
     from kvdroid import network_state
-    print(network_state())"""
+    print(network_state)"""
     
     def dark_mode():
         config = activity.getResources().getConfiguration()

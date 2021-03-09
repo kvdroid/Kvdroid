@@ -29,7 +29,7 @@ print(screen.height_px())
 To check if device has a data connection both for wifi and cellular
 ```python
 from kvdroid import network_state
-print(network_state())
+print(network_state
 ```
 To check if device is  in dark mode or not
 ```python
@@ -98,7 +98,7 @@ To use text-to-speech
 from kvdroid import speech
 speech("hello world", "en")
 ```
-To use default download manager
+To use default Download Manager
 ```python
 from kvdroid import download_manager
 download_manager(<title>,<description>,<URL>,<path>,<file>)
