@@ -21,6 +21,18 @@ if platform == "android":
         Logger.error(
             "Kvdroid: Cannot load classes by Pyjnius. Make sure requirements installed"
         )
+        
+    def keyboard_height():
+        try:
+            rctx = autoclass('android.graphics.Rect')()
+            decor_view = activity.getWindow().getDecorView()
+            height = activity.getWindowManager().getDefaultDisplay().getHeight()
+            decor_view.getWindowVisibleDisplayFrame(rctx)
+            return height - rctx.bottom
+        except:
+            return 0
+    keyboard_height = keyboard_height()
+            
 
     def app_source():
         packageName = activity.getPackageName()
@@ -30,10 +42,6 @@ if platform == "android":
         else:
             return "unknown"
     app_source = app_source()
-    """To detect if target app installed from PlayStore or not
-    from kvdroid import app_source
-    print(app_source)
-    >> playstore"""
 
     class Metrics(object):
         config = activity.getResources().getConfiguration()
@@ -57,10 +65,6 @@ if platform == "android":
             else:
                  return "landscape"
     screen  = Metrics()
-    """To get screen size in dp or pixel and detect current orientation
-    from kvdroid import screen
-    print(screen.orientation())
-    >> potrait"""
     
     def network_state():
         ConnectivityManager = autoclass('android.net.ConnectivityManager')
@@ -78,9 +82,6 @@ if platform == "android":
         except:
              return False
     network_state = network_state()
-    """To check if device has a data connection both for wifi and cellular
-    from kvdroid import network_state
-    print(network_state)"""
     
     def dark_mode():
         config = activity.getResources().getConfiguration()
@@ -93,9 +94,6 @@ if platform == "android":
         elif night_mode_flags == Configuration.UI_MODE_NIGHT_UNDEFINED:
             return False
     dark_mode = dark_mode()
-    """To check if device is  in dark mode or not
-    from kvdroid import dark_mode
-    print(dark_mode)"""
         
     def device_info(yaz):
         os = {
@@ -113,11 +111,7 @@ if platform == "android":
             'sdk_int': VERSION.SDK_INT
         }
         return os[yaz]
-    """To get device's informations
-    from kvdroid import device_info
-    print(device_info("model"))"""
     
-
     @run_on_ui_thread
     def immersive_mode(immerse = None):
         if not immerse:
@@ -137,9 +131,6 @@ if platform == "android":
                 return window.getDecorView().setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_VISIBLE)
                             
-    """To enable immersive mode
-    from kvdroid import immersive_mode
-    immersive_mode(True)"""
        
     def launch_app(app_package, app_activity):
         Intent = autoclass('android.content.Intent')
@@ -147,10 +138,7 @@ if platform == "android":
         intent.setAction(Intent.ACTION_VIEW)    
         intent.setClassName(app_package, app_activity)
         return activity.startActivity(intent)
-        
-    """To launch a specific app
-    from kvdroid import launch_app  
-    launch_app(<app_package>,<app_activity>)"""
+
     
     def app_details(app_package):
         Provider = autoclass('android.provider.Settings')
@@ -161,18 +149,11 @@ if platform == "android":
         uri = Uri.parse("package:"+app_package)           
         intent.setData(uri)
         activity.startActivity(intent)
-        
-    """To open target app's details page
-    from kvdroid import app_details
-    app_details(<app_package>)"""
     
     def device_lang():
         Locale = autoclass('java.util.Locale')
         return Locale.getDefault().getLanguage()
     device_lang = device_lang()
-    """To detect current device's language
-    from kvdroid import device_lang
-    print(device_lang)"""
 
     @run_on_ui_thread
     def statusbar_color(color,text_color):
@@ -186,39 +167,24 @@ if platform == "android":
     	window.clearFlags(WindowManager.FLAG_TRANSLUCENT_STATUS)
     	window.addFlags(WindowManager.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     	window.setStatusBarColor(Color.parseColor(str(color)))
-    """To deternine statusbar color
-    from kvdroid import statusbar_color
-    statusbar_color("#FFFFFF","black")"""
     
     @run_on_ui_thread
     def navbar_color(color):
         window = activity.getWindow()
         window.setNavigationBarColor(Color.parseColor(str(color)))
-    """To deternine navigationbar color
-    from kvdroid import nav_bar_color
-    navbar_color("#FFFFFF")"""
     
     def toast(message):
         return PythonActivity.toastError(str(message))
-    """To show a toast message
-    from kvdroid import toast
-    toast("hello world")"""
-    
+
     def sdcard():
     	Environment = autoclass("android.os.Environment")
     	return Environment.getExternalStorageDirectory().toString()
     sdcard = sdcard()
-    """To get absolute sdcard path
-    from kvdroid import sdcard
-    print(sdcard)"""
 
     def path():
         import os
         return os.path.dirname(os.path.abspath(__file__))
     app_folder = path()
-    """To get path of working app folder
-    from kvdroid import app_folder
-    print(app_folder)"""
 
     def set_wallpaper(path_to_image):
         context = cast('android.content.Context', activity.getApplicationContext())	
@@ -229,9 +195,6 @@ if platform == "android":
         WallpaperManager = autoclass('android.app.WallpaperManager')
         manager = WallpaperManager.getInstance(context)
         return manager.setBitmap(bitmap)
-    """To change default wallpaper
-    from kvdroid import wallpaper
-    set_wallpaper("/sdcard/test.jpg")"""
 
     def speech(text,lang):
         Locale = autoclass('java.util.Locale')
@@ -239,9 +202,6 @@ if platform == "android":
         tts = TextToSpeech(activity, None)
         tts.setLanguage(Locale(str(lang)))
         return tts.speak(str(text), TextToSpeech.QUEUE_FLUSH, None)
-    """To use text to speech
-    from kvdroid import speech
-    speech("hello world", "en")"""
     
     def download_manager(title,description,url,folder,file_name):
         Context = autoclass('android.content.Context')
@@ -255,9 +215,6 @@ if platform == "android":
         request.setNotificationVisibility(Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setDestinationInExternalPublicDir(str(folder), str(file_name))
         dm.enqueue(request)
-    """To use default download manager
-    from kvdroid import download_manager
-    download_manager(<title>,<description>,<URL>,<path>,<file>)"""
 
     def restart_app(restart=False):
         if not restart:
@@ -275,9 +232,6 @@ if platform == "android":
             mainIntent = Intent.makeRestartActivityTask(componentName)
             context.startActivity(mainIntent)
             Runtime.getRuntime().exit(0)
-    """To restart the app
-    from kvdroid import restart_app
-    restart_app(True)"""
        
     def share_text(text):
         Intent = autoclass('android.content.Intent')
@@ -288,9 +242,6 @@ if platform == "android":
         intent.setType("text/plain")
         chooser = Intent.createChooser(intent, String('Share'))
         activity.startActivity(chooser)
-    """To share text via Android Share menu
-    from kvdroid import share_text
-    share_text(<str>)"""
    
     def share_file(text):
         path = str(text)
@@ -308,10 +259,6 @@ if platform == "android":
         shareIntent.putExtra(Intent.EXTRA_STREAM, parcelable)    
         currentActivity = cast('android.app.Activity', activity)
         currentActivity.startActivity(shareIntent)
-    """To share any file via Android Share menu
-    from kvdroid import share_file
-    share_file(<path-and-file>)
-    share_file("/sdcard/test.pdf")"""  
 
     class Player(object):
         MediaPlayer = autoclass('android.media.MediaPlayer')
@@ -378,10 +325,6 @@ if platform == "android":
             else:
                 return False        
     player = Player()
-    """To play suported music or radio stream through Android Media Player
-    from kvdroid import player
-    player.play(<path-to-music-file>)
-    player.raw == Andriod Media Player"""
 
 else:
     Logger.error(

@@ -9,8 +9,8 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 setup(
     name = 'kvdroid',
     packages = ['.'],
-    version = '0.1.3',
-    description = 'Some Android tools for Kivy developments',
+    version = '0.1.5',
+    description = 'Some Pyjnius tools for Kivy-Android developments',
     long_description=long_description,
     long_description_content_type='text/markdown',
     author = 'Yunus Ceyhan',

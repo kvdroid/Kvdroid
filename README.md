@@ -14,6 +14,11 @@ kivy, android, jnius
 pip install kvdroid
 ```
 ### Usage
+To detect keyboard height
+```python
+from kvdroid import keyboard_height
+print(keyboard_height)
+```
 To detect if app is installed from Play Store or not
 ```python
 from kvdroid import app_source
@@ -29,7 +34,7 @@ print(screen.height_px())
 To check if device has a data connection both for wifi and cellular
 ```python
 from kvdroid import network_state
-print(network_state
+print(network_state)
 ```
 To check if device is  in dark mode or not
 ```python
