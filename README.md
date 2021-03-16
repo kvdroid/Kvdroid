@@ -17,7 +17,7 @@ pip install kvdroid
 To detect keyboard height
 ```python
 from kvdroid import keyboard_height
-print(keyboard_height)
+print(keyboard_height())
 ```
 To detect if app is installed from Play Store or not
 ```python

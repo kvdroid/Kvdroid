@@ -31,9 +31,7 @@ if platform == "android":
             return height - rctx.bottom
         except:
             return 0
-    keyboard_height = keyboard_height()
             
-
     def app_source():
         packageName = activity.getPackageName()
         installer =  activity.getPackageManager().getInstallerPackageName(packageName)
