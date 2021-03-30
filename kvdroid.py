@@ -76,14 +76,19 @@ if platform == "android":
     print("Metrics check..")
     
     def network_state():
+        print("---inside network check----")
         ConnectivityManager = autoclass('android.net.ConnectivityManager')
+        print("\tConnectivityManager check...")
         con_mgr = activity.getSystemService(AndroidActivity.CONNECTIVITY_SERVICE)
+        print("\tcon_mgr check...")
         conn = con_mgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting()
+        print("\tconn check....")
         try:
             if conn:
                 return True
             else:
                 conn = con_mgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting()
+                print("\conn again check...")
                 if conn:
                     return True
                 else:
