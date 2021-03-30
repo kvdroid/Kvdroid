@@ -90,7 +90,7 @@ print(sdcard)
 ```
 To get path of working app folder
 ```python
-from kvdroid import app_folder
+from kvdroid.path import app_folder
 print(app_folder)
 ```
 To change default wallpaper
@@ -127,7 +127,7 @@ share_file("/sdcard/test.pdf")
 To play suported music format or radio stream through Android Media Player
 ```player.mPLayer = Android Media PLayer```
 ```python
-from kvdroid import player
+from kvdroid.audioplayer import player
 player.play(<path-to-music-file>)
 player.stream(Url) # radio
 player.pause()
