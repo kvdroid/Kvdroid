@@ -1,4 +1,4 @@
-from kvdroid import ConnectivityManager
+from kvdroid import ConnectivityManager, con_mgr
 
 
 def network_state():
