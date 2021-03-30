@@ -39,6 +39,7 @@ if platform == "android":
         parcelable = cast('android.os.Parcelable', uri)
         context = cast('android.content.Context', activity.getApplicationContext())	
         dm = cast("android.app.DownloadManager",activity.getSystemService(Context.DOWNLOAD_SERVICE))
+        con_mgr = activity.getSystemService(AndroidActivity.CONNECTIVITY_SERVICE)
         
     except BaseException:
         Logger.error(
