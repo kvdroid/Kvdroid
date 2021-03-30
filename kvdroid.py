@@ -49,6 +49,7 @@ if platform == "android":
         else:
             return "unknown"
     app_source = app_source()
+    print("app_source check...")
 
     class Metrics(object):
         config = activity.getResources().getConfiguration()
@@ -72,6 +73,7 @@ if platform == "android":
             else:
                  return "landscape"
     screen  = Metrics()
+    print("Metrics check..")
     
     def network_state():
         ConnectivityManager = autoclass('android.net.ConnectivityManager')
@@ -89,6 +91,7 @@ if platform == "android":
         except:
              return False
     network_state = network_state()
+    print("network_state check...")
     
     def dark_mode():
         config = activity.getResources().getConfiguration()
@@ -101,6 +104,7 @@ if platform == "android":
         elif night_mode_flags == Configuration.UI_MODE_NIGHT_UNDEFINED:
             return False
     dark_mode = dark_mode()
+    print("dark_mode check...")
         
     def device_info(yaz):
         os = {
@@ -161,6 +165,7 @@ if platform == "android":
         Locale = autoclass('java.util.Locale')
         return Locale.getDefault().getLanguage()
     device_lang = device_lang()
+    print("device_lang check...")
 
     @run_on_ui_thread
     def statusbar_color(color,text_color):
@@ -187,11 +192,13 @@ if platform == "android":
     	Environment = autoclass("android.os.Environment")
     	return Environment.getExternalStorageDirectory().toString()
     sdcard = sdcard()
+    print("sdcard check..")
 
     def path():
         import os
         return os.path.dirname(os.path.abspath(__file__))
     app_folder = path()
+    print("app_folder check...")
 
     def set_wallpaper(path_to_image):
         context = cast('android.content.Context', activity.getApplicationContext())	
@@ -332,6 +339,7 @@ if platform == "android":
             else:
                 return False        
     player = Player()
+    print("player check...")
 
 else:
     Logger.error(
