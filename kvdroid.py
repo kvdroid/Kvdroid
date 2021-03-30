@@ -6,16 +6,25 @@ if platform == "android":
         from kivy.core.window import Window
         from jnius import autoclass,cast
         from android.runnable import run_on_ui_thread 
-        
+        print("starting checks")
         AndroidActivity = autoclass('android.app.Activity')
+        print("AndroidActivity check.....")
         PythonActivity = autoclass('org.kivy.android.PythonActivity')
-        activity = PythonActivity.mActivity        
+        print("PythonActivity check.....")
+        activity = PythonActivity.mActivity
+        print("activity check.....")
         Build = autoclass("android.os.Build")
+        print("Build check.....")
         VERSION = autoclass('android.os.Build$VERSION')
-        VERSION_CODES = autoclass("android.os.Build$VERSION_CODES")        
-        View = autoclass('android.view.View')        
+        print("VERSION check.....")
+        VERSION_CODES = autoclass("android.os.Build$VERSION_CODES")
+        print("VERSION_CODES check.....")
+        View = autoclass('android.view.View')   
+        print("View check.....")
         Color = autoclass("android.graphics.Color")
+        print("Color check.....")
         WindowManager = autoclass('android.view.WindowManager$LayoutParams')
+        print("WindowManager check.....")
         
     except BaseException:
         Logger.error(
