@@ -85,7 +85,7 @@ toast("hello world")
 ```
 To get absolute sdcard path
 ```python
-from kvdroid.sdcard import sdcard
+from kvdroid.path import sdcard
 print(sdcard)
 ```
 To get path of working app folder
