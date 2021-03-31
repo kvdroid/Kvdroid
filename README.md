@@ -21,24 +21,24 @@ print(keyboard_height())
 ```
 To detect if app is installed from Play Store or not
 ```python
-from kvdroid import app_source
+from kvdroid.appsource import app_source
 print(app_source)
 ```
 To get absolute screen size in dp-pixel and detect current orientation
 ```python
-from kvdroid import screen
+from kvdroid.metrics import screen
 print(screen.orientation())
 print(screen.width_dp())
 print(screen.height_px())
 ```
 To check if device has a data connection both for wifi and cellular
 ```python
-from kvdroid import network_state
+from kvdroid.networkstate import network_state
 print(network_state)
 ```
 To check if device is  in dark mode or not
 ```python
-from kvdroid import dark_mode
+from kvdroid.darkmode import dark_mode
 print(dark_mode)
 ```
 To get device informations.
@@ -65,7 +65,7 @@ app_details(<app_package>)
 ```
 To detect current device's language
 ```python
-from kvdroid import device_lang
+from kvdroid.devicelang import device_lang
 print(device_lang)
 ```
 To set statusbar color
@@ -85,12 +85,12 @@ toast("hello world")
 ```
 To get absolute sdcard path
 ```python
-from kvdroid import sdcard
+from kvdroid.sdcard import sdcard
 print(sdcard)
 ```
 To get path of working app folder
 ```python
-from kvdroid import app_folder
+from kvdroid.path import app_folder
 print(app_folder)
 ```
 To change default wallpaper
@@ -127,7 +127,7 @@ share_file("/sdcard/test.pdf")
 To play suported music format or radio stream through Android Media Player
 ```player.mPLayer = Android Media PLayer```
 ```python
-from kvdroid import player
+from kvdroid.audioplayer import player
 player.play(<path-to-music-file>)
 player.stream(Url) # radio
 player.pause()
@@ -136,7 +136,7 @@ player.seek(value)
 player.do_loop(True) # default is False
 player.is_playing()
 player.get_duration()
-player.current_possition()
+player.current_position()
 ```
 ### License
 MIT
