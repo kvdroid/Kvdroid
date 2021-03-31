@@ -136,7 +136,7 @@ player.seek(value)
 player.do_loop(True) # default is False
 player.is_playing()
 player.get_duration()
-player.current_possition()
+player.current_position()
 ```
 ### License
 MIT

@@ -2,11 +2,13 @@ from kvdroid import AudioManager, MediaPlayer
 
 
 class Player(object):
-    mPlayer = MediaPlayer()                
+    mPlayer = MediaPlayer()
+    content = None
+
     def raw(self):
         return self.mPlayer
 
-    def play(self,content):
+    def play(self, content):
         self.content = str(content)
         try:
             self.mPlayer.stop()
@@ -26,9 +28,9 @@ class Player(object):
     def stop(self):
         self.mPlayer.stop()
 
-    def stream(self,content):
+    def stream(self, content):
         self.content = str(content)
-        self.mPlayer.setAudioStreamType(self.AudioManager.STREAM_MUSIC)
+        self.mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
         try:
             self.mPlayer.stop()
             self.mPlayer.reset()
@@ -42,22 +44,24 @@ class Player(object):
         if self.content:
             return self.mPlayer.getDuration()
 
-    def current_possition(self):
-        if self.content: 
+    def current_position(self):
+        if self.content:
             return self.mPlayer.getCurrentPosition()
 
-    def seek(self,value):
+    def seek(self, value):
         try:
             self.mPlayer.seekTo(int(value) * 1000)
         except:
             pass
 
-    def do_loop(self,loop = False):
+    def do_loop(self, loop=False):
         if not loop:
             self.mPlayer.setLooping(False)
         else:
             self.mPlayer.setLooping(True)
 
     def is_playing(self):
-        return self.mPlayer.isPlaying       
+        return self.mPlayer.isPlaying
+
+
 player = Player()
