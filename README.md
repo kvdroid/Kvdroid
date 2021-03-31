@@ -41,8 +41,8 @@ To check if device is  in dark mode or not
 from kvdroid.darkmode import dark_mode
 print(dark_mode)
 ```
-To get device's informations
-Available options ```
+To get device informations.
+Available options are ```
 'model','brand','manufacturer','version','sdk','product','base','rom','security','hardware','tags','sdk_int'```
 ```python
 from kvdroid import device_info
@@ -85,7 +85,7 @@ toast("hello world")
 ```
 To get absolute sdcard path
 ```python
-from kvdroid.sdcard import sdcard
+from kvdroid.path import sdcard
 print(sdcard)
 ```
 To get path of working app folder
@@ -95,7 +95,7 @@ print(app_folder)
 ```
 To change default wallpaper
 ```python
-from kvdroid import wallpaper
+from kvdroid import set_wallpaper
 set_wallpaper("/sdcard/test.jpg")
 ```
 To use text-to-speech
