@@ -159,17 +159,17 @@ if platform == "android":
             Runtime.getRuntime().exit(0)
 
 
-    def share_text(text):
+    def share_text(text, title='Share'):
         intent = Intent()
         intent.setAction(Intent.ACTION_SEND)
         intent.putExtra(Intent.EXTRA_TEXT, String(str(text)))
         intent.setType("text/plain")
-        chooser = Intent.createChooser(intent, String('Share'))
+        chooser = Intent.createChooser(intent, String(title))
         activity.startActivity(chooser)
 
 
-    def share_file(text):
-        path = str(text)
+    def share_file(path, title='Share', chooser=False, app_package=None):
+        path = str(path)
         StrictMode.disableDeathOnFileUriExposure()
         shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.setType("*/*")
@@ -178,7 +178,20 @@ if platform == "android":
         parcelable = cast('android.os.Parcelable', uri)
         shareIntent.putExtra(Intent.EXTRA_STREAM, parcelable)
         currentActivity = cast('android.app.Activity', activity)
-        currentActivity.startActivity(shareIntent)
+
+        if not app_package:
+            try:
+                shareIntent.setPackage(String(app_package))
+            except Exception as e:
+                Logger.error(
+                    f"Kvdroid: Specified Application is unavailable, {e}"
+                )
+
+        if chooser:
+            chooser = Intent.createChooser(shareIntent, String(title))
+            currentActivity.startActivity(chooser)
+        else:
+            currentActivity.startActivity(shareIntent)
 
 
 else:

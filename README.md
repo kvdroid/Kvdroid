@@ -116,13 +116,13 @@ restart_app(True) # default is false
 To share text via Android Share menu
 ```python
 from kvdroid import share_text
-share_text("hello world")
+share_text("hello world", title="Share")
 ```
 To share any file via Android Share menu
 ```python
 from kvdroid import share_file
-share_file(<path-to-file>)
-share_file("/sdcard/test.pdf")
+share_file(<path-to-file>, <title>, <chooser>, <app-package: open-with-default-app>)
+share_file("/sdcard/test.pdf", title='Share', chooser=False, app_package=None)
 ```
 To play suported music format or radio stream through Android Media Player
 ```player.mPLayer = Android Media PLayer```
