@@ -168,7 +168,7 @@ if platform == "android":
         activity.startActivity(chooser)
 
 
-    def share_file(path,title='Share', chooser=False, app_package=None):
+    def share_file(path, title='Share', chooser=False, app_package=None):
         path = str(path)
         StrictMode.disableDeathOnFileUriExposure()
         shareIntent = Intent(Intent.ACTION_SEND)
