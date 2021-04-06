@@ -33,7 +33,7 @@ print(screen.height_px())
 ```
 To check if device has a data connection both for wifi and cellular
 ```python
-from kvdroid.networkstate import network_state
+from kvdroid.network import network_state
 print(network_state)
 ```
 To check if device is  in dark mode or not
@@ -65,7 +65,7 @@ app_details(<app_package>)
 ```
 To detect current device's language
 ```python
-from kvdroid.devicelang import device_lang
+from kvdroid.lang import device_lang
 print(device_lang)
 ```
 To set statusbar color
@@ -116,18 +116,18 @@ restart_app(True) # default is false
 To share text via Android Share menu
 ```python
 from kvdroid import share_text
-share_text("hello world")
+share_text("hello world", title="Share")
 ```
 To share any file via Android Share menu
 ```python
 from kvdroid import share_file
-share_file(<path-to-file>)
-share_file("/sdcard/test.pdf")
+share_file(<path-to-file>, <title>, <chooser>, <app-package: open-with-default-app>)
+share_file("/sdcard/test.pdf", title='Share', chooser=False, app_package=None)
 ```
 To play suported music format or radio stream through Android Media Player
 ```player.mPLayer = Android Media PLayer```
 ```python
-from kvdroid.audioplayer import player
+from kvdroid.audio import player
 player.play(<path-to-music-file>)
 player.stream(Url) # radio
 player.pause()
