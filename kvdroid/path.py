@@ -14,3 +14,10 @@ def sdcard():
 
 
 sdcard = sdcard()
+
+
+def external_sdcard():
+    return os.path.join("/storage", os.listdir("/storage")[1])
+
+
+external_sdcard = external_sdcard()
