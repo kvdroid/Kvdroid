@@ -38,7 +38,13 @@ if platform == "android":
         StrictMode = autoclass('android.os.StrictMode')
         MediaPlayer = autoclass('android.media.MediaPlayer')
         AudioManager = autoclass('android.media.AudioManager')
-        rctx = autoclass('android.graphics.Rect')()
+        Rect = autoclass('android.graphics.Rect')()
+        StatFs = autoclass("android.os.StatFs")
+        MemoryInfo = autoclass('android.app.ActivityManager$MemoryInfo')
+        BatteryManager = autoclass("android.os.BatteryManager")
+        IntentFilter = autoclass("android.content.IntentFilter")
+        Point = autoclass("android.graphics.Point")
+
         packages = {
             "whatsapp": "com.whatsapp",
             "facebook": "com.facebook.katana",
@@ -66,13 +72,78 @@ if platform == "android":
         try:
             decor_view = activity.getWindow().getDecorView()
             height = activity.getWindowManager().getDefaultDisplay().getHeight()
-            decor_view.getWindowVisibleDisplayFrame(rctx)
-            return height - rctx.bottom
+            decor_view.getWindowVisibleDisplayFrame(Rect)
+            return height - Rect.bottom
         except:
             return 0
 
 
-    def device_info(yaz):
+    def device_info(text,convert = False):
+        bm = activity.getSystemService(Context.BATTERY_SERVICE)        
+        count = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER)
+        cap = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)        
+        intent = activity.registerReceiver(None, IntentFilter(Intent.ACTION_BATTERY_CHANGED)) 
+        
+        def convert_bytes(num):
+            step_unit = 1000.0 #1024 bad the size
+            for x in ['bytes', 'KB', 'MB', 'GB', 'TB']:
+                if num < step_unit:
+                    return "%3.1f %s" % (num, x)
+                num /= step_unit
+                
+        def avail_mem():
+            stat = StatFs(Environment.getDataDirectory().getPath())
+            bytesAvailable = stat.getBlockSize() * stat.getAvailableBlocks()
+            if convert:
+                return convert_bytes(bytesAvailable)
+            else:
+                return bytesAvailable
+                
+            
+        def total_mem():
+            stat = StatFs(Environment.getDataDirectory().getPath())
+            bytesAvailable = stat.getBlockSize() *stat.getBlockCount()
+            if convert:
+                return convert_bytes(bytesAvailable)
+            else:
+                return bytesAvailable
+                
+        def used_mem():
+            stat = StatFs(Environment.getDataDirectory().getPath())
+            total = stat.getBlockSize() *stat.getBlockCount()            
+            avail = stat.getBlockSize() * stat.getAvailableBlocks()
+            if convert:
+                return convert_bytes(total - avail)
+            else:
+                return total - avail
+                            
+        def avail_ram():
+            memInfo = MemoryInfo()
+            service = activity.getSystemService(Context.ACTIVITY_SERVICE)
+            service.getMemoryInfo(memInfo)
+            if convert:
+                return convert_bytes(memInfo.availMem)
+            else:
+                return memInfo.availMem
+            
+        def total_ram():
+            memInfo = MemoryInfo()
+            service = activity.getSystemService(Context.ACTIVITY_SERVICE)
+            service.getMemoryInfo(memInfo)
+            if convert:
+                return convert_bytes(memInfo.totalMem)
+            else:
+                return memInfo.totalMem
+                
+        def used_ram():
+            memInfo = MemoryInfo()
+            service = activity.getSystemService(Context.ACTIVITY_SERVICE)
+            service.getMemoryInfo(memInfo)
+            if convert:
+                return convert_bytes(memInfo.totalMem - memInfo.availMem)
+            else:
+                return memInfo.totalMem - memInfo.availMem
+                
         os = {
             'model': Build.MODEL,
             'brand': Build.BRAND,
@@ -85,9 +156,22 @@ if platform == "android":
             'security': VERSION.SECURITY_PATCH,
             'hardware': Build.HARDWARE,
             'tags': Build.TAGS,
-            'sdk_int': VERSION.SDK_INT
+            'sdk_int': VERSION.SDK_INT,
+            'cpu_abi': Build.CPU_ABI,
+            'cpu_cores': Runtime.getRuntime().availableProcessors(),
+            'avail_mem': avail_mem(),
+            'total_mem': total_mem(),
+            'used_mem': used_mem(),
+            'avail_ram': avail_ram(),
+            'total_ram': total_ram(),
+            'used_ram': used_ram(),
+            'bat_level': bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY),
+            'bat_capacity': round((count/cap)*100),
+            'bat_tempeture': intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE,0) / 10,
+            'bat_voltage': float(intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE,0) * 0.001),
+            'bat_technology': intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY)
         }
-        return os[yaz]
+        return os[text]
 
 
     @run_on_ui_thread
