@@ -10,7 +10,7 @@ kivy, android, jnius
  ```
 ### Installation
 
-```
+```python
 pip install kvdroid
 ```
 ### Usage
@@ -30,6 +30,7 @@ from kvdroid.metrics import screen
 print(screen.orientation())
 print(screen.width_dp())
 print(screen.height_px())
+print(screen.resolution())
 ```
 To check if device has a data connection both for wifi and cellular
 ```python
@@ -43,10 +44,11 @@ print(dark_mode)
 ```
 To get device informations.
 Available options are ```
-'model','brand','manufacturer','version','sdk','product','base','rom','security','hardware','tags','sdk_int'```
+'model','brand','manufacturer','version','sdk','product','base','rom','security','hardware','tags','sdk_int','total_mem','used_mem','avail_ram','total_ram','used_ram','bat_level','bat_capacity','bat_tempeture','bat_voltage','bat_technology'```
 ```python
 from kvdroid import device_info
 print(device_info("model"))
+print(device_info("avail_ram",convert = True))
 ```
 To enable immersive mode
 ```python
@@ -88,46 +90,10 @@ To get absolute sdcard path
 from kvdroid.path import sdcard
 print(sdcard)
 ```
-To get absolute external_sdcard
-```python
-from kvdroid.path import external_sdcard
-print(external_sdcard)
-```
 To get path of working app folder
 ```python
 from kvdroid.path import app_folder
 print(app_folder)
-
-```
-To get file mime Type
-```python
-from kvdroid import mime_type
-mime_type = mime_type(file_path)
-print(mime_type)
-```
-To cast Java Object
-```python
-from kvdroid.cast import cast_object
-from kvdroid import Uri
-uri = Uri.fromFile("/home/java/my_document.pdf")
-parcelable = cast_object("parcelable", uri)
-
-# Above code  is same as below code::
-
-from kvdroid.cast import cast_object
-from kvdroid import Uri
-from jnius import cast
-uri = Uri.fromFile("/home/java/my_document.pdf")
-parcelable = cast("android.os.Parcelabel", uri)
-
-'''
- the difference is, you dont have to remember the package name, just only the name and 
- you are good to go. This will also be helpful for python devs who do have zero knowledge on java
- 
- Note:: 
- not all castable java object are included you can open an issue to include all missing 
- castables
-'''
 ```
 To change default wallpaper
 ```python
@@ -152,16 +118,13 @@ restart_app(True) # default is false
 To share text via Android Share menu
 ```python
 from kvdroid import share_text
-share_text("hello world", title="Share", chooser=False, app_package=None, 
-           call_playstore=False, error_msg="application unavailable")
+share_text("hello world", title="Share")
 ```
 To share any file via Android Share menu
 ```python
 from kvdroid import share_file
-share_file(<path-to-file>, <title>, <chooser>, <app-package: open-with-default-app>, 
-    <call_playstore>, <error_msg>)
-share_file("/sdcard/test.pdf", title='Share', chooser=False, app_package=None, 
-           call_playstore=False, error_msg="application unavailable")
+share_file(<path-to-file>, <title>, <chooser>, <app-package: open-with-default-app>)
+share_file("/sdcard/test.pdf", title='Share', chooser=False, app_package=None)
 ```
 To play suported music format or radio stream through Android Media Player
 ```player.mPLayer = Android Media PLayer```
