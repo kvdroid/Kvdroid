@@ -1,10 +1,12 @@
+import webbrowser
+
 from kivy.utils import platform
 from kivy.logger import Logger
 
 if platform == "android":
     try:
         from kivy.core.window import Window
-        from jnius import autoclass, cast
+        from jnius import autoclass, cast, JavaException
         from android.runnable import run_on_ui_thread
 
         AndroidActivity = autoclass('android.app.Activity')
@@ -18,6 +20,8 @@ if platform == "android":
         WindowManager = autoclass('android.view.WindowManager$LayoutParams')
         Intent = autoclass('android.content.Intent')
         Provider = autoclass('android.provider.Settings')
+        URLConnection = autoclass("java.net.URLConnection")
+        Toast = autoclass('android.widget.Toast')
         Uri = autoclass('android.net.Uri')
         Locale = autoclass('java.util.Locale')
         ConnectivityManager = autoclass('android.net.ConnectivityManager')
@@ -35,6 +39,22 @@ if platform == "android":
         MediaPlayer = autoclass('android.media.MediaPlayer')
         AudioManager = autoclass('android.media.AudioManager')
         rctx = autoclass('android.graphics.Rect')()
+        packages = {
+            "whatsapp": "com.whatsapp",
+            "facebook": "com.facebook.katana",
+            "facebookLite": "com.facebook.lite",
+            "oldFacebook": "com.facebook.android",
+            "linkedin": "com.linkedin.android",
+            "fbMessenger": "com.facebook.orca",
+            "fbMessengerLite": "com.facebook.mlite",
+            "tiktok": "com.zhiliaoapp.musically",
+            "tiktokLite": "com.zhiliaoapp.musically.go",
+            "twitter": "com.twitter.android",
+            "twitterLite": "com.twitter.android.lite",
+            "telegram": "org.telegram.messenger",
+            "telegramX": "org.thunderdog.challegram",
+            "snapchat": "com.snapchat.android"
+        }
 
     except BaseException:
         Logger.error(
@@ -159,16 +179,28 @@ if platform == "android":
             Runtime.getRuntime().exit(0)
 
 
-    def share_text(text, title='Share'):
+    def share_text(text, title='Share', chooser=False, app_package=None, call_playstore=True, error_msg=""):
         intent = Intent()
         intent.setAction(Intent.ACTION_SEND)
         intent.putExtra(Intent.EXTRA_TEXT, String(str(text)))
         intent.setType("text/plain")
-        chooser = Intent.createChooser(intent, String(title))
-        activity.startActivity(chooser)
+        if app_package:
+            app_package = packages[app_package] if app_package in packages else None
+            try:
+                intent.setPackage(String(app_package))
+            except JavaException:
+                if call_playstore:
+                    webbrowser.open(f"http://play.google.com/store/apps/details?id={app_package}")
+                toast(error_msg) if error_msg else Logger.error("Kvdroid: Specified Application is unavailable")
+                return
+        if chooser:
+            chooser = Intent.createChooser(intent, String(title))
+            activity.startActivity(chooser)
+        else:
+            activity.startActivity(intent)
 
 
-    def share_file(path, title='Share', chooser=False, app_package=None):
+    def share_file(path, title='Share', chooser=True, app_package=None, call_playstore=True, error_msg=""):
         path = str(path)
         StrictMode.disableDeathOnFileUriExposure()
         shareIntent = Intent(Intent.ACTION_SEND)
@@ -177,21 +209,26 @@ if platform == "android":
         uri = Uri.fromFile(imageFile)
         parcelable = cast('android.os.Parcelable', uri)
         shareIntent.putExtra(Intent.EXTRA_STREAM, parcelable)
-        currentActivity = cast('android.app.Activity', activity)
 
-        if not app_package:
+        if app_package:
+            app_package = packages[app_package] if app_package in packages else None
             try:
                 shareIntent.setPackage(String(app_package))
-            except Exception as e:
-                Logger.error(
-                    f"Kvdroid: Specified Application is unavailable, {e}"
-                )
+            except JavaException:
+                if call_playstore:
+                    webbrowser.open(f"http://play.google.com/store/apps/details?id={app_package}")
+                toast(error_msg) if error_msg else Logger.error("Kvdroid: Specified Application is unavailable")
+                return
 
         if chooser:
             chooser = Intent.createChooser(shareIntent, String(title))
-            currentActivity.startActivity(chooser)
+            activity.startActivity(chooser)
         else:
-            currentActivity.startActivity(shareIntent)
+            activity.startActivity(shareIntent)
+
+    def mime_type(file_path):
+        return URLConnection.guessContentTypeFromName(file_path)
+
 
 
 else:
