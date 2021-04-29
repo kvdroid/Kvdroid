@@ -88,6 +88,11 @@ To get absolute sdcard path
 from kvdroid.path import sdcard
 print(sdcard)
 ```
+To get absolute external_sdcard
+```python
+from kvdroid.path import external_sdcard
+print(external_sdcard)
+```
 To get path of working app folder
 ```python
 from kvdroid.path import app_folder
