@@ -61,7 +61,7 @@ class Player(object):
             self.mPlayer.setLooping(True)
 
     def is_playing(self):
-        return self.mPlayer.isPlaying
+        return self.mPlayer.isPlaying()
 
 
 player = Player()
