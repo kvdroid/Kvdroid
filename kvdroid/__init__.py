@@ -44,6 +44,10 @@ if platform == "android":
         BatteryManager = autoclass("android.os.BatteryManager")
         IntentFilter = autoclass("android.content.IntentFilter")
         Point = autoclass("android.graphics.Point")
+        CookieManager = autoclass("android.webkit.CookieManager")
+        Contacts = autoclass('android.provider.ContactsContract$Contacts')
+        Phone = autoclass('android.provider.ContactsContract$CommonDataKinds$Phone')
+        ArrayList = autoclass('java.util.ArrayList')
 
         packages = {
             "whatsapp": "com.whatsapp",
