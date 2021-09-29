@@ -198,7 +198,7 @@ To access WebView cookies\
 (i.e if you compiled your app with webview bootstrap or have Webview in your app)
 ```python
 from kvdroid.webkit import get_cookies
-print(get_cookies())
+print(get_cookies("https://google.com"))
 ```
 ### License
 MIT
