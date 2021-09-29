@@ -2,7 +2,14 @@ from kvdroid import activity
 from kvdroid import Phone
 
 
-def get_contact_details():
+def get_contact_details(option: str = "phone_book"):
+    """
+    option accepts this values : "phone_book", "mobile_no", "names"
+
+    :param option: str: used to determine the return value
+    :return: value
+    """
+    value = None
     PROJECTION = ["contact_id", "display_name", Phone.NUMBER]
     cr = activity.getContentResolver()
     cursor = cr.query(Phone.CONTENT_URI, PROJECTION, None, None, "display_name" + " ASC")
@@ -25,12 +32,11 @@ def get_contact_details():
                     mobile_no_set.append(number)
         finally:
             cursor.close()
-    return phone_book
 
-
-def get_contact_names():
-    return list(get_contact_details().keys())
-
-
-def get_contact_numbers():
-    return list(get_contact_details().values())
+        if option == "names":
+            value = list(phone_book.keys())
+        elif option == "mobile_no":
+            value = mobile_no_set
+        else:
+            value = phone_book
+    return value
