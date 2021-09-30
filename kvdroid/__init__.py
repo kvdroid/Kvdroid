@@ -207,7 +207,7 @@ if platform == "android":
 
 
     @run_on_ui_thread
-    def statusbar_color(color, text_color):
+    def change_statusbar_color(color, text_color, set_nav_color=True):
         window = activity.getWindow()
         if str(text_color) == "black":
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
@@ -218,6 +218,8 @@ if platform == "android":
         window.clearFlags(WindowManager.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.setStatusBarColor(Color.parseColor(str(color)))
+        if set_nav_color:
+            window.setNavigationBarColor(Color.parseColor(color))
 
 
     @run_on_ui_thread

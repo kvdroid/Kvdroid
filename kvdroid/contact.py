@@ -37,6 +37,8 @@ def get_contact_details(option: str = "phone_book"):
             value = list(phone_book.keys())
         elif option == "mobile_no":
             value = mobile_no_set
-        else:
+        elif option == "phone_book":
             value = phone_book
+        else:
+            raise TypeError("available options are ['names', 'mobile_no', 'phone_book'] for get_contact_details")
     return value
