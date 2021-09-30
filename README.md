@@ -200,6 +200,17 @@ To access WebView cookies\
 from kvdroid.webkit import get_cookies
 print(get_cookies("https://google.com"))
 ```
+To access android package resource folders like:\
+- drawble
+- layout
+- menu
+- values
+- mipmap
+- etc....
+```python
+from kvdroid import get_resource
+drawable = get_resource("drawable")
+```
 ### License
 MIT
 

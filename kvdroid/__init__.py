@@ -337,6 +337,9 @@ if platform == "android":
     def mime_type(file_path):
         return URLConnection.guessContentTypeFromName(file_path)
 
+    def get_resource(resource):
+        return autoclass(f"{activity.getPackageName()}.R${resource}")
+
 
 
 else:
