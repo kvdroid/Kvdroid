@@ -17,6 +17,6 @@ setup(
     author_email='yunus.ceyhn@gmail.com',
     url='https://github.com/yunus-ceyhan/Kvdroid',
     keywords=['Android', 'Python', 'Kivy'],
-    install_requires=["kivy"],
+    install_requires=[],
     classifiers=[],
 )

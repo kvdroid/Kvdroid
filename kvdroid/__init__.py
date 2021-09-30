@@ -1,11 +1,28 @@
+import logging
 import webbrowser
+from os import environ
 
-from kivy.utils import platform
-from kivy.logger import Logger
+
+def _get_platform():
+    # On Android sys.platform returns 'linux2', so prefer to check the
+    # existence of environ variables set during Python initialization
+    kivy_build = environ.get('KIVY_BUILD', '')
+    if kivy_build in {'android', 'ios'}:
+        return kivy_build
+    elif 'P4A_BOOTSTRAP' in environ:
+        return 'android'
+    elif 'ANDROID_ARGUMENT' in environ:
+        # We used to use this method to detect android platform,
+        # leaving it here to be backwards compatible with `pydroid3`
+        # and similar tools outside kivy's ecosystem
+        return 'android'
+
+
+platform = _get_platform()
+Logger = logging.getLogger('kivy')
 
 if platform == "android":
     try:
-        from kivy.core.window import Window
         from jnius import autoclass, cast, JavaException
         from android.runnable import run_on_ui_thread
 
@@ -82,19 +99,19 @@ if platform == "android":
             return 0
 
 
-    def device_info(text,convert = False):
-        bm = activity.getSystemService(Context.BATTERY_SERVICE)        
+    def device_info(text, convert=False):
+        bm = activity.getSystemService(Context.BATTERY_SERVICE)
         count = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER)
-        cap = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)        
-        intent = activity.registerReceiver(None, IntentFilter(Intent.ACTION_BATTERY_CHANGED)) 
-        
+        cap = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+        intent = activity.registerReceiver(None, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+
         def convert_bytes(num):
-            step_unit = 1000.0 #1024 bad the size
+            step_unit = 1000.0  # 1024 bad the size
             for x in ['bytes', 'KB', 'MB', 'GB', 'TB']:
                 if num < step_unit:
                     return "%3.1f %s" % (num, x)
                 num /= step_unit
-                
+
         def avail_mem():
             stat = StatFs(Environment.getDataDirectory().getPath())
             bytesAvailable = stat.getBlockSize() * stat.getAvailableBlocks()
@@ -102,25 +119,24 @@ if platform == "android":
                 return convert_bytes(bytesAvailable)
             else:
                 return bytesAvailable
-                
-            
+
         def total_mem():
             stat = StatFs(Environment.getDataDirectory().getPath())
-            bytesAvailable = stat.getBlockSize() *stat.getBlockCount()
+            bytesAvailable = stat.getBlockSize() * stat.getBlockCount()
             if convert:
                 return convert_bytes(bytesAvailable)
             else:
                 return bytesAvailable
-                
+
         def used_mem():
             stat = StatFs(Environment.getDataDirectory().getPath())
-            total = stat.getBlockSize() *stat.getBlockCount()            
+            total = stat.getBlockSize() * stat.getBlockCount()
             avail = stat.getBlockSize() * stat.getAvailableBlocks()
             if convert:
                 return convert_bytes(total - avail)
             else:
                 return total - avail
-                            
+
         def avail_ram():
             memInfo = MemoryInfo()
             service = activity.getSystemService(Context.ACTIVITY_SERVICE)
@@ -129,7 +145,7 @@ if platform == "android":
                 return convert_bytes(memInfo.availMem)
             else:
                 return memInfo.availMem
-            
+
         def total_ram():
             memInfo = MemoryInfo()
             service = activity.getSystemService(Context.ACTIVITY_SERVICE)
@@ -138,7 +154,7 @@ if platform == "android":
                 return convert_bytes(memInfo.totalMem)
             else:
                 return memInfo.totalMem
-                
+
         def used_ram():
             memInfo = MemoryInfo()
             service = activity.getSystemService(Context.ACTIVITY_SERVICE)
@@ -147,7 +163,7 @@ if platform == "android":
                 return convert_bytes(memInfo.totalMem - memInfo.availMem)
             else:
                 return memInfo.totalMem - memInfo.availMem
-                
+
         os = {
             'model': Build.MODEL,
             'brand': Build.BRAND,
@@ -170,9 +186,9 @@ if platform == "android":
             'total_ram': total_ram(),
             'used_ram': used_ram(),
             'bat_level': bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY),
-            'bat_capacity': round((count/cap)*100),
-            'bat_tempeture': intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE,0) / 10,
-            'bat_voltage': float(intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE,0) * 0.001),
+            'bat_capacity': round((count / cap) * 100),
+            'bat_tempeture': intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) / 10,
+            'bat_voltage': float(intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0) * 0.001),
             'bat_technology': intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY)
         }
         return os[text]
@@ -316,6 +332,7 @@ if platform == "android":
             activity.startActivity(chooser)
         else:
             activity.startActivity(shareIntent)
+
 
     def mime_type(file_path):
         return URLConnection.guessContentTypeFromName(file_path)
