@@ -72,8 +72,8 @@ print(device_lang)
 ```
 To set statusbar color
 ```python
-from kvdroid import statusbar_color
-statusbar_color("#FFFFFF","black")
+from kvdroid import change_statusbar_color
+change_statusbar_color("#FFFFFF","black")
 ```
 To set navigationbar color
 ```python
