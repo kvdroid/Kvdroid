@@ -1,6 +1,7 @@
 import logging
 import webbrowser
 from os import environ
+from jnius.jnius import JavaException
 
 
 def _get_platform():
@@ -36,6 +37,7 @@ if platform == "android":
         Color = autoclass("android.graphics.Color")
         WindowManager = autoclass('android.view.WindowManager$LayoutParams')
         Intent = autoclass('android.content.Intent')
+        PendingIntent = autoclass("android.app.PendingIntent")
         Provider = autoclass('android.provider.Settings')
         URLConnection = autoclass("java.net.URLConnection")
         Toast = autoclass('android.widget.Toast')
@@ -65,6 +67,20 @@ if platform == "android":
         Contacts = autoclass('android.provider.ContactsContract$Contacts')
         Phone = autoclass('android.provider.ContactsContract$CommonDataKinds$Phone')
         ArrayList = autoclass('java.util.ArrayList')
+        NotificationManager = autoclass("android.app.NotificationManager")
+        print(VERSION.SDK_INT)
+        if VERSION.SDK_INT >= 26:
+            NotificationChannel = autoclass("android.app.NotificationChannel")
+            NotificationManagerCompat = autoclass("androidx.core.app.NotificationManagerCompat")
+        NotificationCompat = autoclass("androidx.core.app.NotificationCompat")
+        NotificationCompatBigPictureStyle = autoclass("androidx.core.app.NotificationCompat$BigPictureStyle")
+        NotificationCompatAction = autoclass("androidx.core.app.NotificationCompat$Action")
+        NotificationCompatActionBuilder = autoclass("androidx.core.app.NotificationCompat$Action$Builder")
+        NotificationCompatBuilder = autoclass("androidx.core.app.NotificationCompat$Builder")
+        NotificationManage = autoclass("android.app.NotificationManager")
+        RemoteInput = autoclass("androidx.core.app.RemoteInput")
+        RemoteInputBuilder = autoclass("androidx.core.app.RemoteInput$Builder")
+        System = autoclass("java.lang.System")
 
         packages = {
             "whatsapp": "com.whatsapp",
@@ -83,9 +99,9 @@ if platform == "android":
             "snapchat": "com.snapchat.android"
         }
 
-    except BaseException:
+    except JavaException:
         Logger.error(
-            "Kvdroid: Cannot load classes by Pyjnius. Make sure requirements installed"
+            "Kvdroid: Cannot load classes by Pyjnius. Make sure requirements installed\n"
         )
 
 
