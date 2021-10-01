@@ -68,18 +68,25 @@ if platform == "android":
         Phone = autoclass('android.provider.ContactsContract$CommonDataKinds$Phone')
         ArrayList = autoclass('java.util.ArrayList')
         NotificationManager = autoclass("android.app.NotificationManager")
-        print(VERSION.SDK_INT)
+
         if VERSION.SDK_INT >= 26:
             NotificationChannel = autoclass("android.app.NotificationChannel")
-            NotificationManagerCompat = autoclass("androidx.core.app.NotificationManagerCompat")
-        NotificationCompat = autoclass("androidx.core.app.NotificationCompat")
-        NotificationCompatBigPictureStyle = autoclass("androidx.core.app.NotificationCompat$BigPictureStyle")
-        NotificationCompatAction = autoclass("androidx.core.app.NotificationCompat$Action")
-        NotificationCompatActionBuilder = autoclass("androidx.core.app.NotificationCompat$Action$Builder")
-        NotificationCompatBuilder = autoclass("androidx.core.app.NotificationCompat$Builder")
+            try:
+                NotificationManagerCompat = autoclass("androidx.core.app.NotificationManagerCompat")
+            except JavaException:
+                Logger.error("Kvdroid: Androidx Not Enabled. Skipping....")
+
+        try:
+            NotificationCompat = autoclass("androidx.core.app.NotificationCompat")
+            NotificationCompatBigPictureStyle = autoclass("androidx.core.app.NotificationCompat$BigPictureStyle")
+            NotificationCompatAction = autoclass("androidx.core.app.NotificationCompat$Action")
+            NotificationCompatActionBuilder = autoclass("androidx.core.app.NotificationCompat$Action$Builder")
+            NotificationCompatBuilder = autoclass("androidx.core.app.NotificationCompat$Builder")
+            RemoteInput = autoclass("androidx.core.app.RemoteInput")
+            RemoteInputBuilder = autoclass("androidx.core.app.RemoteInput$Builder")
+        except JavaException:
+            Logger.error("Kvdroid: Androidx Not Enabled. Skipping....")
         NotificationManage = autoclass("android.app.NotificationManager")
-        RemoteInput = autoclass("androidx.core.app.RemoteInput")
-        RemoteInputBuilder = autoclass("androidx.core.app.RemoteInput$Builder")
         System = autoclass("java.lang.System")
 
         packages = {
