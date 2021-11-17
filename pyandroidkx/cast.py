@@ -1,5 +1,5 @@
 from jnius import cast
-from kvdroid import toast
+from pyandroidkx.jimplement import toast
 
 # experimental(castables not yet complete, still in hunt)
 castable_packages = {

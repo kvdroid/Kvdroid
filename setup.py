@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 from os import path
 
@@ -7,16 +7,19 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='kvdroid',
-    packages=['kvdroid'],
-    version='0.2.5',
-    description='Some Pyjnius tools for Kivy-Android developments',
+    name='pyandroidkx',
+    packages=find_packages(
+            include=["pyandroidkx", "pyandroidkx.*"]
+        ),
+    version='1.0.0',
+    description='A re-implementation of android java API in python with easy access to some Android functionality '
+                'like Notification,Reading of Contacts, accessing Webview Cookies, etc...',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    author='Yunus Ceyhan',
-    author_email='yunus.ceyhn@gmail.com',
+    author='Akubue-Izundu Kenechukwu',
+    author_email='kengoon19@gmail.com',
     url='https://github.com/yunus-ceyhan/Kvdroid',
-    keywords=['Android', 'Python', 'Kivy'],
-    install_requires=[],
+    keywords=['Android', 'Androidx', 'Python', 'Kivy', 'KivyMD'],
+    install_requires=["pyjnius"],
     classifiers=[],
 )
