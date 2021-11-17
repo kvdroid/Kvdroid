@@ -1,6 +1,6 @@
-PyAndroid
+PyAndroidKX
 =========
-PyAndroid is a fork of [Kvdroid](https://github.com/yunus-ceyhan/Kvdroid)
+PyAndroidKX is a fork of [Kvdroid](https://github.com/yunus-ceyhan/Kvdroid)
 
 A re-implementation of android java API in python with easy access to some Android functionality like Notification,
 Reading of Contacts, accessing Webview Cookies, etc...
