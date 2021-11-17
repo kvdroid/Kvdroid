@@ -9,7 +9,8 @@ The aim is to provide full access to Android API which can be used together with
 [kivy](https://github.com/kivy/kivy), [kivymd](https://github.com/kivymd/kivymd), etc... Or as a standalone, in which
 Android native UI is created with only python codes.
 
-####MIGHT BE A FRAMEWORK
+MIGHT BE A FRAMEWORK
+====================
 
 ### Compiling into APK
 To compile kivy [p4a](https://github.com/kivy/python-for-android) or [buildozer](https://github.com/kivy/buildozer) is
