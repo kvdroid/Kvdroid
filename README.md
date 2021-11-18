@@ -23,7 +23,7 @@ Android min-api21
 ### Installation
 
 ```
-pip install PyAndroid
+pip install https://github.com/kengoon/PyAndroidKX/archive/refs/heads/master.zip
 ```
 ### Usage
 To send notification
