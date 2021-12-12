@@ -1,10 +1,8 @@
-from typing import Union
-
 from pyandroidkx import activity
 from pyandroidkx.jclass.android.provider import Phone
 
 
-def get_contact_details(option: str = "phone_book") -> Union[list, dict]:
+def get_contact_details(option: str = "phone_book"):
     """
     option accepts this values : "phone_book", "mobile_no", "names"
 
@@ -30,17 +28,17 @@ def get_contact_details(option: str = "phone_book") -> Union[list, dict]:
                     if name in phone_book:
                         phone_book[name].append(number)
                     else:
-                        phone_book[name] = [number]
+                        phone_book.update({name: [number]})
                     mobile_no_set.append(number)
         finally:
             cursor.close()
 
-        if option == "mobile_no":
-            value = mobile_no_set
-        elif option == "names":
+        if option == "names":
             value = list(phone_book.keys())
+        elif option == "mobile_no":
+            value = mobile_no_set
         elif option == "phone_book":
             value = phone_book
         else:
-            raise TypeError("available options are ['names', 'mobile_no', 'phone_book'] for `get_contact_details`")
+            raise TypeError("available options are ['names', 'mobile_no', 'phone_book'] for get_contact_details")
     return value

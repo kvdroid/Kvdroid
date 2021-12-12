@@ -1,3 +1,4 @@
+from os import environ
 from jnius import autoclass
 from pyandroidkx.jclass.android.os import VERSION
 
