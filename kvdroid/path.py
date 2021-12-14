@@ -1,6 +1,5 @@
 import os
-
-from pyandroidkx.jclass.android.os import Environment
+from kvdroid import Environment
 
 
 def path():

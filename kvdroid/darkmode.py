@@ -1,5 +1,4 @@
-from pyandroidkx import activity
-from pyandroidkx.jclass.android.content.res import Configuration
+from kvdroid import activity, Configuration
 
 
 def dark_mode():
