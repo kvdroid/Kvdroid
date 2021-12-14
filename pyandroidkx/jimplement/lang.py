@@ -1,4 +1,4 @@
-from kvdroid import Locale
+from pyandroidkx.jclass.java.util import Locale
 
 
 def device_lang():

@@ -1,4 +1,4 @@
-from kvdroid import activity
+from pyandroidkx import activity
 
 
 def app_source():
