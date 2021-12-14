@@ -1,9 +1,7 @@
-from pyandroidkx.jclass.android.app import AndroidActivity
-from pyandroidkx.jclass.android.net import ConnectivityManager
-from pyandroidkx import activity
+from kvdroid import ConnectivityManager, activity, AndroidActivity
 
 
-def network_status():
+def network_state():
     con_mgr = activity.getSystemService(AndroidActivity.CONNECTIVITY_SERVICE)
     conn = con_mgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting()
     try:
@@ -15,4 +13,4 @@ def network_status():
         return False
 
 
-network_state = network_status()
+network_state = network_state()

@@ -1,4 +1,4 @@
-from pyandroidkx.jclass.android.media import MediaPlayer, AudioManager
+from kvdroid import AudioManager, MediaPlayer
 
 
 class Player(object):
