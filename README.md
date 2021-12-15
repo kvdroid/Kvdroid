@@ -24,7 +24,14 @@ Android min-api21
 
 ```
 pip install https://github.com/kengoon/PyAndroidKX/archive/refs/heads/master.zip
+# Note: this works on android only, but you can install it on your desktop for code completion assistance
 ```
+
+### Buildozer Requirement
+```python
+requirement = https://github.com/kengoon/PyAndroidKX/archive/refs/heads/master.zip
+```
+
 ### Usage
 To send notification
 
