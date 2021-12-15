@@ -176,11 +176,16 @@ def immersive_mode(immerse=None):
             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
 
 
-def launch_app(app_package, app_activity):
+def launch_app_internally(app_package, app_activity):
     intent = Intent()
     intent.setAction(Intent.ACTION_VIEW)
     intent.setClassName(app_package, app_activity)
     return activity.startActivity(intent)
+
+
+def launch_app_externally(app_package):
+    intent = activity.getPackageManager().getLaunchIntentForPackage(app_package)
+    activity.startActivity(intent)
 
 
 def app_details(app_package):
