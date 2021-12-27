@@ -1,5 +1,4 @@
 from jnius import cast
-from kvdroid.jimplement import toast
 
 # experimental(castables not yet complete, still in hunt)
 castable_packages = {
@@ -13,5 +12,5 @@ castable_packages = {
 
 def cast_object(name: str, java_object: object):
     if name not in castable_packages:
-        return toast("Java package name not in predefined castables")
+        raise NameError("Java package name not in predefined castables")
     return cast(castable_packages[name], java_object)
