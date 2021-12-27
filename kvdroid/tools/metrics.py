@@ -1,7 +1,7 @@
 import re
 
-from pyandroidkx import activity
-from pyandroidkx.jclass.android.graphics import Point
+from kvdroid import activity
+from kvdroid.jclass.android.graphics import Point
 
 
 class Metrics(object):

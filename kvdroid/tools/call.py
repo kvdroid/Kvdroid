@@ -1,7 +1,7 @@
-from pyandroidkx.jclass.android.net import Uri
+from kvdroid.jclass.android.net import Uri
 
-from pyandroidkx.jclass.android.content import Intent
-from pyandroidkx import activity
+from kvdroid.jclass.android.content import Intent
+from kvdroid import activity
 
 
 def make_call(tel):

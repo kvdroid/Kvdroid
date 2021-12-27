@@ -1,5 +1,5 @@
-from pyandroidkx import activity
-from pyandroidkx.jclass.android.provider import Phone
+from kvdroid import activity
+from kvdroid.jclass.android.provider import Phone
 
 
 def get_contact_details(option: str = "phone_book"):
@@ -28,15 +28,15 @@ def get_contact_details(option: str = "phone_book"):
                     if name in phone_book:
                         phone_book[name].append(number)
                     else:
-                        phone_book.update({name: [number]})
+                        phone_book[name] = [number]
                     mobile_no_set.append(number)
         finally:
             cursor.close()
 
-        if option == "names":
-            value = list(phone_book.keys())
-        elif option == "mobile_no":
+        if option == "mobile_no":
             value = mobile_no_set
+        elif option == "names":
+            value = list(phone_book.keys())
         elif option == "phone_book":
             value = phone_book
         else:

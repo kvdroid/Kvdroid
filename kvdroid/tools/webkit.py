@@ -1,4 +1,4 @@
-from pyandroidkx.jclass.android.webkit import CookieManager
+from kvdroid.jclass.android.webkit import CookieManager
 
 
 def get_cookies(site_name: str):

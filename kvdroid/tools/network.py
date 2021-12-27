@@ -1,6 +1,6 @@
-from pyandroidkx.jclass.android.app import AndroidActivity
-from pyandroidkx.jclass.android.net import ConnectivityManager
-from pyandroidkx import activity
+from kvdroid.jclass.android.app import AndroidActivity
+from kvdroid.jclass.android.net import ConnectivityManager
+from kvdroid import activity
 
 
 def network_status():

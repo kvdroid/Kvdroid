@@ -1,9 +1,9 @@
 def launch_url(url: str, color="#FFFFFF", color_scheme="system"):
-    from pyandroidkx.jclass.android.graphics import Color
-    from pyandroidkx.jclass.androidx.browser.customtabs import CustomTabColorSchemeParamsBuilder
-    from pyandroidkx.jclass.androidx.browser.customtabs import CustomTabsIntentBuilder, CustomTabsIntent
-    from pyandroidkx import activity
-    from pyandroidkx.jclass.android.net import Uri
+    from kvdroid.jclass.android.graphics import Color
+    from kvdroid.jclass.androidx.browser.customtabs import CustomTabColorSchemeParamsBuilder
+    from kvdroid.jclass.androidx.browser.customtabs import CustomTabsIntentBuilder, CustomTabsIntent
+    from kvdroid import activity
+    from kvdroid.jclass.android.net import Uri
     schemes = {
         "system": CustomTabsIntent.COLOR_SCHEME_SYSTEM,
         "light": CustomTabsIntent.COLOR_SCHEME_LIGHT,

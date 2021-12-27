@@ -2,18 +2,18 @@ from typing import Union
 
 from jnius import cast, JavaException
 from android import python_act
-from pyandroidkx import Logger, activity
-from pyandroidkx.cast import cast_object
-from pyandroidkx.jclass.android.app import PendingIntent, NotificationManager
-from pyandroidkx.jclass.android.content import Intent, Context
-from pyandroidkx.jclass.android.graphics import BitmapFactory
-from pyandroidkx.jclass.android.os import VERSION
-from pyandroidkx.jclass.androidx.core.app import NotificationCompatBuilder, NotificationCompat, \
+from kvdroid import Logger, activity
+from kvdroid.cast import cast_object
+from kvdroid.jclass.android.app import PendingIntent, NotificationManager
+from kvdroid.jclass.android.content import Intent, Context
+from kvdroid.jclass.android.graphics import BitmapFactory
+from kvdroid.jclass.android.os import VERSION
+from kvdroid.jclass.androidx.core.app import NotificationCompatBuilder, NotificationCompat, \
     NotificationCompatActionBuilder, RemoteInputBuilder, NotificationCompatBigPictureStyle, NotificationBigTextStyle
-from pyandroidkx.jclass.androidx.core.content import ContextCompat
-from pyandroidkx.jclass.java.lang import String, System
-from pyandroidkx.jimplement import get_resource
-from pyandroidkx.jclass.android.app import Notification
+from kvdroid.jclass.androidx.core.content import ContextCompat
+from kvdroid.jclass.java.lang import String, System
+from kvdroid.jimplement import get_resource
+from kvdroid.jclass.android.app import Notification
 
 try:
 
@@ -43,7 +43,7 @@ try:
             Context.NOTIFICATION_SERVICE
         ))
         if VERSION.SDK_INT >= 26:
-            from pyandroidkx.jclass.android.app import NotificationChannel
+            from kvdroid.jclass.android.app import NotificationChannel
             importance: int = NotificationManager.IMPORTANCE_HIGH
             channel = NotificationChannel(String(channel_id), String(channel_name), importance)
             channel.setDescription("notification")

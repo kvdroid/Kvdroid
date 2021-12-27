@@ -36,9 +36,9 @@ requirement = https://github.com/kengoon/PyAndroidKX/archive/refs/heads/master.z
 To send notification
 
 ```python
-from pyandroidkx.jclass.android.graphics import Color
-from pyandroidkx.jimplement.notification import create_notification
-from pyandroidkx.jimplement import get_resource
+from kvdroid.jclass.android.graphics import Color
+from kvdroid.jimplement.notification import create_notification
+from kvdroid.jimplement import get_resource
 
 create_notification(
     small_icon=get_resource("drawable").ico_nocenstore,  # app icon
@@ -54,7 +54,7 @@ create_notification(
 To read Contacts
 
 ```python
-from pyandroidkx.jimplement.contact import get_contact_details
+from kvdroid.jimplement.contact import get_contact_details
 
 get_contact_details("phone_book") # gets a dictionary of all contact both contact name and phone mumbers
 get_contact_details("names") # gets a list of all contact names
@@ -63,28 +63,28 @@ get_contact_details("mobile_no") # gets a list of all contact phone numbers
 To get Android WebView Cookies
 
 ```python
-from pyandroidkx.jimplement.webkit import get_cookies
+from kvdroid.jimplement.webkit import get_cookies
 
 get_cookies("https://google.login")
 ```
 To detect keyboard height
 
 ```python
-from pyandroidkx.jimplement import keyboard_height
+from kvdroid.jimplement import keyboard_height
 
 print(keyboard_height())
 ```
 To detect if app is installed from Play Store or not
 
 ```python
-from pyandroidkx.jimplement.appsource import app_source
+from kvdroid.jimplement.appsource import app_source
 
 print(app_source)
 ```
 To get absolute screen size in dp-pixel and detect current orientation
 
 ```python
-from pyandroidkx.jimplement.metrics import screen
+from kvdroid.jimplement.metrics import screen
 
 print(screen.orientation())
 print(screen.width_dp())
@@ -94,14 +94,14 @@ print(screen.resolution())
 To check if device has a data connection both for wifi and cellular
 
 ```python
-from pyandroidkx.jimplement.network import network_state
+from kvdroid.jimplement.network import network_state
 
 print(network_state)
 ```
 To check if device is  in dark mode or not
 
 ```python
-from pyandroidkx.jimplement.darkmode import dark_mode
+from kvdroid.jimplement.darkmode import dark_mode
 
 print(dark_mode)
 ```
@@ -110,7 +110,7 @@ Available options are;
 ```'model','brand','manufacturer','version','sdk','product','base','rom','security','hardware','tags','sdk_int','total_mem','used_mem','avail_ram','total_ram','used_ram','bat_level','bat_capacity','bat_tempeture','bat_voltage','bat_technology'```
 
 ```python
-from pyandroidkx.jimplement.deviceinfo import device_info
+from kvdroid.jimplement.deviceinfo import device_info
 
 print(device_info("model"))
 print(device_info("avail_ram", convert=True))
@@ -118,70 +118,70 @@ print(device_info("avail_ram", convert=True))
 To enable immersive mode
 
 ```python
-from pyandroidkx.jimplement import immersive_mode
+from kvdroid.jimplement import immersive_mode
 
 immersive_mode(True)  # default is False
 ```
 To launch a specific app
 
 ```python
-from pyandroidkx.jimplement import launch_app
+from kvdroid.jimplement import launch_app
 
 launch_app( < app_package >, < app_activity >)
 ```
 To open target app's details page
 
 ```python
-from pyandroidkx.jimplement import app_details
+from kvdroid.jimplement import app_details
 
 app_details( < app_package >)
 ```
 To detect current device's language
 
 ```python
-from pyandroidkx.jimplement.lang import device_lang
+from kvdroid.jimplement.lang import device_lang
 
 print(device_lang)
 ```
 To set statusbar color
 
 ```python
-from pyandroidkx.jimplement import change_statusbar_color
+from kvdroid.jimplement import change_statusbar_color
 
 change_statusbar_color("#FFFFFF", "black")
 ```
 To set navigationbar color
 
 ```python
-from pyandroidkx.jimplement import navbar_color
+from kvdroid.jimplement import navbar_color
 
 navbar_color("#FFFFFF")
 ```
 To display a toast message
 
 ```python
-from pyandroidkx.jimplement import toast
+from kvdroid.jimplement import toast
 
 toast("hello world")
 ```
 To get absolute sdcard path
 
 ```python
-from pyandroidkx.path import sdcard
+from kvdroid.path import sdcard
 
 print(sdcard)
 ```
 To get absolute external_sdcard
 
 ```python
-from pyandroidkx.jimplement.path import external_sdcard
+from kvdroid.jimplement.path import external_sdcard
 
 print(external_sdcard)
 ```
 To get path of working app folder
 
 ```python
-from pyandroidkx.jimplement.path import app_folder
+from kvdroid.jimplement.path import app_folder
 
 print(app_folder)
 
@@ -189,7 +189,7 @@ print(app_folder)
 To get file mime Type
 
 ```python
-from pyandroidkx import mime_type
+from kvdroid import mime_type
 
 mime_type = mime_type(file_path)
 print(mime_type)
@@ -198,35 +198,35 @@ print(mime_type)
 To change default wallpaper
 
 ```python
-from pyandroidkx.jimplement import set_wallpaper
+from kvdroid.jimplement import set_wallpaper
 
 set_wallpaper("/sdcard/test.jpg")
 ```
 To use text-to-speech
 
 ```python
-from pyandroidkx.jimplement import speech
+from kvdroid.jimplement import speech
 
 speech("hello world", "en")
 ```
 To use default Download Manager
 
 ```python
-from pyandroidkx.jimplement import download_manager
+from kvdroid.jimplement import download_manager
 
 download_manager( < title >, < description >, < URL >, < path >, < file >)
 ```
 To restart the app
 
 ```python
-from pyandroidkx.jimplement import restart_app
+from kvdroid.jimplement import restart_app
 
 restart_app(True)  # default is false
 ```
 To share text via Android Share menu
 
 ```python
-from pyandroidkx.jimplement import share_text
+from kvdroid.jimplement import share_text
 
 share_text("hello world", title="Share", chooser=False, app_package=None,
            call_playstore=False, error_msg="application unavailable")
@@ -234,7 +234,7 @@ share_text("hello world", title="Share", chooser=False, app_package=None,
 To share any file via Android Share menu
 
 ```python
-from pyandroidkx.jimplement import share_file
+from kvdroid.jimplement import share_file
 
 share_file( < path - to - file >, < title >, < chooser >, < app - package: open -
 with-default - app >,
@@ -246,7 +246,7 @@ To play suported music format or radio stream through Android Media Player
 ```player.mPLayer = Android Media PLayer```
 
 ```python
-from pyandroidkx.jimplement.audio import player
+from kvdroid.jimplement.audio import player
 
 player.play( < path - to - music - file >)
 player.stream(Url)  # radio
@@ -261,16 +261,16 @@ player.current_position()
 To cast Java Object
 
 ```python
-from pyandroidkx.cast import cast_object
-from pyandroidkx.jclass.android.net import Uri
+from kvdroid.cast import cast_object
+from kvdroid.jclass.android.net import Uri
 
 uri = Uri.fromFile("/home/java/my_document.pdf")
 parcelable = cast_object("parcelable", uri)
 
 # Above code  is same as below code::
 
-from pyandroidkx.cast import cast_object
-from pyandroidkx.jclass.android.net import Uri
+from kvdroid.cast import cast_object
+from kvdroid.jclass.android.net import Uri
 from jnius import cast
 
 uri = Uri.fromFile("/home/java/my_document.pdf")
@@ -289,7 +289,7 @@ To access phone contacts
 
 ```python
 # returns a dictionary containing names and numbers
-from pyandroidkx.jimplement.contact import get_contact_details
+from kvdroid.jimplement.contact import get_contact_details
 
 print(get_contact_details("phone_book"))
 # or
@@ -305,7 +305,7 @@ To access WebView cookies\
 (i.e if you compiled your app with webview bootstrap or have Webview in your app)
 
 ```python
-from pyandroidkx.jimplement.webkit import get_cookies
+from kvdroid.jimplement.webkit import get_cookies
 
 print(get_cookies("https://google.com"))
 ```
@@ -318,7 +318,7 @@ To access android package resource folders like:\
 - etc....
 
 ```python
-from pyandroidkx.jimplement import get_resource
+from kvdroid.jimplement import get_resource
 
 drawable = get_resource("drawable")
 ```

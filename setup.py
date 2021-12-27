@@ -7,9 +7,9 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='pyandroidkx',
+    name='kvdroid',
     packages=find_packages(
-            include=["pyandroidkx", "pyandroidkx.*"]
+            include=["kvdroid", "kvdroid.*"]
         ),
     version='1.0.0',
     description='A re-implementation of android java API in python with easy access to some Android functionality '

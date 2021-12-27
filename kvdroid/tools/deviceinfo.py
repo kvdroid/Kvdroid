@@ -1,8 +1,8 @@
-from pyandroidkx.jclass.android.app import MemoryInfo
-from pyandroidkx.jclass.android.content import Context, IntentFilter, Intent
-from pyandroidkx.jclass.android.os import BatteryManager, StatFs, Environment, Build, VERSION
-from pyandroidkx.jclass.java.lang import Runtime
-from pyandroidkx import activity
+from kvdroid.jclass.android.app import MemoryInfo
+from kvdroid.jclass.android.content import Context, IntentFilter, Intent
+from kvdroid.jclass.android.os import BatteryManager, StatFs, Environment, Build, VERSION
+from kvdroid.jclass.java.lang import Runtime
+from kvdroid import activity
 
 
 def device_info(text, convert=False):
