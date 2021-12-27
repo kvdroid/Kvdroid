@@ -1,4 +1,10 @@
 from jnius import autoclass
+from kvdroid.jclass import _class_call
 
-Locale = autoclass('java.util.Locale')
-ArrayList = autoclass('java.util.ArrayList')
+
+def Locale(*args, instantiate: bool = False):
+    return _class_call(autoclass('java.util.Locale'), args, instantiate)
+
+
+def ArrayList(*args, instantiate: bool = False):
+    return _class_call(autoclass('java.util.ArrayList'), args, instantiate)

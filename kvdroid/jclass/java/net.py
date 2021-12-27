@@ -1,5 +1,14 @@
 from jnius import autoclass
+from kvdroid.jclass import _class_call
 
-URLConnection = autoclass("java.net.URLConnection")
-HttpURLConnection = autoclass("java.net.HttpURLConnection")
-URL = autoclass("java.net.URL")
+
+def URLConnection(*args, instantiate: bool = False):
+    return _class_call(autoclass("java.net.URLConnection"), args, instantiate)
+
+
+def HttpURLConnection(*args, instantiate: bool = False):
+    return _class_call(autoclass("java.net.HttpURLConnection"), args, instantiate)
+
+
+def URL(*args, instantiate: bool = False):
+    return _class_call(autoclass("java.net.URL"), args, instantiate)
