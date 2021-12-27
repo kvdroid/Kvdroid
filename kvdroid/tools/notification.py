@@ -1,19 +1,13 @@
 from typing import Union
 
 from jnius import cast, JavaException
-from android import python_act
+from android import python_act # NOQA
 from kvdroid import Logger, activity
 from kvdroid.cast import cast_object
-from kvdroid.jclass.android.app import PendingIntent, NotificationManager
-from kvdroid.jclass.android.content import Intent, Context
-from kvdroid.jclass.android.graphics import BitmapFactory
-from kvdroid.jclass.android.os import VERSION
-from kvdroid.jclass.androidx.core.app import NotificationCompatBuilder, NotificationCompat, \
-    NotificationCompatActionBuilder, RemoteInputBuilder, NotificationCompatBigPictureStyle, NotificationBigTextStyle
-from kvdroid.jclass.androidx.core.content import ContextCompat
-from kvdroid.jclass.java.lang import String, System
-from kvdroid.jimplement import get_resource
-from kvdroid.jclass.android.app import Notification
+from kvdroid.jclass.android import BitmapFactory
+from kvdroid.tools import get_resource
+
+BitmapFactory = BitmapFactory()
 
 try:
 
@@ -27,6 +21,39 @@ try:
             set_reply: bool = False, put_extra: bool = False, extras: tuple = ("test", "test"),
             small_icon_color: int = 0
     ):  # sourcery no-metrics
+        from kvdroid.jclass.androidx import (
+            ContextCompat,
+            NotificationCompatBuilder,
+            NotificationCompat,
+            NotificationCompatActionBuilder,
+            RemoteInputBuilder,
+            NotificationCompatBigPictureStyle,
+            NotificationBigTextStyle
+        )
+        from kvdroid.jclass.android import (
+            Intent,
+            Context,
+            PendingIntent,
+            NotificationManager,
+            Notification,
+            VERSION,
+        )
+        from kvdroid.jclass.java.lang import String, System
+        NotificationCompatBuilder = NotificationCompatBuilder()
+        NotificationCompat = NotificationCompat()
+        NotificationCompatActionBuilder = NotificationCompatActionBuilder()
+        RemoteInputBuilder = RemoteInputBuilder()
+        NotificationCompatBigPictureStyle = NotificationCompatBigPictureStyle()
+        NotificationBigTextStyle = NotificationBigTextStyle()
+        System = System()
+        String = String()
+        ContextCompat = ContextCompat()
+        VERSION = VERSION()
+        Context = Context()
+        Notification = Notification()
+        NotificationManager = NotificationManager()
+        PendingIntent = PendingIntent()
+        Intent = Intent()
         intent = Intent(activity.getApplication().getApplicationContext(), python_act)
         if put_extra:
             intent.putExtra(*extras)

@@ -1,15 +1,21 @@
 from kvdroid.jclass.android.app import MemoryInfo
-from kvdroid.jclass.android.content import Context, IntentFilter, Intent
-from kvdroid.jclass.android.os import BatteryManager, StatFs, Environment, Build, VERSION
-from kvdroid.jclass.java.lang import Runtime
+from kvdroid.jclass.android import IntentFilter, Intent
+from kvdroid.jclass.android import StatFs
+from kvdroid.jclass.java import Runtime
 from kvdroid import activity
 
 
 def device_info(text, convert=False):
+    from kvdroid.jclass.android import Context, Build, BatteryManager, VERSION, Environment
+    Environment = Environment()
+    VERSION = VERSION()
+    Build = Build()
+    BatteryManager = BatteryManager()
+    Context = Context()
     bm = activity.getSystemService(Context.BATTERY_SERVICE)
     count = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER)
     cap = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
-    intent = activity.registerReceiver(None, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+    intent = activity.registerReceiver(None, IntentFilter(Intent().ACTION_BATTERY_CHANGED))
 
     def convert_bytes(num):
         step_unit = 1000.0  # 1024 bad the size
@@ -44,7 +50,7 @@ def device_info(text, convert=False):
             return total - avail
 
     def avail_ram():
-        memInfo = MemoryInfo()
+        memInfo = MemoryInfo(instantiate=True)
         service = activity.getSystemService(Context.ACTIVITY_SERVICE)
         service.getMemoryInfo(memInfo)
         if convert:
@@ -84,7 +90,7 @@ def device_info(text, convert=False):
         'tags': Build.TAGS,
         'sdk_int': VERSION.SDK_INT,
         'cpu_abi': Build.CPU_ABI,
-        'cpu_cores': Runtime.getRuntime().availableProcessors(),
+        'cpu_cores': Runtime().getRuntime().availableProcessors(),
         'avail_mem': avail_mem(),
         'total_mem': total_mem(),
         'used_mem': used_mem(),

@@ -1,8 +1,9 @@
 from kvdroid import activity
-from kvdroid.jclass.android.content.res import Configuration
 
 
 def dark_mode():
+    from kvdroid.jclass.android import Configuration
+    Configuration = Configuration()
     night_mode_flags = activity.getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK
     if night_mode_flags == Configuration.UI_MODE_NIGHT_YES:
         return True

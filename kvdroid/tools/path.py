@@ -11,7 +11,7 @@ app_folder = path()
 
 
 def sdcard():
-    return Environment.getExternalStorageDirectory().toString()
+    return Environment().getExternalStorageDirectory().toString()
 
 
 sdcard = sdcard()

@@ -1,16 +1,15 @@
-from kvdroid.jclass.android.app import AndroidActivity
-from kvdroid.jclass.android.net import ConnectivityManager
+from kvdroid.jclass.android import Activity
 from kvdroid import activity
 
 
 def network_status():
-    con_mgr = activity.getSystemService(AndroidActivity.CONNECTIVITY_SERVICE)
-    conn = con_mgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting()
+    from kvdroid.jclass.android import ConnectivityManager
+    ConnectivityManager = ConnectivityManager()
+    con_mgr = activity.getSystemService(Activity().CONNECTIVITY_SERVICE)
     try:
-        if conn:
-            return True
-        conn = con_mgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting()
-        return bool(conn)
+        wifi = con_mgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting()
+        mobile = con_mgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting()
+        return wifi or mobile
     except:
         return False
 

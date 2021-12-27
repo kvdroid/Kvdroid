@@ -1,8 +1,9 @@
 from kvdroid import activity
-from kvdroid.jclass.android.provider import Phone
 
 
 def get_contact_details(option: str = "phone_book"):
+    from kvdroid.jclass.android import Phone
+    Phone = Phone()
     """
     option accepts this values : "phone_book", "mobile_no", "names"
 

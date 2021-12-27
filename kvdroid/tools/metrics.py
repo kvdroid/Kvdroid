@@ -28,9 +28,9 @@ class Metrics(object):
 
     @staticmethod
     def resolution():
-        point = Point()
+        point = Point(instantiate=True)
         activity.getWindowManager().getDefaultDisplay().getRealSize(point)
-        size = re.findall("\d+", point.toString())
+        size = re.findall(r"\d+", point.toString())
         return size[1] + "x" + size[0]
 
 
