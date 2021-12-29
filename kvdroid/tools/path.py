@@ -1,5 +1,6 @@
 import os
-from kvdroid import Environment
+
+from kvdroid.jclass.android.os import Environment
 
 
 def path():
@@ -10,7 +11,7 @@ app_folder = path()
 
 
 def sdcard():
-    return Environment.getExternalStorageDirectory().toString()
+    return Environment().getExternalStorageDirectory().toString()
 
 
 sdcard = sdcard()

@@ -1,5 +1,8 @@
-from kvdroid import activity, Point
 import re
+
+from kvdroid import activity
+from kvdroid.jclass.android.graphics import Point
+
 
 class Metrics(object):
     config = activity.getResources().getConfiguration()
@@ -22,11 +25,13 @@ class Metrics(object):
             return "portrait"
         else:
             return "landscape"
-            
-    def resolution(self):
-        point = Point()
+
+    @staticmethod
+    def resolution():
+        point = Point(instantiate=True)
         activity.getWindowManager().getDefaultDisplay().getRealSize(point)
-        size = re.findall("\d+",point.toString())
-        return size[1]+"x"+size[0]
+        size = re.findall(r"\d+", point.toString())
+        return size[1] + "x" + size[0]
+
 
 screen = Metrics()

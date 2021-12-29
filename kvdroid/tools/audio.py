@@ -1,8 +1,8 @@
-from kvdroid import AudioManager, MediaPlayer
+from kvdroid.jclass.android.media import MediaPlayer, AudioManager
 
 
 class Player(object):
-    mPlayer = MediaPlayer()
+    mPlayer = MediaPlayer(instantiate=True)
     content = None
 
     def raw(self):
@@ -30,7 +30,7 @@ class Player(object):
 
     def stream(self, content):
         self.content = str(content)
-        self.mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        self.mPlayer.setAudioStreamType(AudioManager().STREAM_MUSIC)
         try:
             self.mPlayer.stop()
             self.mPlayer.reset()
