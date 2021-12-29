@@ -11,14 +11,14 @@ setup(
     packages=find_packages(
             include=["kvdroid", "kvdroid.*"]
         ),
-    version='1.0.0',
+    version='0.2.7',
     description='A re-implementation of android java API in python with easy access to some Android functionality '
                 'like Notification,Reading of Contacts, accessing Webview Cookies, etc...',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    author='Akubue-Izundu Kenechukwu',
-    author_email='kengoon19@gmail.com',
-    url='https://github.com/yunus-ceyhan/Kvdroid',
+    author='Yunus Ceyhan',
+    author_email='yunus.ceyhn@gmail',
+    url='https://github.com/kvdroid/Kvdroid',
     keywords=['Android', 'Androidx', 'Python', 'Kivy', 'KivyMD', "KvDroid"],
     install_requires=["pyjnius"],
     classifiers=[],
