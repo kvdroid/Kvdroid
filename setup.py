@@ -18,7 +18,7 @@ setup(
     long_description_content_type='text/markdown',
     author='Akubue-Izundu Kenechukwu',
     author_email='kengoon19@gmail.com',
-    url='https://github.com/yunus-ceyhan/Kvdroid',
+    url='https://github.com/kvdroid/Kvdroid',
     keywords=['Android', 'Androidx', 'Python', 'Kivy', 'KivyMD', "KvDroid"],
     install_requires=["pyjnius"],
     classifiers=[],

@@ -1,3 +1,5 @@
+from typing import Union
+from kvdroid import _convert_color
 from jnius import JavaException
 from kvdroid import activity
 from kvdroid.jclass.android import Intent, Context
@@ -112,7 +114,8 @@ def download_manager(title, description, url, folder, file_name):
 
 
 @run_on_ui_thread
-def change_statusbar_color(color, text_color):
+def change_statusbar_color(color: Union[str, list], text_color):
+    color = _convert_color(color)
     window = activity.getWindow()
     if str(text_color) == "black":
         from kvdroid.jclass.android import View
@@ -124,13 +127,14 @@ def change_statusbar_color(color, text_color):
     from kvdroid.jclass.android import WindowManager
     window.clearFlags(WindowManager().FLAG_TRANSLUCENT_STATUS)
     window.addFlags(WindowManager().FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-    window.setStatusBarColor(Color().parseColor(str(color)))
+    window.setStatusBarColor(Color().parseColor(color))
 
 
 @run_on_ui_thread
-def navbar_color(color):
+def navbar_color(color: Union[str, list]):
+    color = _convert_color(color)
     window = activity.getWindow()
-    window.setNavigationBarColor(Color().parseColor(str(color)))
+    window.setNavigationBarColor(Color().parseColor(color))
 
 
 def set_wallpaper(path_to_image):

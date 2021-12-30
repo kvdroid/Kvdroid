@@ -1,6 +1,5 @@
 from jnius import autoclass
 from kvdroid.jclass import _class_call
-from kvdroid.jclass.android import VERSION
 
 
 def NotificationManager(*args, instantiate: bool = False):
@@ -11,7 +10,7 @@ def Notification(*args, instantiate: bool = False):
     return _class_call(autoclass("android.app.Notification"), args, instantiate)
 
 
-if VERSION().SDK_INT >= 26:
+if autoclass('android.os.Build$VERSION').SDK_INT >= 26:
     def NotificationChannel(*args, instantiate: bool = False):
         return _class_call(autoclass("android.app.NotificationChannel"), args, instantiate)
 

@@ -1,0 +1,42 @@
+[
+    {
+        "icon": "share",
+        "text": "SHARE FILE"
+    },
+    {
+        "icon": "share-variant",
+        "text": "SHARE TEXT"
+    },
+    {
+        "icon": "restart",
+        "text": "RESTART APP"
+    },
+    {
+        "icon": "message-badge",
+        "text": "TOAST"
+    },
+    {
+        "icon": "cloud-download",
+        "text": "DOWNLOAD MANAGER"
+    },
+    {
+        "icon": "select-color",
+        "text": "CHANGE STATUSBAR COLOR"
+    },
+    {
+        "icon": "format-color-fill",
+        "text": "CHANGE NAVIGATION-BAR COLOR"
+    },
+    {
+        "icon": "wallpaper",
+        "text": "SET WALLPAPER"
+    },
+    {
+        "icon": "text-to-speech",
+        "text": "TEXT TO SPEECH"
+    },
+    {
+        "icon": "keyboard",
+        "text": "GET KEYBOARD HEIGHT"
+    }
+]
