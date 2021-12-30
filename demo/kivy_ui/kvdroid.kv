@@ -1,0 +1,47 @@
+#:import ScrollEffect kivy.effects.scroll.ScrollEffect
+#:import Window kivy.core.window.Window
+<CardButton@MD3Card>:
+    elevation: 10
+    radius: [dp(20)]
+    md_bg_color: app.theme_cls.primary_light
+    padding: dp(20)
+    spacing: dp(10)
+    text_color: app.theme_cls.primary_color
+    ripple_color: app.theme_cls.primary_color
+    ripple_behavior: True
+    text: "NOTIFICATION"
+    icon: "bell"
+    MDIcon:
+        icon: root.icon
+        pos_hint: {"center_y": .5}
+        font_size: sp(50)
+        color: app.theme_cls.primary_color
+    MDLabel:
+        text: root.text
+        color: root.text_color
+        font_style: "H4"
+        halign: "center"
+        max_lines: 2
+
+BoxLayout:
+    orientation: "vertical"
+    MDToolbar:
+        id: toolbar
+        title: "KvDroid"
+    RecycleView:
+        effect_cls: ScrollEffect
+        scroll_distance: dp(1)
+        viewclass: "CardButton"
+        data: [{} for i in range(20)]
+        RecycleBoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            size: self.minimum_size
+            default_size_hint: 1, None
+            default_size: 0, dp(100)
+            padding: dp(20)
+            spacing: dp(25)
+
+
+
+

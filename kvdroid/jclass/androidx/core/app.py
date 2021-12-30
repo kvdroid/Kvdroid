@@ -1,8 +1,7 @@
 from jnius import autoclass
 from kvdroid.jclass import _class_call
-from kvdroid.jclass.android import VERSION
 
-if VERSION().SDK_INT >= 26:
+if autoclass('android.os.Build$VERSION').SDK_INT >= 26:
     def NotificationManagerCompat(*args, instantiate: bool = False):
         return _class_call(
             autoclass("androidx.core.app.NotificationManagerCompat"), args, instantiate)

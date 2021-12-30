@@ -1,5 +1,6 @@
 import logging
 from os import environ
+from typing import Union
 
 from jnius import autoclass
 
@@ -14,12 +15,22 @@ def _get_platform():
         return 'android'
 
 
+def get_hex_from_color(color: list):
+    return "#" + "".join([f"{i * 255:02x}" for i in color])
+
+
+def _convert_color(color: Union[str, list]):
+    if isinstance(color, list):
+        color = get_hex_from_color(color)
+    return color
+
+
 platform = _get_platform()
 Logger = logging.getLogger('kivy')
 
 if platform == "android":
     try:
-        from android import config
+        from android import config # NOQA
 
         ns = config.JAVA_NAMESPACE
     except (ImportError, AttributeError):
