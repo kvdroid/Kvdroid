@@ -59,7 +59,7 @@ def device_info(text, convert=False):
             return memInfo.availMem
 
     def total_ram():
-        memInfo = MemoryInfo()
+        memInfo = MemoryInfo(instantiate=True)
         service = activity.getSystemService(Context.ACTIVITY_SERVICE)
         service.getMemoryInfo(memInfo)
         if convert:
@@ -68,7 +68,7 @@ def device_info(text, convert=False):
             return memInfo.totalMem
 
     def used_ram():
-        memInfo = MemoryInfo()
+        memInfo = MemoryInfo(instantiate=True)
         service = activity.getSystemService(Context.ACTIVITY_SERVICE)
         service.getMemoryInfo(memInfo)
         if convert:
