@@ -152,7 +152,22 @@ To detect current device's language
 ```python
 from kvdroid.tools.lang import device_lang
 
-print(device_lang)
+print(device_lang())    # en
+print(device_lang("DisplayLanguage"))    # English
+
+"""
+Available options are ;
+
+Language           ---> en      
+ISO3Language       ---> eng 
+Country            ---> US 
+Country            ---> USA 
+DisplayCountry     ---> United States 
+DisplayName        ---> English (United States) 
+String             ---> en_US
+DisplayLanguage    ---> English
+LanguageTag        ---> en-US
+"""
 ```
 To set statusbar color
 
