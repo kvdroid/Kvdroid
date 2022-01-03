@@ -1,94 +1,107 @@
 [
     {
         "icon": "share",
-        "text": "SHARE FILE"
+        "text": "SHARE FILE",
+        "exec": "from kvdroid.tools import share_file; share_file('assets/image/icon.png')"
     },
     {
         "icon": "share-variant",
-        "text": "SHARE TEXT"
+        "text": "SHARE TEXT",
+        "exec": "from kvdroid.tools import share_text; share_text('Sent from KvDroid')"
     },
     {
         "icon": "restart",
-        "text": "RESTART APP"
+        "text": "RESTART APP",
+        "exec": "from kvdroid.tools import restart_app; restart_app()"
     },
     {
         "icon": "message-badge",
-        "text": "TOAST"
+        "text": "TOAST",
+        "exec": "from kvdroid.tools import toast; toast('Hello, Welcome to KvDroid')"
     },
     {
         "icon": "cloud-download",
-        "text": "DOWNLOAD MANAGER"
+        "text": "DOWNLOAD MANAGER",
+        "exec": "from kvdroid.tools import download_manager download_manager('Downloading Egedege Song', 'Egedege ndi Igbo', 'https://bit.ly/3mHQdzZ')"
     },
     {
         "icon": "select-color",
-        "text": "CHANGE STATUSBAR COLOR"
+        "text": "CHANGE STATUSBAR COLOR",
+        "exec": "from kvdroid.tools import change_statusbar_color; change_statusbar_color('#2962FF', 'white')"
     },
     {
         "icon": "format-color-fill",
-        "text": "CHANGE NAVIGATION-BAR COLOR"
+        "text": "CHANGE NAVIGATION-BAR COLOR",
+        "exec": "from kvdroid.tools import navbar_color; navbar_color('#2962FF')"
+
     },
     {
         "icon": "wallpaper",
-        "text": "SET WALLPAPER"
+        "text": "SET WALLPAPER",
+        "exec": "from kvdroid.tools import set_wallpaper; set_wallpaper('assets/image/icon.png')"
     },
     {
         "icon": "text-to-speech",
-        "text": "TEXT TO SPEECH"
-    },
-    {
-        "icon": "keyboard",
-        "text": "GET KEYBOARD HEIGHT"
+        "text": "TEXT TO SPEECH",
+        "exec": "from kvdroid.tools import speech; speech('This is KV Droid application talking', 'en')"
     },
     {
         "icon": "magnify-expand",
-        "text": "IMMERSIVE MODE"
+        "text": "IMMERSIVE MODE",
+        "exec": "from kvdroid.tools import immersive_mode; immersive_mode()"
     },
     {
         "icon": "launch",
-        "text": "LAUNCH CHROME INTERNALLY"
+        "text": "LAUNCH CHROME INTERNALLY",
+        "exec": "from kvdroid.tools import launch_app_internally; launch_app_internally('com.android.chrome', 'com.google.android.apps.chrome.Main')"
     },
     {
         "icon": "launch",
-        "text": "LAUNCH CHROME EXTERNALLY"
+        "text": "LAUNCH CHROME EXTERNALLY",
+        "exec": "from kvdroid.tools import launch_app_externally; launch_app_externally('com.android.chrome')"
     },
     {
         "icon": "details",
-        "text": "GET CHROME DETAILS"
+        "text": "GET CHROME DETAILS",
+        "exec": "from kvdroid.tools import app_details; app_details('com.android.chrome')"
     },
     {
         "icon": "map-marker",
-        "text": "GET CHROME INSTALLATION SOURCE"
+        "text": "GET CHROME INSTALLATION SOURCE",
+        "exec": "from kvdroid.tools import appsource; app_source('com.android.chrome')"
     },
     {
         "icon": "music",
-        "text": "PLAY LOCAL MUSIC"
+        "text": "PLAY LOCAL MUSIC",
+        "exec": "from kvdroid.tools.audio import Player; Player.play('assets/audio/Egedege.mp3')"
     },
     {
         "icon": "music-box",
-        "text": "STREAM ONLINE MUSIC"
+        "text": "STREAM ONLINE MUSIC",
+        "exec": "from kvdroid.tools.audio import Player; Player.stream('https://bit.ly/3mHQdzZ')"
     },
     {
         "icon": "phone",
-        "text": "CALL 911"
+        "text": "CALL 911",
+        "exec": "from kvdroid.tools.call import make_call; make_call('911')"
     },
     {
         "icon": "phone-dial",
-        "text": "DIAL 911"
+        "text": "DIAL 911",
+        "exec": "from kvdroid.tools.call import dial_call; dial_call('911')"
     },
     {
         "icon": "contacts",
-        "text": "READ MY CONTACT"
+        "text": "READ MY CONTACT",
+        "exec": "from kvdroid.tools.call import get_contact_details; get_contact_details()"
     },
     {
         "icon": "web",
-        "text": "OPEN CUSTOM-TAB WEBVIEW"
+        "text": "OPEN CUSTOM-TAB WEBVIEW",
+        "exec": "from kvdroid.tools.webkit import launch_url; launch_url('https://github.com/kvdroid/Kvdroid')"
     },
     {
-        "icon": "theme-light-dark",
-        "text": "CHECK DARK MODE OR LIGHT MODE"
-    },
-    {
-        "icon": "devices",
-        "text": "GET DEVICE DETAIL"
+        "icon": "bell",
+        "text": "NOTIFICATION"
     }
 ]
