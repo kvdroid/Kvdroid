@@ -315,22 +315,7 @@ parcelable = cast("android.os.Parcelabel", uri)
  castables
 '''
 ```
-To access phone contacts
 
-```python
-# returns a dictionary containing names and numbers
-from kvdroid.tools.contact import get_contact_details
-
-print(get_contact_details("phone_book"))
-# or
-print(get_contact_details())
-
-# returns a list of names
-print(get_contact_details("names"))
-
-# returns a list of numbers
-print(get_contact_details("mobile_no"))
-```
 To access WebView cookies\
 (i.e if you compiled your app with webview bootstrap or have Webview in your app)
 
