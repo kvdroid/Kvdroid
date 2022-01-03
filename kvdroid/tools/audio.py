@@ -1,4 +1,4 @@
-from kvdroid.jclass.android.media import MediaPlayer, AudioManager
+from kvdroid.jclass.android import MediaPlayer, AudioManager
 
 
 class Player(object):
@@ -8,8 +8,8 @@ class Player(object):
     def raw(self):
         return self.mPlayer
 
-    def play(self, content):
-        self.content = str(content)
+    def play(self, content: str):
+        self.content = content
         try:
             self.mPlayer.stop()
             self.mPlayer.reset()
@@ -28,8 +28,8 @@ class Player(object):
     def stop(self):
         self.mPlayer.stop()
 
-    def stream(self, content):
-        self.content = str(content)
+    def stream(self, content: str):
+        self.content = content
         self.mPlayer.setAudioStreamType(AudioManager().STREAM_MUSIC)
         try:
             self.mPlayer.stop()
@@ -48,9 +48,9 @@ class Player(object):
         if self.content:
             return self.mPlayer.getCurrentPosition()
 
-    def seek(self, value):
+    def seek(self, value: int):
         try:
-            self.mPlayer.seekTo(int(value) * 1000)
+            self.mPlayer.seekTo(value * 1000)
         except:
             pass
 
@@ -62,6 +62,3 @@ class Player(object):
 
     def is_playing(self):
         return self.mPlayer.isPlaying()
-
-
-player = Player()
