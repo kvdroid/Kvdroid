@@ -8,6 +8,3 @@ def app_source():
         return "playstore"
     else:
         return "unknown"
-
-
-app_source = app_source()
