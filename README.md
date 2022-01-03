@@ -154,6 +154,7 @@ from kvdroid.tools.lang import device_lang
 
 print(device_lang())    # en
 print(device_lang("DisplayLanguage"))    # English
+print(device_lang(option = "DisplayLanguage", display_lang = "fr"))     # Anglais
 
 """
 Available options are ;
