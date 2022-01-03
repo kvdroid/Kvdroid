@@ -12,6 +12,3 @@ def dark_mode():
         Configuration.UI_MODE_NIGHT_UNDEFINED,
     ]:
         return False
-
-
-dark_mode = dark_mode()
