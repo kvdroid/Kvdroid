@@ -13,7 +13,8 @@ def device_lang(option = "Language", display_lang = None):
         "DisplayLanguage" : locale.getDisplayLanguage(Locale( str(display_lang) )) ,
         "LanguageTag" : locale.toLanguageTag() }
 
-    if option not in options.keys():
-        raise ValueError(f"Invalid option. Expected one of: {list(options.keys())}")
-    else:
+    if option in options:
         return options[option]
+
+    else:
+        raise ValueError(f"Invalid option. Expected one of: {list(options.keys())}")
