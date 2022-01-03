@@ -1,4 +1,4 @@
-from jnius import autoclass
+from jnius import autoclass # NOQA
 from kvdroid.jclass import _class_call
 
 

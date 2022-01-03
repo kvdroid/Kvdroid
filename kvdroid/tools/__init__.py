@@ -1,6 +1,6 @@
 from typing import Union
 from kvdroid import _convert_color
-from jnius import JavaException
+from jnius import JavaException # NOQA
 from kvdroid import activity
 from kvdroid.jclass.android import Intent, Context
 from kvdroid.jclass.android.app import Request, WallpaperManager
@@ -20,7 +20,7 @@ def share_text(text, title='Share', chooser=False, app_package=None, call_playst
     if app_package:
         from kvdroid import packages
         app_package = packages[app_package] if app_package in packages else None
-        from jnius import JavaException
+        from jnius import JavaException # NOQA
         try:
             intent.setPackage(String(app_package))
         except JavaException:
@@ -99,7 +99,7 @@ def restart_app():
     Runtime().getRuntime().exit(0)
 
 
-def download_manager(title, description, url, folder, file_name):
+def download_manager(title, description, url, folder=None, file_name=None):
     from kvdroid.jclass.android import Uri
     uri = Uri().parse(str(url))
     from kvdroid.cast import cast_object
@@ -108,7 +108,8 @@ def download_manager(title, description, url, folder, file_name):
     request.setTitle(str(title))
     request.setDescription(str(description))
     request.setNotificationVisibility(Request().VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-    request.setDestinationInExternalPublicDir(str(folder), str(file_name))
+    if folder and file_name:
+        request.setDestinationInExternalPublicDir(str(folder), str(file_name))
     dm.enqueue(request)
 
 
