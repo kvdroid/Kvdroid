@@ -38,5 +38,57 @@
     {
         "icon": "keyboard",
         "text": "GET KEYBOARD HEIGHT"
+    },
+    {
+        "icon": "magnify-expand",
+        "text": "IMMERSIVE MODE"
+    },
+    {
+        "icon": "launch",
+        "text": "LAUNCH CHROME INTERNALLY"
+    },
+    {
+        "icon": "launch",
+        "text": "LAUNCH CHROME EXTERNALLY"
+    },
+    {
+        "icon": "details",
+        "text": "GET CHROME DETAILS"
+    },
+    {
+        "icon": "map-marker",
+        "text": "GET CHROME INSTALLATION SOURCE"
+    },
+    {
+        "icon": "music",
+        "text": "PLAY LOCAL MUSIC"
+    },
+    {
+        "icon": "music-box",
+        "text": "STREAM ONLINE MUSIC"
+    },
+    {
+        "icon": "phone",
+        "text": "CALL 911"
+    },
+    {
+        "icon": "phone-dial",
+        "text": "DIAL 911"
+    },
+    {
+        "icon": "contacts",
+        "text": "READ MY CONTACT"
+    },
+    {
+        "icon": "web",
+        "text": "OPEN CUSTOM-TAB WEBVIEW"
+    },
+    {
+        "icon": "theme-light-dark",
+        "text": "CHECK DARK MODE OR LIGHT MODE"
+    },
+    {
+        "icon": "devices",
+        "text": "GET DEVICE DETAIL"
     }
 ]
