@@ -12,6 +12,3 @@ def network_status():
         return wifi or mobile
     except:
         return False
-
-
-network_state = network_status()

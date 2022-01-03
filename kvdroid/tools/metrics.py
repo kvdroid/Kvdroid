@@ -32,6 +32,3 @@ class Metrics(object):
         activity.getWindowManager().getDefaultDisplay().getRealSize(point)
         size = re.findall(r"\d+", point.toString())
         return size[1] + "x" + size[0]
-
-
-screen = Metrics()
