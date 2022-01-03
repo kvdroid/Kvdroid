@@ -2,14 +2,16 @@
 #:import Window kivy.core.window.Window
 <CardButton@MD3Card>:
     elevation: 10
+    exec: ""
     radius: [dp(20)]
     padding: dp(20)
     spacing: dp(10)
     text_color: app.theme_cls.primary_color
     ripple_color: app.theme_cls.primary_color
     ripple_behavior: True
-    text: "NOTIFICATION"
-    icon: "bell"
+    text: ""
+    icon: ""
+    on_release: app.execute_code(self.exec)
     MDIcon:
         icon: root.icon
         pos_hint: {"center_y": .5}

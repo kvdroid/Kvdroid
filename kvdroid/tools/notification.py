@@ -1,6 +1,6 @@
 from typing import Union
 
-from jnius import cast, JavaException
+from jnius import cast, JavaException # NOQA
 from android import python_act # NOQA
 from kvdroid import Logger, activity
 from kvdroid.cast import cast_object

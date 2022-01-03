@@ -93,7 +93,7 @@
     {
         "icon": "contacts",
         "text": "READ MY CONTACT",
-        "exec": "from kvdroid.tools.call import get_contact_details; get_contact_details()"
+        "exec": "from kvdroid.tools.call import get_contact_details; print(get_contact_details()); from kvdroid.tools import toast; toast('use adb logcat -s python to view your contact list, will still provide a more user friendly way in the near future')"
     },
     {
         "icon": "web",
@@ -102,6 +102,7 @@
     },
     {
         "icon": "bell",
-        "text": "NOTIFICATION"
+        "text": "NOTIFICATION",
+        "exec": "from kvdroid.tools.notification import create_notification; from kvdroid.tools import get_resource(); create_notification(get_resource('drawable').icon, '1', 'KvDroid', 'hello from kvdroid androidx notification', 'assets/images/icon.png', 'assets/images/icon.png', 'CLICK', 'PRESS', 'SEND', 'reply', 'REPLY', True, True, True, False, True, True, True, True, ('test', 'test'), Color.parseColor('#2962FF'))"
     }
 ]

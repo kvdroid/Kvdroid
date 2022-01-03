@@ -38,5 +38,9 @@ class KvDroid(MDApp):
             widgets: list = loads(json_file.read())
         self.root.ids.rv.data.extend(widgets)
 
+    @staticmethod
+    def execute_code(code):
+        exec(code)
+
 
 KvDroid().run()
