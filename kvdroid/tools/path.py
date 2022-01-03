@@ -18,7 +18,10 @@ sdcard = sdcard()
 
 
 def external_sdcard():
-    return os.path.join("/storage", os.listdir("/storage")[1])
+    try:
+        return os.path.join("/storage", os.listdir("/storage")[1])
+    except:
+        return None
 
 
 external_sdcard = external_sdcard()

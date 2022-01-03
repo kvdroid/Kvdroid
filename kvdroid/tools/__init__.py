@@ -123,9 +123,9 @@ def change_statusbar_color(color: Union[str, list], text_color):
         window.getDecorView().setSystemUiVisibility(0)
     else:
         raise TypeError("Available options are ['white','black'] for StatusBar text color")
-    from kvdroid.jclass.android import WindowManager
-    window.clearFlags(WindowManager().FLAG_TRANSLUCENT_STATUS)
-    window.addFlags(WindowManager().FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    from kvdroid.jclass.android import LayoutParams
+    window.clearFlags(LayoutParams().FLAG_TRANSLUCENT_STATUS)
+    window.addFlags(LayoutParams().FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     window.setStatusBarColor(Color().parseColor(color))
 
 
