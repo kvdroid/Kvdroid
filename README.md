@@ -51,7 +51,7 @@ create_notification(
     ids=1, channel_name=f"ch1",
     large_icon="assets/image.png",
     expandable=True,
-    small_icon_color=Color.rgb(0x00, 0xC8, 0x53),  # 0x00 0xC8 0x53 is same as 00C853
+    small_icon_color=Color().rgb(0x00, 0xC8, 0x53),  # 0x00 0xC8 0x53 is same as 00C853
     big_picture="assets/image.png"
 )
 ```
@@ -83,7 +83,7 @@ To detect if app is installed from Play Store or not
 ```python
 from kvdroid.tools.appsource import app_source
 
-print(app_source)
+print(app_source())
 ```
 To get absolute screen size in dp-pixel and detect current orientation
 
@@ -111,7 +111,7 @@ print(dark_mode)
 ```
 To get device informations.
 Available options are;
-```'model','brand','manufacturer','version','sdk','product','base','rom','security','hardware','tags','sdk_int','total_mem','used_mem','avail_ram','total_ram','used_ram','bat_level','bat_capacity','bat_tempeture','bat_voltage','bat_technology'```
+```'model','brand','manufacturer','version','sdk','product','base','rom','security','hardware','tags','sdk_int','total_mem','used_mem','avail_ram','total_ram','used_ram','bat_level','bat_capacity','bat_temperature','bat_voltage','bat_technology'```
 
 ```python
 from kvdroid.tools.deviceinfo import device_info
@@ -124,21 +124,28 @@ To enable immersive mode
 ```python
 from kvdroid.tools import immersive_mode
 
-immersive_mode(True)  # default is False
+immersive_mode()
 ```
-To launch a specific app
+To launch a specific app outside your app Activity
 
 ```python
-from kvdroid.tools import launch_app
+from kvdroid.tools import launch_app_externally
 
-launch_app( < app_package >, < app_activity >)
+launch_app_externally("< app_package >")
+```
+To launch a specific app within your app Activity
+
+```python
+from kvdroid.tools import launch_app_internally
+
+launch_app_internally("< app_package >", "< app_activity >")
 ```
 To open target app's details page
 
 ```python
 from kvdroid.tools import app_details
 
-app_details( < app_package >)
+app_details("< app_package >")
 ```
 To detect current device's language
 
@@ -171,7 +178,7 @@ toast("hello world")
 To get absolute sdcard path
 
 ```python
-from kvdroid.path import sdcard
+from kvdroid.tools.path import sdcard
 
 print(sdcard)
 ```
@@ -193,9 +200,9 @@ print(app_folder)
 To get file mime Type
 
 ```python
-from kvdroid import mime_type
+from kvdroid.tools import mime_type
 
-mime_type = mime_type(file_path)
+mime_type = mime_type("path/to/file")
 print(mime_type)
 ```
 
@@ -218,14 +225,14 @@ To use default Download Manager
 ```python
 from kvdroid.tools import download_manager
 
-download_manager( < title >, < description >, < URL >, < path >, < file >)
+download_manager("< title >", "< description >", "< URL >", "< path >", "< file >")
 ```
 To restart the app
 
 ```python
 from kvdroid.tools import restart_app
 
-restart_app(True)  # default is false
+restart_app()
 ```
 To share text via Android Share menu
 
@@ -240,23 +247,24 @@ To share any file via Android Share menu
 ```python
 from kvdroid.tools import share_file
 
-share_file( < path - to - file >, < title >, < chooser >, < app - package: open -
-with-default - app >,
-< call_playstore >, < error_msg > )
+share_file(
+    "< path - to - file >", "< title >", "< chooser >", "< app - package: open -with-default - app >",
+    "< call_playstore >", "< error_msg >")
 share_file("/sdcard/test.pdf", title='Share', chooser=False, app_package=None,
            call_playstore=False, error_msg="application unavailable")
 ```
-To play suported music format or radio stream through Android Media Player
+To play supported music format or radio stream through Android Media Player
 ```player.mPLayer = Android Media PLayer```
 
 ```python
-from kvdroid.tools.audio import player
+from kvdroid.tools.audio import Player
 
-player.play( < path - to - music - file >)
-player.stream(Url)  # radio
+player = Player()
+player.play("< path - to - music - file >")
+player.stream("https://bit.ly/3mHQdzZ")  # radio
 player.pause()
 player.resume()
-player.seek(value)
+player.seek(2) # seconds
 player.do_loop(True)  # default is False
 player.is_playing()
 player.get_duration()
@@ -266,18 +274,17 @@ To cast Java Object
 
 ```python
 from kvdroid.cast import cast_object
-from kvdroid.jclass.android.net import Uri
+from kvdroid.jclass.android import Uri
 
-uri = Uri.fromFile("/home/java/my_document.pdf")
+uri = Uri().fromFile("/home/java/my_document.pdf")
 parcelable = cast_object("parcelable", uri)
 
 # Above code  is same as below code::
 
-from kvdroid.cast import cast_object
-from kvdroid.jclass.android.net import Uri
+from kvdroid.jclass.android import Uri
 from jnius import cast
 
-uri = Uri.fromFile("/home/java/my_document.pdf")
+uri = Uri().fromFile("/home/java/my_document.pdf")
 parcelable = cast("android.os.Parcelabel", uri)
 
 '''

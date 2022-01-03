@@ -86,18 +86,17 @@ def get_resource(resource, activity_type=activity):
     return autoclass(f"{activity_type.getPackageName()}.R${resource}")
 
 
-def restart_app(restart=False):
-    if restart:
-        from kvdroid.cast import cast_object
-        currentActivity = cast_object('activity', activity)
-        context = cast_object('context', currentActivity.getApplicationContext())
-        packageManager = context.getPackageManager()
-        intent = packageManager.getLaunchIntentForPackage(context.getPackageName())
-        componentName = intent.getComponent()
-        mainIntent = Intent().makeRestartActivityTask(componentName)
-        context.startActivity(mainIntent)
-        from kvdroid.jclass.java.lang import Runtime
-        Runtime().getRuntime().exit(0)
+def restart_app():
+    from kvdroid.cast import cast_object
+    currentActivity = cast_object('activity', activity)
+    context = cast_object('context', currentActivity.getApplicationContext())
+    packageManager = context.getPackageManager()
+    intent = packageManager.getLaunchIntentForPackage(context.getPackageName())
+    componentName = intent.getComponent()
+    mainIntent = Intent().makeRestartActivityTask(componentName)
+    context.startActivity(mainIntent)
+    from kvdroid.jclass.java.lang import Runtime
+    Runtime().getRuntime().exit(0)
 
 
 def download_manager(title, description, url, folder, file_name):
@@ -166,18 +165,17 @@ def keyboard_height():
 
 
 @run_on_ui_thread
-def immersive_mode(immerse=None):
-    if immerse:
-        window = activity.getWindow()
-        from kvdroid.jclass.android import View
-        View = View()
-        return window.getDecorView().setSystemUiVisibility(
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            | View.SYSTEM_UI_FLAG_FULLSCREEN
-            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+def immersive_mode():
+    window = activity.getWindow()
+    from kvdroid.jclass.android import View
+    View = View()
+    return window.getDecorView().setSystemUiVisibility(
+        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        | View.SYSTEM_UI_FLAG_FULLSCREEN
+        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
 
 
 def launch_app_internally(app_package, app_activity):

@@ -13,6 +13,8 @@ class MD3Card(MDCard, FakeRectangularElevationBehavior):
 
 
 class KvDroid(MDApp):
+    icon = "assets/image/icon.png"
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.theme_cls.primary_palette = "Blue"
@@ -32,7 +34,9 @@ class KvDroid(MDApp):
         )
 
     def on_start(self):
-        print(self.root)
+        with open("assets/json/widget.json") as json_file:
+            widgets: list = loads(json_file.read())
+        self.root.ids.rv.data.extend(widgets)
 
 
 KvDroid().run()
