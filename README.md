@@ -161,7 +161,7 @@ Available options are ;
 Language           ---> en      
 ISO3Language       ---> eng 
 Country            ---> US 
-Country            ---> USA 
+ISO3Country            ---> USA 
 DisplayCountry     ---> United States 
 DisplayName        ---> English (United States) 
 String             ---> en_US
