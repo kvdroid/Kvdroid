@@ -19,8 +19,8 @@ def launch_url(url: str, color="#FFFFFF", color_scheme="system"):
         "dark": CustomTabsIntent.COLOR_SCHEME_DARK
     }
     color_int = Color().parseColor(color)
-    default_color = CustomTabColorSchemeParamsBuilder().setToolbarColor(color_int).build()
-    builder = CustomTabsIntentBuilder()
+    default_color = CustomTabColorSchemeParamsBuilder(instantiate=True).setToolbarColor(color_int).build()
+    builder = CustomTabsIntentBuilder(instantiate=True)
     if color_scheme not in schemes:
         builder.setColorScheme(CustomTabsIntent.COLOR_SCHEME_SYSTEM)
     else:

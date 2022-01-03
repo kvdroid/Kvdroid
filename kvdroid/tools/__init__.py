@@ -1,3 +1,4 @@
+from time import sleep
 from typing import Union
 from kvdroid import _convert_color
 from jnius import JavaException # NOQA
@@ -147,12 +148,20 @@ def set_wallpaper(path_to_image):
     return manager.setBitmap(bitmap)
 
 
-def speech(text, lang):
-    from kvdroid.jclass.android.speech.tts import TextToSpeech
+def speech(text: str, lang: str):
+    from kvdroid.jclass.android import TextToSpeech
     tts = TextToSpeech(activity, None)
-    from kvdroid.jclass.java.util import Locale
-    tts.setLanguage(Locale(str(lang)))
-    return tts.speak(str(text), TextToSpeech().QUEUE_FLUSH, None)
+    retries = 0
+    from kvdroid.jclass.java import Locale
+    tts.setLanguage(Locale(lang))
+    speak_status = tts.speak(text, TextToSpeech().QUEUE_FLUSH, None)
+    while retries < 100 and speak_status == -1:
+        sleep(0.1)
+        retries += 1
+        speak_status = tts.speak(
+            text, TextToSpeech().QUEUE_FLUSH, None
+        )
+    return speak_status
 
 
 def keyboard_height():

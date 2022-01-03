@@ -22,17 +22,17 @@
     {
         "icon": "cloud-download",
         "text": "DOWNLOAD MANAGER",
-        "exec": "from kvdroid.tools import download_manager download_manager('Downloading Egedege Song', 'Egedege ndi Igbo', 'https://bit.ly/3mHQdzZ')"
+        "exec": "from kvdroid.tools import download_manager; download_manager('Downloading Egedege Song', 'Egedege ndi Igbo', 'https://bit.ly/3mHQdzZ')"
     },
     {
         "icon": "select-color",
         "text": "CHANGE STATUSBAR COLOR",
-        "exec": "from kvdroid.tools import change_statusbar_color; change_statusbar_color('#2962FF', 'white')"
+        "exec": "from kvdroid.tools import change_statusbar_color; change_statusbar_color('#AA00FF', 'white')"
     },
     {
         "icon": "format-color-fill",
         "text": "CHANGE NAVIGATION-BAR COLOR",
-        "exec": "from kvdroid.tools import navbar_color; navbar_color('#2962FF')"
+        "exec": "from kvdroid.tools import navbar_color; navbar_color('#AA00FF')"
 
     },
     {
@@ -68,17 +68,17 @@
     {
         "icon": "map-marker",
         "text": "GET CHROME INSTALLATION SOURCE",
-        "exec": "from kvdroid.tools import appsource; app_source('com.android.chrome')"
+        "exec": "from kvdroid.tools.appsource import app_source; app_source('com.android.chrome')"
     },
     {
         "icon": "music",
         "text": "PLAY LOCAL MUSIC",
-        "exec": "from kvdroid.tools.audio import Player; Player.play('assets/audio/Egedege.mp3')"
+        "exec": "from kvdroid.tools.audio import Player; Player().play('assets/audio/Egedege.mp3')"
     },
     {
         "icon": "music-box",
         "text": "STREAM ONLINE MUSIC",
-        "exec": "from kvdroid.tools.audio import Player; Player.stream('https://bit.ly/3mHQdzZ')"
+        "exec": "from kvdroid.tools.audio import Player; Player().stream('https://bit.ly/3mHQdzZ')"
     },
     {
         "icon": "phone",
@@ -93,7 +93,7 @@
     {
         "icon": "contacts",
         "text": "READ MY CONTACT",
-        "exec": "from kvdroid.tools.call import get_contact_details; print(get_contact_details()); from kvdroid.tools import toast; toast('use adb logcat -s python to view your contact list, will still provide a more user friendly way in the near future')"
+        "exec": "from kvdroid.tools.contact import get_contact_details; print(get_contact_details()); from kvdroid.tools import toast; toast('use adb logcat -s python to view your contact list, will still provide a more user friendly way in the near future')"
     },
     {
         "icon": "web",
@@ -103,6 +103,6 @@
     {
         "icon": "bell",
         "text": "NOTIFICATION",
-        "exec": "from kvdroid.tools.notification import create_notification; from kvdroid.tools import get_resource(); create_notification(get_resource('drawable').icon, '1', 'KvDroid', 'hello from kvdroid androidx notification', 'assets/images/icon.png', 'assets/images/icon.png', 'CLICK', 'PRESS', 'SEND', 'reply', 'REPLY', True, True, True, False, True, True, True, True, ('test', 'test'), Color.parseColor('#2962FF'))"
+        "exec": "from kvdroid.tools.notification import create_notification; from kvdroid.jclass.android import Color from kvdroid.tools import get_resource; create_notification(get_resource('drawable').ic_kvdroid, '1', 'KvDroid', 'hello from kvdroid androidx notification', 'assets/images/icon.png', 'assets/images/icon.png', 'CLICK', 'PRESS', 'SEND', 'reply', 'REPLY', True, True, True, False, True, True, True, True, ('test', 'test'), Color.parseColor('#2962FF'))"
     }
 ]
