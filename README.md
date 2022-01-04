@@ -95,12 +95,15 @@ print(screen.width_dp())
 print(screen.height_px())
 print(screen.resolution())
 ```
-To check if device has a data connection both for wifi and cellular
+To check if device has a data connection.
 
 ```python
-from kvdroid.tools.network import network_state
+from kvdroid.tools.network import network_status, wifi_status, mobile_status
 
-print(network_state)
+print(network_status())  # for both wifi and mobile
+print(wifi_status())    # only for wifi
+print(mobile_status())    # only for mobile
+
 ```
 To check if device is  in dark mode or not
 
@@ -312,22 +315,7 @@ parcelable = cast("android.os.Parcelabel", uri)
  castables
 '''
 ```
-To access phone contacts
 
-```python
-# returns a dictionary containing names and numbers
-from kvdroid.tools.contact import get_contact_details
-
-print(get_contact_details("phone_book"))
-# or
-print(get_contact_details())
-
-# returns a list of names
-print(get_contact_details("names"))
-
-# returns a list of numbers
-print(get_contact_details("mobile_no"))
-```
 To access WebView cookies\
 (i.e if you compiled your app with webview bootstrap or have Webview in your app)
 
