@@ -98,6 +98,6 @@
     {
         "icon": "bell",
         "text": "NOTIFICATION",
-        "exec": "from kvdroid.tools.notification import create_notification; from kvdroid.jclass.android import Color from kvdroid.tools import get_resource; create_notification(get_resource('drawable').ic_kvdroid, '1', 'KvDroid', 'hello from kvdroid androidx notification', 'assets/images/icon.png', 'assets/images/icon.png', 'CLICK', 'PRESS', 'SEND', 'reply', 'REPLY', True, True, True, False, True, True, True, True, ('test', 'test'), Color.parseColor('#2962FF'))"
+        "exec": "from kvdroid.tools.notification import create_notification; from kvdroid.jclass.android import Color; from kvdroid.tools import get_resource; create_notification(get_resource('drawable').ic_kvdroid, '1', 'KvDroid', 'hello from kvdroid androidx notification', 'assets/images/icon.png', 'assets/images/icon.png', 'CLICK', 'PRESS', 'SEND', 'reply', 'REPLY', True, True, True, False, True, True, True, True, ('test', 'test'), Color.parseColor('#2962FF'))"
     }
 ]

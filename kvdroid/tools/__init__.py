@@ -123,6 +123,7 @@ def download_manager(title, description, url, folder=None, file_name=None):
     else:
         conn = URL(url).openConnection()
         url = conn.getURL().toString()
+        print(url)
         request.setDestinationInExternalPublicDir(
             Environment().DIRECTORY_DOWNLOADS, URLUtil().guessFileName(url, None, None)
         )
