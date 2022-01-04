@@ -66,11 +66,6 @@
         "exec": "from kvdroid.tools import app_details; app_details('com.android.chrome')"
     },
     {
-        "icon": "map-marker",
-        "text": "GET CHROME INSTALLATION SOURCE",
-        "exec": "from kvdroid.tools.appsource import app_source; app_source('com.android.chrome')"
-    },
-    {
         "icon": "music",
         "text": "PLAY LOCAL MUSIC",
         "exec": "from kvdroid.tools.audio import Player; Player().play('assets/audio/Egedege.mp3')"
