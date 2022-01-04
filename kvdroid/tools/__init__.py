@@ -3,9 +3,18 @@ from typing import Union
 from kvdroid import _convert_color
 from jnius import JavaException # NOQA
 from kvdroid import activity
-from kvdroid.jclass.android import Intent, Context
-from kvdroid.jclass.android.app import Request, WallpaperManager
-from kvdroid.jclass.android.graphics import Color, BitmapFactory, Rect
+from kvdroid.jclass.java import URL
+from kvdroid.jclass.android import (
+    Intent,
+    Context,
+    Environment,
+    Request,
+    WallpaperManager,
+    Color,
+    BitmapFactory,
+    Rect,
+    URLUtil
+)
 from android.runnable import run_on_ui_thread # NOQA
 
 
@@ -111,6 +120,12 @@ def download_manager(title, description, url, folder=None, file_name=None):
     request.setNotificationVisibility(Request().VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
     if folder and file_name:
         request.setDestinationInExternalPublicDir(str(folder), str(file_name))
+    else:
+        conn = URL(url).openConnection()
+        url = conn.getURL().toString()
+        request.setDestinationInExternalPublicDir(
+            Environment().DIRECTORY_DOWNLOADS, URLUtil().guessFileName(url, None, None)
+        )
     dm.enqueue(request)
 
 
