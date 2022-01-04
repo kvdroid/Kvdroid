@@ -122,6 +122,10 @@ def download_manager(title, description, url, folder=None, file_name=None):
         request.setDestinationInExternalPublicDir(str(folder), str(file_name))
     else:
         conn = URL(url).openConnection()
+        try:
+            conn.getContent()
+        except JavaException:
+            pass
         url = conn.getURL().toString()
         print(url)
         request.setDestinationInExternalPublicDir(
