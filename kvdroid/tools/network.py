@@ -3,7 +3,10 @@ from kvdroid import activity
 
 
 def network_status():
-    return wifi_status() or mobile_status()
+    if wifi_status() or mobile_status():
+        return True
+    else:
+        return False
             
 def wifi_status():
     from kvdroid.jclass.android import ConnectivityManager
