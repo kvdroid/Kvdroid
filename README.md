@@ -88,7 +88,8 @@ print(app_source())
 To get absolute screen size in dp-pixel and detect current orientation
 
 ```python
-from kvdroid.tools.metrics import screen
+from kvdroid.tools.metrics import Metrics
+screen = Metrics()
 
 print(screen.orientation())
 print(screen.width_dp())
