@@ -46,7 +46,7 @@ To use system-provided fonts
 from kivy.uix.label import Label
 from kvdroid.tools.font import system_font
 
-# for the default font
+# that will return the default font for the device's current language.
 Label(text = "example", font_name = system_font())
 
 # for the specific language font
