@@ -37,6 +37,22 @@ requirement = https://github.com/kvdroid/Kvdroid/archive/refs/heads/master.zip
 ```
 
 ### Usage
+
+To use system-provided fonts
+
+:warning: `That function is so experimental. It should work for Android 7 and above but not been tested on much devices. It is actually for multilingual purposes to use system-provided fonts for no Latin languages. system_font() will always return the supported font from /system/fonts for the current device language.  Also, you could use any language-supported font from the system just by calling the system_font function with the target language's iso639-1 or iso639-2 abbreviation such as font_name = system_font('zh') or system_font('zho'). `
+
+```python
+from kivy.uix.label import Label
+from kvdroid.tools.font import system_font
+
+# for the default font
+Label(text = "example", font_name = system_font())
+
+# for the specific language font
+Label(text = "你好世界", font_name = system_font('zho')) # Language definition must be iso639-1 or iso639-2 abbreviation.  https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+```
+
 To send notification
 
 ```python
