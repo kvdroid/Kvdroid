@@ -120,6 +120,14 @@ from kvdroid.tools.package import is_system_package
 print(is_system_package("com.android.settings"))
 ```
 
+To check if the package is enabled
+
+```python
+from kvdroid.tools.package import is_package_enabled
+
+print(is_package_enabled("com.android.settings"))
+```
+
 To get a specific app details
 
 ```python
