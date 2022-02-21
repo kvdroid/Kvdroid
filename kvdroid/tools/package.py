@@ -32,6 +32,11 @@ def is_system_package(package):
     else:
         return False
 
+    
+def is_package_enabled(package):
+    pManager = activity.getPackageManager()
+    return pManager.getApplicationInfo(package,0).enabled
+
 
 def package_source(package):
     installer = activity.getPackageManager().getInstallerPackageName(package)
