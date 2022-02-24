@@ -17,3 +17,10 @@ def device_lang(option = "Language", display_lang = None):
         raise ValueError(f"Invalid option. Expected one of: {list(options.keys())}")
     else:
         return options[option]
+
+def supported_languages():
+    langs = []
+    for locale in Locale().getAvailableLocales():
+        if locale.getLanguage() not in langs:
+            langs.append(locale.getLanguage())
+    return langs
