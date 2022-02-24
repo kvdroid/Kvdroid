@@ -309,6 +309,18 @@ DisplayLanguage    ---> English
 LanguageTag        ---> en-US
 """
 ```
+
+To get a list of supported languages on the device
+
+```python
+from kvdroid.tools.lang import supported_languages
+print(supported_languages())
+
+"""
+['af', 'agq', 'ak', 'am', 'ar', 'as', 'asa', 'ast'...]
+"""
+```
+
 To set statusbar color
 
 ```python
