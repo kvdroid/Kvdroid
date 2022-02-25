@@ -7,7 +7,8 @@ castable_packages = {
     "context": "android.content.Context",
     "downloadManager": "android.app.DownloadManager",
     "charSequence": "java.lang.CharSequence",
-    "bitmapdrawable": "android.graphics.drawable.BitmapDrawable"
+    "bitmapdrawable": "android.graphics.drawable.BitmapDrawable",
+    "adaptiveicondrawable": "android.graphics.drawable.AdaptiveIconDrawable"
 }
 
 
