@@ -16,7 +16,10 @@ def Bitmap(*args, instantiate: bool = False):
     
 def BitmapDrawable(*args, instantiate: bool = False):
     return _class_call(autoclass('android.graphics.drawable.BitmapDrawable'), args, instantiate)
-
+    
+def AdaptiveIconDrawable(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.graphics.drawable.AdaptiveIconDrawable'), args, instantiate)
+    
 def BitmapFactory(*args, instantiate: bool = False):
     return _class_call(autoclass('android.graphics.BitmapFactory'), args, instantiate)
     
