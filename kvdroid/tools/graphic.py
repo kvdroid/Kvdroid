@@ -1,10 +1,14 @@
 from kvdroid.cast import cast_object
-from kvdroid.jclass.android import Bitmap, CompressFormat, Config, Canvas
+from kvdroid.jclass.android import Bitmap, CompressFormat, Config, Canvas, AdaptiveIconDrawable
 from kvdroid.jclass.java import FileOutputStream
 
 
 def save_drawable(drawable, path, name):
-    drawable = cast_object("bitmapdrawable", drawable)
+    if isinstance(drawable, AdaptiveIconDrawable()):
+        drawable = cast_object("adaptiveicondrawable", drawable)
+    else:
+        drawable = cast_object("bitmapdrawable", drawable)
+
     height = drawable.getIntrinsicHeight() if drawable.getIntrinsicHeight() > 0 else 1
     width = drawable.getIntrinsicWidth() if drawable.getIntrinsicWidth() > 0 else 1
     if drawable.isFilterBitmap():
