@@ -78,10 +78,10 @@ import re
 import os
 from kvdroid.tools.iso import iso_codes
 from kivy.core.text import LabelBase
-
+from kvdroid.tools.lang import device_lang
 
 def system_font(language=None):
-    if language:
+    if language != None:
         if language.lower() in iso_codes.keys():
             try:
                 return font_dict[iso_codes[language.lower()]]
@@ -91,7 +91,6 @@ def system_font(language=None):
             raise ValueError(
                 "The language definition must be in iso639-1 or iso639-2 code formats such as 'en' or 'eng'")
     else:
-        from kvdroid.tools.lang import device_lang
         locale = device_lang()
         try:
             return font_dict[iso_codes[locale]]
@@ -171,4 +170,6 @@ if r:
                     lang = "Jpan"
                 if lang == "ko":
                     lang = "Kore"
+                if lang == 'Hans':
+                   define_font('Hant',i)
                 define_font(lang, i)
