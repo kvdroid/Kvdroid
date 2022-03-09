@@ -80,6 +80,7 @@ from kvdroid.tools.iso import iso_codes
 from kivy.core.text import LabelBase
 from kvdroid.tools.lang import device_lang
 
+
 def system_font(language=None):
     if language != None:
         if language.lower() in iso_codes.keys():
@@ -125,28 +126,31 @@ def define_font(lang, item):
     temp = {}
     split_item = item.splitlines()
     for f in split_item:
-        if f.strip().startswith("<font"):
-            font = re.findall(
-                "(?<=\">)[A-Z].*\.ttf|(?<=\">)[A-Z].*\.ttc|(?<=\">)[A-Z].*\.otf", f)[0]
-            font = is_font_exist(font)
+        font = re.findall(
+            "(?<=\s)[A-Z].*\.ttf|(?<=\s)[A-Z].*\.ttc|(?<=\s)[A-Z].*\.otf|(?<=\">)[A-Z].*\.ttf|(?<=\">)[A-Z].*\.ttc|(?<=\">)[A-Z].*\.otf", f)
+        if font:
+            font = is_font_exist(font[0])
             if font:
-                temp["name"] = font.split("-")[0]
-                if "-Regular" in font:
-                    if not "regular" in temp.keys():
-                        temp["regular"] = font
-                elif "-Bold" in font:
-                    if not "bold" in temp.keys():
-                        temp["bold"] = font
-                elif "-Italic" in font:
-                    if not "italic" in temp.keys():
-                        temp["italic"] = font
-                elif "-BoldItalic" in font:
-                    if not "bolditalic" in font:
-                        temp["bolditalic"] = font
-
-        if "regular" in temp.keys():
-            register_font(lang, temp)
-    temp = {}
+                name = font.split("-")[0]
+                if not name.startswith('Roboto'):
+                    temp["name"] = name
+                    if "-Regular" in font:
+                        if not "regular" in temp.keys():
+                            temp["regular"] = font
+                    elif "-Bold" in font:
+                        if not "bold" in temp.keys():
+                            temp["bold"] = font
+                    elif "-Italic" in font:
+                        if not "italic" in temp.keys():
+                            temp["italic"] = font
+                    elif "-BoldItalic" in font:
+                        if not "bolditalic" in font:
+                            temp["bolditalic"] = font
+                    else:
+                        if not "regular" in temp.keys():
+                            temp["regular"] = font
+    if temp:
+        register_font(lang, temp)
 
 
 path = "/system/fonts/"
@@ -163,7 +167,7 @@ if r:
     if langs:
         for i in langs:
             lang = re.findall("\"(.*?)\"", i)[0]
-            split_lang = lang.split()
+            split_lang = lang.split(',')
             for s in split_lang:
                 lang = s.split("-")[-1]
                 if lang == "ja":
@@ -171,5 +175,5 @@ if r:
                 if lang == "ko":
                     lang = "Kore"
                 if lang == 'Hans':
-                   define_font('Hant',i)
+                    define_font('Hant', i)
                 define_font(lang, i)
