@@ -37,3 +37,19 @@ def MemoryInfo(*args, instantiate: bool = False):
 
 def ActivityManager(*args, instantiate: bool = False):
     return _class_call(autoclass("android.app.ActivityManager"), args, instantiate)
+
+    
+def ComponentName(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.content.ComponentName"), args, instantiate)
+
+    
+def ApplicationInfo(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.content.pm.ApplicationInfo"), args, instantiate)
+
+    
+def PackageManager(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.content.pm.PackageManager"), args, instantiate)
+
+    
+def Configuration(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.content.res.Configuration"), args, instantiate)

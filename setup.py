@@ -11,7 +11,7 @@ setup(
     packages=find_packages(
             include=["kvdroid", "kvdroid.*"]
         ),
-    version='0.2.7',
+    version='0.2.9',
     description='A re-implementation of android java API in python with easy access to some Android functionality '
                 'like Notification,Reading of Contacts, accessing Webview Cookies, etc...',
     long_description=long_description,

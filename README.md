@@ -37,6 +37,22 @@ requirement = https://github.com/kvdroid/Kvdroid/archive/refs/heads/master.zip
 ```
 
 ### Usage
+
+To use system-provided fonts
+
+:warning: `That function is so experimental. It should work for Android 7 and above but not been tested on much devices. It is actually for multilingual purposes to use system-provided fonts for no Latin languages. system_font() will always return the supported font from /system/fonts for the current device language.  Also, you could use any language-supported font from the system just by calling the system_font function with the target language's iso639-1 or iso639-2 abbreviation such as font_name = system_font('zh') or system_font('zho'). `
+
+```python
+from kivy.uix.label import Label
+from kvdroid.tools.font import system_font
+
+# that will return the default font for the device's current language.
+Label(text = "example", font_name = system_font())
+
+# for the specific language font
+Label(text = "你好世界", font_name = system_font('zho')) # Language definition must be iso639-1 or iso639-2 abbreviation.  https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+```
+
 To send notification
 
 ```python
@@ -64,6 +80,125 @@ get_contact_details("phone_book") # gets a dictionary of all contact both contac
 get_contact_details("names") # gets a list of all contact names
 get_contact_details("mobile_no") # gets a list of all contact phone numbers
 ```
+
+To get a list of all installed packages (Applications)
+
+```python
+from kvdroid.tools.package import all_packages
+
+print(all_packages())
+
+"""
+['com.google.android.carriersetup',
+ 'com.android.cts.priv.ctsshim',
+ 'com.google.android.ext.services',
+ 'com.android.providers.telephony',
+ 'com.android.providers.calendar'...]
+"""
+```
+
+To get all main activities
+
+```python
+from kvdroid.tools.package import all_main_activities
+
+print(all_main_activities())
+
+"""
+[{'com.android.settings': 'com.android.settings.Settings'},
+ {'com.android.vending': 'com.android.vending.AssetBrowserActivity'},
+ {'com.google.android.contacts': 'com.android.contacts.activities.PeopleActivity'},
+ {'com.google.android.deskclock': 'com.android.deskclock.DeskClock'}...]
+"""
+```
+
+To check if the package is a system application
+
+```python
+from kvdroid.tools.package import is_system_package
+
+print(is_system_package("com.android.settings"))
+```
+
+To check if the package is enabled
+
+```python
+from kvdroid.tools.package import is_package_enabled
+
+print(is_package_enabled("com.android.settings"))
+```
+
+To get a specific app details
+
+```python
+from kvdroid.tools.package import package_info
+
+print(package_info("com.android.settings"))
+
+"""
+{'activities': ['org.chromium.settings.SettingsBlackHoleActivity',
+                'com.android.settings.Settings$NetworkDashboardActivity',
+                'com.android.settings.network.NetworkSettings',
+                'com.android.settings.Settings$AdvancedAppsActivity',
+                'com.android.settings.app.AdvancedAppsSettings'...],
+ 'dataDir': '/data/user_de/0/com.android.settings',
+ 'loadIcon': <android.graphics.drawable.Drawable at 0x7e8e15bac8b0 jclass=android/graphics/drawable/Drawable jself=<LocalRef obj=0x6196 at 0x7e8e15f63e30>>,
+ 'loadLabel': 'Settings',
+ 'packageName': 'com.android.settings',
+ 'permissions': ['org.chromium.settings.ENABLE_INPUT_METHOD',
+                 'android.permission.REQUEST_NETWORK_SCORES',
+                 'android.permission.WRITE_MEDIA_STORAGE',
+                 'android.permission.WRITE_EXTERNAL_STORAGE'...],
+ 'processName': 'com.android.settings',
+ 'publicSourceDir': '/system/priv-app/ArcSettings/ArcSettings.apk',
+ 'sharedLibraryFiles': None,
+ 'sourceDir': '/system/priv-app/ArcSettings/ArcSettings.apk'}
+"""
+```
+ 
+To get an activity info
+
+```python
+from kvdroid.tools.package import activity_info
+
+print(activity_info("com.android.settings","com.android.settings.network.NetworkSettings"))
+
+"""
+{'loadIcon': <android.graphics.drawable.Drawable at 0x7e8e15c46db0 jclass=android/graphics/drawable/Drawable jself=<LocalRef obj=0x6156 at 0x7e8e15c8c8b0>>,
+ 'loadLabel': 'Network and Internet'}
+"""
+```
+ 
+To save a drawable object to given path as png
+
+```python
+from kvdroid.tools.package import package_info
+from kvdroid.tools.graphic import save_drawable
+
+app = package_info("com.android.settings")
+app_icon = app["loadIcon"]
+
+# <android.graphics.drawable.Drawable at 0x7e8e15c46db0 jclass=android/graphics/drawable/Drawable jself=<LocalRef obj=0x6156 at 0x7e8e15c8c8b0>>
+
+save_drawable(app_icon, "< path >" , "< file_name >") 
+
+# That will save the app icon to given path and return the path + filename
+# can be used like
+
+from kivy.uix.image import Image
+
+Image(source = save_drawable(app_icon, "< path >" , "< file_name >"))
+```
+
+
+To check if the given app is installed from PlayStore
+
+```python
+from kvdroid.tools.package import package_source
+
+print(package_source("< package_name >"))
+```
+
 To get Android WebView Cookies
 
 ```python
@@ -174,6 +309,18 @@ DisplayLanguage    ---> English
 LanguageTag        ---> en-US
 """
 ```
+
+To get a list of supported languages on the device
+
+```python
+from kvdroid.tools.lang import supported_languages
+print(supported_languages())
+
+"""
+['af', 'agq', 'ak', 'am', 'ar', 'as', 'asa', 'ast'...]
+"""
+```
+
 To set statusbar color
 
 ```python
