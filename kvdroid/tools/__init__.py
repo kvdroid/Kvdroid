@@ -161,9 +161,7 @@ def navbar_color(color: Union[str, list]):
 def set_wallpaper(path_to_image):
     from kvdroid.cast import cast_object
     context = cast_object('context', activity.getApplicationContext())
-    from kvdroid.jclass.java import File
-    file = File(str(path_to_image))
-    bitmap = BitmapFactory().decodeFile(file.getAbsolutePath())
+    bitmap = BitmapFactory().decodeFile(path_to_image)
     manager = WallpaperManager().getInstance(context)
     return manager.setBitmap(bitmap)
 
@@ -208,13 +206,13 @@ def immersive_mode():
         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
 
 
-def launch_app_internally(app_package, app_activity):
+def launch_app_activity(app_package, app_activity):
     intent = Intent(Intent().ACTION_VIEW)
     intent.setClassName(app_package, app_activity)
     return activity.startActivity(intent)
 
 
-def launch_app_externally(app_package):
+def launch_app(app_package):
     intent = activity.getPackageManager().getLaunchIntentForPackage(app_package)
     activity.startActivity(intent)
 

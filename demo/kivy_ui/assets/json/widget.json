@@ -52,13 +52,8 @@
     },
     {
         "icon": "launch",
-        "text": "LAUNCH CHROME INTERNALLY",
-        "exec": "from kvdroid.tools import launch_app_internally; launch_app_internally('com.android.chrome', 'com.google.android.apps.chrome.Main')"
-    },
-    {
-        "icon": "launch",
-        "text": "LAUNCH CHROME EXTERNALLY",
-        "exec": "from kvdroid.tools import launch_app_externally; launch_app_externally('com.android.chrome')"
+        "text": "LAUNCH CHROME APPLICATION",
+        "exec": "from kvdroid.tools import launch_app; launch_app('com.android.chrome')"
     },
     {
         "icon": "details",
@@ -73,7 +68,7 @@
     {
         "icon": "music-box",
         "text": "STREAM ONLINE MUSIC",
-        "exec": "from kvdroid.tools.audio import Player; Player().stream('https://bit.ly/3mHQdzZ')"
+        "exec": "from kvdroid.tools.audio import Player; from kvdroid.tools import toast; toast('fetching music data'); Player().stream('https://bit.ly/3mHQdzZ')"
     },
     {
         "icon": "phone",

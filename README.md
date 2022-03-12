@@ -265,19 +265,19 @@ from kvdroid.tools import immersive_mode
 
 immersive_mode()
 ```
-To launch a specific app outside your app Activity
+To launch an application
 
 ```python
-from kvdroid.tools import launch_app_externally
+from kvdroid.tools import launch_app
 
-launch_app_externally("< app_package >")
+launch_app("< app_package >")
 ```
-To launch a specific app within your app Activity
+To launch a specific application activity
 
 ```python
-from kvdroid.tools import launch_app_internally
+from kvdroid.tools import launch_app_activity
 
-launch_app_internally("< app_package >", "< app_activity >")
+launch_app_activity("< app_package >", "< app_activity >")
 ```
 To open target app's details page
 
