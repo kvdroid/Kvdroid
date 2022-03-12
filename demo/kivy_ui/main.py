@@ -4,6 +4,7 @@ from kivymd.app import MDApp
 from kivymd.uix.behaviors import FakeRectangularElevationBehavior
 from kivymd.uix.card import MDCard
 from json import loads
+from kivy.clock import Clock
 
 font_file = "assets/fonts/avenir_heavy.ttf"
 
@@ -45,7 +46,7 @@ class KvDroid(MDApp):
         )
         with open("assets/json/widget.json") as json_file:
             widgets: list = loads(json_file.read())
-        self.root.ids.rv.data.extend(widgets)
+        Clock.schedule_once(lambda *_: self.root.ids.rv.data.extend(widgets), 3)
 
     @staticmethod
     def execute_code(code):
