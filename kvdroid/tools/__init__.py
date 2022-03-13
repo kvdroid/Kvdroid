@@ -1,10 +1,20 @@
+from time import sleep
 from typing import Union
 from kvdroid import _convert_color
-from jnius import JavaException
+from jnius import JavaException # NOQA
 from kvdroid import activity
-from kvdroid.jclass.android import Intent, Context
-from kvdroid.jclass.android.app import Request, WallpaperManager
-from kvdroid.jclass.android.graphics import Color, BitmapFactory, Rect
+from kvdroid.jclass.java import URL
+from kvdroid.jclass.android import (
+    Intent,
+    Context,
+    Environment,
+    Request,
+    WallpaperManager,
+    Color,
+    BitmapFactory,
+    Rect,
+    URLUtil
+)
 from android.runnable import run_on_ui_thread # NOQA
 
 
@@ -20,7 +30,7 @@ def share_text(text, title='Share', chooser=False, app_package=None, call_playst
     if app_package:
         from kvdroid import packages
         app_package = packages[app_package] if app_package in packages else None
-        from jnius import JavaException
+        from jnius import JavaException # NOQA
         try:
             intent.setPackage(String(app_package))
         except JavaException:
@@ -99,7 +109,7 @@ def restart_app():
     Runtime().getRuntime().exit(0)
 
 
-def download_manager(title, description, url, folder, file_name):
+def download_manager(title, description, url, folder=None, file_name=None):
     from kvdroid.jclass.android import Uri
     uri = Uri().parse(str(url))
     from kvdroid.cast import cast_object
@@ -108,7 +118,19 @@ def download_manager(title, description, url, folder, file_name):
     request.setTitle(str(title))
     request.setDescription(str(description))
     request.setNotificationVisibility(Request().VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-    request.setDestinationInExternalPublicDir(str(folder), str(file_name))
+    if folder and file_name:
+        request.setDestinationInExternalPublicDir(str(folder), str(file_name))
+    else:
+        conn = URL(url).openConnection()
+        try:
+            conn.getContent()
+        except JavaException:
+            pass
+        url = conn.getURL().toString()
+        print(url)
+        request.setDestinationInExternalPublicDir(
+            Environment().DIRECTORY_DOWNLOADS, URLUtil().guessFileName(url, None, None)
+        )
     dm.enqueue(request)
 
 
@@ -139,19 +161,25 @@ def navbar_color(color: Union[str, list]):
 def set_wallpaper(path_to_image):
     from kvdroid.cast import cast_object
     context = cast_object('context', activity.getApplicationContext())
-    from kvdroid.jclass.java import File
-    file = File(str(path_to_image))
-    bitmap = BitmapFactory().decodeFile(file.getAbsolutePath())
+    bitmap = BitmapFactory().decodeFile(path_to_image)
     manager = WallpaperManager().getInstance(context)
     return manager.setBitmap(bitmap)
 
 
-def speech(text, lang):
-    from kvdroid.jclass.android.speech.tts import TextToSpeech
+def speech(text: str, lang: str):
+    from kvdroid.jclass.android import TextToSpeech
     tts = TextToSpeech(activity, None)
-    from kvdroid.jclass.java.util import Locale
-    tts.setLanguage(Locale(str(lang)))
-    return tts.speak(str(text), TextToSpeech().QUEUE_FLUSH, None)
+    retries = 0
+    from kvdroid.jclass.java import Locale
+    tts.setLanguage(Locale(lang))
+    speak_status = tts.speak(text, TextToSpeech().QUEUE_FLUSH, None)
+    while retries < 100 and speak_status == -1:
+        sleep(0.1)
+        retries += 1
+        speak_status = tts.speak(
+            text, TextToSpeech().QUEUE_FLUSH, None
+        )
+    return speak_status
 
 
 def keyboard_height():
@@ -178,13 +206,13 @@ def immersive_mode():
         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
 
 
-def launch_app_internally(app_package, app_activity):
+def launch_app_activity(app_package, app_activity):
     intent = Intent(Intent().ACTION_VIEW)
     intent.setClassName(app_package, app_activity)
     return activity.startActivity(intent)
 
 
-def launch_app_externally(app_package):
+def launch_app(app_package):
     intent = activity.getPackageManager().getLaunchIntentForPackage(app_package)
     activity.startActivity(intent)
 

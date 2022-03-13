@@ -1,10 +1,11 @@
 from kivy import Config
+Config.set("kivy", "exit_on_escape", "0")
 from kivymd.app import MDApp
 from kivymd.uix.behaviors import FakeRectangularElevationBehavior
 from kivymd.uix.card import MDCard
 from json import loads
+from kivy.clock import Clock
 
-Config.set("kivy", "exit_on_escape", "0")
 font_file = "assets/fonts/avenir_heavy.ttf"
 
 
@@ -34,9 +35,22 @@ class KvDroid(MDApp):
         )
 
     def on_start(self):
+        from android.permissions import Permission, request_permissions  # NOQA
+        request_permissions(
+            [Permission.READ_EXTERNAL_STORAGE,
+             Permission.WRITE_EXTERNAL_STORAGE,
+             Permission.CALL_PHONE,
+             Permission.CALL_PRIVILEGED,
+             Permission.READ_CONTACTS,
+             Permission.WRITE_CONTACTS]
+        )
         with open("assets/json/widget.json") as json_file:
             widgets: list = loads(json_file.read())
-        self.root.ids.rv.data.extend(widgets)
+        Clock.schedule_once(lambda *_: self.root.ids.rv.data.extend(widgets), 3)
+
+    @staticmethod
+    def execute_code(code):
+        exec(code)
 
 
 KvDroid().run()

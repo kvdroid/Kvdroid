@@ -2,7 +2,7 @@ import logging
 from os import environ
 from typing import Union
 
-from jnius import autoclass
+from jnius import autoclass # NOQA
 
 
 def _get_platform():
@@ -57,7 +57,8 @@ if platform == "android":
         "twitterLite": "com.twitter.android.lite",
         "telegram": "org.telegram.messenger",
         "telegramX": "org.thunderdog.challegram",
-        "snapchat": "com.snapchat.android"
+        "snapchat": "com.snapchat.android",
+        "chrome": "com.android.chrome"
     }
 else:
     Logger.error(

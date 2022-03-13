@@ -1,6 +1,6 @@
 from typing import Union
 
-from jnius import cast, JavaException
+from jnius import cast, JavaException # NOQA
 from android import python_act # NOQA
 from kvdroid import Logger, activity
 from kvdroid.cast import cast_object
@@ -36,7 +36,7 @@ try:
             PendingIntent,
             NotificationManager,
             Notification,
-            VERSION,
+            VERSION
         )
         from kvdroid.jclass.java.lang import String, System
         NotificationCompatBuilder = NotificationCompatBuilder()
@@ -60,10 +60,16 @@ try:
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP)
         intent.setAction(Intent.ACTION_MAIN)
         intent.addCategory(Intent.CATEGORY_LAUNCHER)
-        pendingIntent = PendingIntent.getActivity(
-            activity.getApplication().getApplicationContext(), 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT | Notification.FLAG_AUTO_CANCEL
-        )
+        if VERSION.SDK_INT >= 31:
+            pendingIntent = PendingIntent.getActivity(
+                activity.getApplication().getApplicationContext(), 0, intent,
+                PendingIntent.FLAG_MUTABLE
+            )
+        else:
+            pendingIntent = PendingIntent.getActivity(
+                activity.getApplication().getApplicationContext(), 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | Notification.FLAG_AUTO_CANCEL
+            )
         # Create the NotificationChannel, but only on API 26+ because
         # the NotificationChannel class is new and not in the support library
         notificationManager = cast(NotificationManager, activity.getSystemService(

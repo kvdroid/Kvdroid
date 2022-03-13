@@ -1,3 +1,6 @@
+from threading import Thread
+from typing import Callable
+from jnius.jnius import JavaException
 from kvdroid.jclass.android import MediaPlayer, AudioManager
 
 
@@ -13,7 +16,7 @@ class Player(object):
         try:
             self.mPlayer.stop()
             self.mPlayer.reset()
-        except:
+        except JavaException:
             pass
         self.mPlayer.setDataSource(self.content)
         self.mPlayer.prepare()
@@ -28,17 +31,31 @@ class Player(object):
     def stop(self):
         self.mPlayer.stop()
 
-    def stream(self, content: str):
+    def stream(self, content: str, on_load_finish: Callable = lambda: None):
+        Thread(target=self._stream, args=(content, on_load_finish)).start()
+
+    def _stream(self, content: str, on_load_finish: Callable):
+        try:
+            from kivy.clock import mainthread # NOQA
+            @mainthread # NOQA
+            def load_finish():
+                on_load_finish()
+        except ImportError:
+            from android.runnable import run_on_ui_thread  # NOQA
+            @run_on_ui_thread # NOQA
+            def load_finish():
+                on_load_finish()
         self.content = content
         self.mPlayer.setAudioStreamType(AudioManager().STREAM_MUSIC)
         try:
             self.mPlayer.stop()
             self.mPlayer.reset()
-        except:
+        except JavaException:
             pass
         self.mPlayer.setDataSource(self.content)
         self.mPlayer.prepare()
         self.mPlayer.start()
+        load_finish()
 
     def get_duration(self):
         if self.content:
@@ -51,7 +68,7 @@ class Player(object):
     def seek(self, value: int):
         try:
             self.mPlayer.seekTo(value * 1000)
-        except:
+        except JavaException:
             pass
 
     def do_loop(self, loop=False):
