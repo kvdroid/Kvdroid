@@ -1,9 +1,9 @@
 from kvdroid.event import EventDispatcher
 from kvdroid.base import EventLoop
+from android.runnable import run_on_ui_thread
 from kvdroid import activity
 from kvdroid.jclass.android import RelativeLayout
 from kvdroid.jclass.android import ViewGroupLayoutParams
-from kvdroid import Logger
 
 
 class App(EventDispatcher):
@@ -31,13 +31,16 @@ class App(EventDispatcher):
             None or a root :class:`~android.widget.RelativeLayout` instance
             if no self.root exists."""
         if not self.root:
-            relative_layout = RelativeLayout(activity)
-            layout_params = ViewGroupLayoutParams()
-            activity.addContentView(
-                relative_layout,
-                layout_params(layout_params.MATCH_PARENT, layout_params.FILL_PARENT)
-            )
-            return relative_layout
+            return RelativeLayout(activity)
+
+    @run_on_ui_thread
+    def add_content_view(self, layout):
+        layout_params = ViewGroupLayoutParams()
+        activity.addContentView(
+            layout,
+            layout_params(layout_params.MATCH_PARENT, layout_params.FILL_PARENT)
+        )
+        return layout
 
     def on_create(self):
         """Event handler for the `on_create` event which is fired after
@@ -62,6 +65,7 @@ class App(EventDispatcher):
         if not self.root:
             Logger.critical("Application: No Layout was returned in build")
             return
+        self.add_content_view(self.root)
         self._eventloop.status = "created"
         self.dispatch("on_create")
         self._eventloop.mainloop()
