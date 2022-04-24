@@ -10,5 +10,9 @@ def WindowManager(*args, instantiate: bool = False):
     return _class_call(autoclass("android.view.WindowManager"), args, instantiate)
 
 
-def LayoutParams(*args, instantiate: bool = False):
+def WindowManagerLayoutParams(*args, instantiate: bool = False):
     return _class_call(autoclass("android.view.WindowManager$LayoutParams"), args, instantiate)
+
+
+def ViewGroupLayoutParams(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.view.ViewGroup$LayoutParams'), args, instantiate)
