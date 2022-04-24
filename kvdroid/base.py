@@ -1,11 +1,11 @@
 from kvdroid.event import EventDispatcher
 from kvdroid import activity
-from kvdroid.app import App
 
 
 class EventLoop(EventDispatcher):
     def __init__(self):
         super(EventLoop, self).__init__()
+        from kvdroid.app import App
         self.app = App.get_running_app()
         self.quit = False
         self.status = "idle"
