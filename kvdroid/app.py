@@ -4,6 +4,7 @@ from android.runnable import run_on_ui_thread
 from kvdroid import activity
 from kvdroid.jclass.android import RelativeLayout
 from kvdroid.jclass.android import ViewGroupLayoutParams
+from kvdroid import Logger
 
 
 class App(EventDispatcher):
