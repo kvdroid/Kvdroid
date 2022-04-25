@@ -8,7 +8,8 @@ castable_packages = {
     "downloadManager": "android.app.DownloadManager",
     "charSequence": "java.lang.CharSequence",
     "bitmapdrawable": "android.graphics.drawable.BitmapDrawable",
-    "adaptiveicondrawable": "android.graphics.drawable.AdaptiveIconDrawable"
+    "adaptiveicondrawable": "android.graphics.drawable.AdaptiveIconDrawable",
+    "audioManager": "android.media.AudioManager"
 }
 
 
