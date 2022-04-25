@@ -9,7 +9,7 @@ class EventLoop(EventDispatcher):
         self.app = App.get_running_app()
         self.quit = False
         self.status = "idle"
-        self.resume = False
+        self.resumed = False
         self.destroyed = False
         self.paused = False
 
@@ -18,20 +18,20 @@ class EventLoop(EventDispatcher):
             self.poll()
 
     def poll(self):
-        if activity.isResumed() and not self.resume:
+        if activity.isResumed() and not self.resumed:
             self.app.dispatch("on_resume")
-            self.resume = activity.resume
+            self.resumed = activity.resumed
             self.paused = False
 
         if activity.isDestroyed() and not self.destroyed:
             self.app.dispatch("on_destroy")
             self.destroyed = activity.destroyed
-            self.resume = False
+            self.resumed = False
 
         if not activity.hasWindowFocus() and not self.paused:
             self.app.dispatch("on_pause")
             self.paused = True
-            self.resume = False
+            self.resumed = False
 
     def close(self):
         self.quit = True
