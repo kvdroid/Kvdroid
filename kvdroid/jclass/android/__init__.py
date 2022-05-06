@@ -11,3 +11,6 @@ from .provider import *
 from .view import *
 from .webkit import *
 from .widget import *
+from .net.wifi import *
+from .text.format import *
+

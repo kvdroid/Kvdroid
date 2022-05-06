@@ -472,7 +472,7 @@ from kvdroid.tools.webkit import get_cookies
 
 print(get_cookies("https://google.com"))
 ```
-To access android package resource folders like:\
+To access android package resource folders like:
 - drawble
 - layout
 - menu
@@ -484,6 +484,11 @@ To access android package resource folders like:\
 from kvdroid.tools import get_resource
 
 drawable = get_resource("drawable")
+```
+To get Wi-Fi IP Address
+```python
+from kvdroid.tools.network import get_wifi_ip_address
+print(get_wifi_ip_address())
 ```
 ### License
 MIT
