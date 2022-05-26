@@ -4,7 +4,7 @@ from kvdroid.cast import cast_object
 
 from kvdroid import activity
 from kvdroid.jclass.java import File
-from kvdroid.jclass.android import Intent, Uri
+from kvdroid.jclass.android import Intent, Uri, VERSION
 
 
 def send_email(recipient: List[str], subject: str, body: str, file_path: str = None,
@@ -21,6 +21,9 @@ def send_email(recipient: List[str], subject: str, body: str, file_path: str = N
     :param mime_type: body text type (defaults to "text/plain")
     :rtype: None
     """
+    if VERSION().SDK_INT >= 24:
+        from kvdroid.jclass.android import StrictMode
+        StrictMode().disableDeathOnFileUriExposure()
     email_intent = Intent(Intent().ACTION_SEND)
     email_intent.setType(mime_type)
     email_intent.putExtra(Intent().EXTRA_EMAIL, recipient)
