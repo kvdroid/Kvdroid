@@ -1,7 +1,7 @@
 from kvdroid.jclass.android import Activity
 from kvdroid import activity
 from jnius import JavaException, cast
-from kvdroid.jclass.android import WifiManager, Formatter
+from kvdroid.jclass.android import WifiManager, Formatter, Context
 
 
 def network_status() -> bool:
@@ -55,5 +55,9 @@ def get_wifi_ip_address() -> str:
     :return: Wi-Fi Ip Address
     """
     formatter = Formatter()
-    wifi_manager = cast(WifiManager(), activity.getSystemService(activity.WIFI_SERVICE))
+    context = activity.getApplicationContext()
+    print(context.getSystemService(Context().WIFI_SERVICE))
+    wifi_manager = cast(WifiManager(), context.getSystemService(Context().WIFI_SERVICE))
+    print(wifi_manager)
+    print(formatter.formatIpAddress(wifi_manager.getConnectionInfo().getIpAddress()))
     return formatter.formatIpAddress(wifi_manager.getConnectionInfo().getIpAddress())
