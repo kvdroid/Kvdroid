@@ -56,8 +56,5 @@ def get_wifi_ip_address() -> str:
     """
     formatter = Formatter()
     context = activity.getApplicationContext()
-    print(context.getSystemService(Context().WIFI_SERVICE))
     wifi_manager = cast(WifiManager(), context.getSystemService(Context().WIFI_SERVICE))
-    print(wifi_manager)
-    print(formatter.formatIpAddress(wifi_manager.getConnectionInfo().getIpAddress()))
     return formatter.formatIpAddress(wifi_manager.getConnectionInfo().getIpAddress())

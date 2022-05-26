@@ -1,4 +1,7 @@
 from typing import List
+
+from kvdroid.cast import cast_object
+
 from kvdroid import activity
 from kvdroid.jclass.java import File
 from kvdroid.jclass.android import Intent, Uri
@@ -28,7 +31,8 @@ def send_email(recipient: List[str], subject: str, body: str, file_path: str = N
         if not file.exists() or not file.canRead():
             return
         uri = Uri().fromFile(file)
-        email_intent.putExtra(Intent().EXTRA_STREAM, uri)
+        parcelable = cast_object('parcelable', uri)
+        email_intent.putExtra(Intent().EXTRA_STREAM, parcelable)
     if create_chooser:
         activity.startActivity(Intent().createChooser(email_intent, "Pick an Email provider"))
     else:
