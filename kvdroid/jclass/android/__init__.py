@@ -13,4 +13,15 @@ from .webkit import *
 from .widget import *
 from .net.wifi import *
 from .text.format import *
+from .hardware.camera2 import *
+from .hardware.camera2.params import *
+from .support.v4.app import *
+
+from jnius import autoclass
+from kvdroid.jclass import _class_call
+
+
+def Manifest(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.Manifest"), args, instantiate)
+
 
