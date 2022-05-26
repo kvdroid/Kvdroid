@@ -27,7 +27,7 @@ def is_system_package(package):
     pManager = activity.getPackageManager()
     package = pManager.getApplicationInfo(
         package, PackageManager().GET_META_DATA)
-    if ((package.flags & (ApplicationInfo().FLAG_SYSTEM | ApplicationInfo().FLAG_UPDATED_SYSTEM_APP)) != 0):
+    if (package.flags & (ApplicationInfo().FLAG_SYSTEM | ApplicationInfo().FLAG_UPDATED_SYSTEM_APP)) != 0:
         return True
     else:
         return False

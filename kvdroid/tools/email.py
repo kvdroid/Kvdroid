@@ -1,11 +1,10 @@
+from typing import List
 from kvdroid import activity
-
 from kvdroid.jclass.java import File
-
 from kvdroid.jclass.android import Intent, Uri
 
 
-def send_email(recipient: str, subject: str, body: str, file_path: str = None,
+def send_email(recipient: List[str], subject: str, body: str, file_path: str = None,
                create_chooser: bool = False, mime_type: str = "text/plain") -> None:
     """
     This method will open any default or selected email app and sends a body of message
@@ -21,7 +20,7 @@ def send_email(recipient: str, subject: str, body: str, file_path: str = None,
     """
     email_intent = Intent(Intent().ACTION_SEND)
     email_intent.setType(mime_type)
-    email_intent.putExtra(Intent().EXTRA_EMAIL, [recipient])
+    email_intent.putExtra(Intent().EXTRA_EMAIL, recipient)
     email_intent.putExtra(Intent().EXTRA_SUBJECT, subject)
     email_intent.putExtra(Intent().EXTRA_TEXT, body)
     if file_path:
