@@ -8,3 +8,11 @@ def File(*args, instantiate: bool = False):
 
 def FileOutputStream(*args, instantiate: bool = False):
     return _class_call(autoclass('java.io.FileOutputStream'), args, instantiate)
+
+
+def FileInputStream(*args, instantiate: bool = False):
+    return _class_call(autoclass('java.io.FileInputStream'), args, instantiate)
+
+
+def ByteArrayOutputStream(*args, instantiate: bool = False):
+    return _class_call(autoclass('java.io.ByteArrayOutputStream'), args, instantiate)

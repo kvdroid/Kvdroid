@@ -8,3 +8,7 @@ def CookieManager(*args, instantiate: bool = False):
 
 def URLUtil(*args, instantiate: bool = False):
     return _class_call(autoclass("android.webkit.URLUtil"), args, instantiate)
+
+
+def MimeTypeMap(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.webkit.MimeTypeMap'), args, instantiate)

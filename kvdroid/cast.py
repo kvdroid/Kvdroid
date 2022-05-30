@@ -9,7 +9,8 @@ castable_packages = {
     "charSequence": "java.lang.CharSequence",
     "bitmapdrawable": "android.graphics.drawable.BitmapDrawable",
     "adaptiveicondrawable": "android.graphics.drawable.AdaptiveIconDrawable",
-    "audioManager": "android.media.AudioManager"
+    "audioManager": "android.media.AudioManager",
+    "uri": "android.net.Uri"
 }
 
 

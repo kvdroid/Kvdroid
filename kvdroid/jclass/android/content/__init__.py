@@ -12,3 +12,11 @@ def Context(*args, instantiate: bool = False):
 
 def IntentFilter(*args, instantiate: bool = False):
     return _class_call(autoclass("android.content.IntentFilter"), args, instantiate)
+
+
+def ContentValues(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.content.ContentValues'), args, instantiate)
+
+
+def ContentUris(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.content.ContentUris'), args, instantiate)

@@ -36,3 +36,7 @@ def Handler(*args, instantiate: bool = False):
 
 def HandlerThread(*args, instantiate: bool = False):
     return _class_call(autoclass("android.os.HandlerThread"), args, instantiate)
+
+
+def FileUtils(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.os.FileUtils'), args, instantiate)
