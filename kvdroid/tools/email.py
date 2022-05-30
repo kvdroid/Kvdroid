@@ -3,7 +3,7 @@ from typing import List
 from kvdroid.cast import cast_object
 
 from kvdroid import activity
-from kvdroid.jclass.java import File
+from kvdroid.jclass.java import File, String
 from kvdroid.jclass.android import Intent, Uri, VERSION
 
 
@@ -27,8 +27,8 @@ def send_email(recipient: List[str], subject: str, body: str, file_path: str = N
     email_intent = Intent(Intent().ACTION_SEND)
     email_intent.setType(mime_type)
     email_intent.putExtra(Intent().EXTRA_EMAIL, recipient)
-    email_intent.putExtra(Intent().EXTRA_SUBJECT, subject)
-    email_intent.putExtra(Intent().EXTRA_TEXT, body)
+    email_intent.putExtra(Intent().EXTRA_SUBJECT, String(subject))
+    email_intent.putExtra(Intent().EXTRA_TEXT, String(body))
     if file_path:
         file = File(file_path)
         if not file.exists() or not file.canRead():
@@ -39,4 +39,5 @@ def send_email(recipient: List[str], subject: str, body: str, file_path: str = N
     if create_chooser:
         activity.startActivity(Intent().createChooser(email_intent, "Pick an Email provider"))
     else:
+        email_intent.setClassName('com.google.android.gm', 'com.google.android.gm.ComposeActivityGmailExternal')
         activity.startActivity(email_intent)
