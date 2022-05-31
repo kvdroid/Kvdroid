@@ -29,6 +29,8 @@ def send_email(recipient: List[str], subject: str, body: str, file_path: str = N
     email_intent.putExtra(Intent().EXTRA_EMAIL, recipient)
     email_intent.putExtra(Intent().EXTRA_SUBJECT, String(subject))
     email_intent.putExtra(Intent().EXTRA_TEXT, String(body))
+    email_intent.addFlags(Intent().FLAG_GRANT_READ_URI_PERMISSION)
+    email_intent.addFlags(Intent().FLAG_GRANT_WRITE_URI_PERMISSION)
     if file_path:
         file = File(file_path)
         if not file.exists() or not file.canRead():
@@ -37,6 +39,9 @@ def send_email(recipient: List[str], subject: str, body: str, file_path: str = N
         parcelable = cast_object('parcelable', uri)
         email_intent.putExtra(Intent().EXTRA_STREAM, parcelable)
     if create_chooser:
+        email_selector_intent = Intent(Intent().ACTION_SENDTO)
+        email_selector_intent.setData(Uri().parse("mailto:"))
+        email_intent.setSelector(email_selector_intent)
         activity.startActivity(Intent().createChooser(email_intent, "Pick an Email provider"))
     else:
         email_intent.setClassName('com.google.android.gm', 'com.google.android.gm.ComposeActivityGmailExternal')
