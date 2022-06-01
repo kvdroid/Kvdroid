@@ -16,6 +16,7 @@ from .text.format import *
 from .hardware.camera2 import *
 from .hardware.camera2.params import *
 from .support.v4.app import *
+from .content.pm import *
 
 from jnius import autoclass
 from kvdroid.jclass import _class_call
