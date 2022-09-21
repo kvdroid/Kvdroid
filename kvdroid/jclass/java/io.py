@@ -16,3 +16,7 @@ def FileInputStream(*args, instantiate: bool = False):
 
 def ByteArrayOutputStream(*args, instantiate: bool = False):
     return _class_call(autoclass('java.io.ByteArrayOutputStream'), args, instantiate)
+
+
+def InputStream(*args, instantiate: bool = False):
+    return _class_call(autoclass('java.io.InputStream'), args, instantiate)

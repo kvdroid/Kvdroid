@@ -173,21 +173,21 @@ To save a drawable object to given path as png
 
 ```python
 from kvdroid.tools.package import package_info
-from kvdroid.tools.graphic import save_drawable
+from kvdroid.tools.graphics import save_drawable
 
 app = package_info("com.android.settings")
 app_icon = app["loadIcon"]
 
 # <android.graphics.drawable.Drawable at 0x7e8e15c46db0 jclass=android/graphics/drawable/Drawable jself=<LocalRef obj=0x6156 at 0x7e8e15c8c8b0>>
 
-save_drawable(app_icon, "< path >" , "< file_name >") 
+save_drawable(app_icon, "< path >", "< file_name >")
 
 # That will save the app icon to given path and return the path + filename
 # can be used like
 
 from kivy.uix.image import Image
 
-Image(source = save_drawable(app_icon, "< path >" , "< file_name >"))
+Image(source=save_drawable(app_icon, "< path >", "< file_name >"))
 ```
 
 
@@ -490,6 +490,50 @@ To get Wi-Fi IP Address
 from kvdroid.tools.network import get_wifi_ip_address
 print(get_wifi_ip_address())
 ```
+To send email
+```python
+from kvdroid.tools.email import send_email
+send_email(
+    recipient=["test@gmail.com"], 
+    subject="Hello there", 
+    body="This is kvdroid"
+)
+```
+To send an email with an attachment (androidx is required). \
+Also note before you can share files on Android version greater \
+than 10, you must specify a provider in the AndroidManifest.xml \
+inside the \<application> tag e.g
+```xml
+<provider
+    android:name="androidx.core.content.FileProvider"
+    android:authorities="${applicationId}.fileprovider"
+    android:grantUriPermissions="true"
+    android:exported="false">
+    <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/filepath" />
+</provider>
+```
+and also specify file path in the res/xml/filepath.xml of the android project folder e.g
+```xml
+<paths>
+    <files-path name="document" path="app" />
+</paths>
+```
+refer to [android developer FileProvder Documentation](https://developer.android.com/reference/androidx/core/content/FileProvider) to know more
+```python
+from kvdroid.tools.email import send_email
+from os import getenv
+from os.path import join
+send_email(
+    recipient=["test@gmail.com"], 
+    subject="Hello there", 
+    body="This is kvdroid",
+    file_path=join(getenv("PYTHONHOME"), "test.txt")
+)
+```
+
+Since the release of Android 11 (API 30), the way file are stored became different
 ### License
 MIT
 

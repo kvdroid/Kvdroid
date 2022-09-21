@@ -4,6 +4,7 @@ from .speech.tts import *
 from .speech import *
 from .app import *
 from .graphics import *
+from .graphics.drawable import *
 from .media import *
 from .net import *
 from .os import *
@@ -17,6 +18,7 @@ from .hardware.camera2 import *
 from .hardware.camera2.params import *
 from .support.v4.app import *
 from .content.pm import *
+from .R import *
 
 from jnius import autoclass
 from kvdroid.jclass import _class_call

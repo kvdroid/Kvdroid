@@ -1,19 +1,19 @@
 [app]
 
 # (str) Title of your application
-title = KvDroid
+title = KvDroid Native
 
 # (str) Package name
 package.name = kvdroid
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.android
+package.domain = org.kvdroid
 
 # (str) Source code where the main.py live
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas,json,mp3,ttf
+source.include_exts = py,png,jpg,kv,atlas
 
 # (list) List of inclusions using pattern matching
 #source.include_patterns = assets/*,images/*.png
@@ -25,6 +25,7 @@ source.include_exts = py,png,jpg,kv,atlas,json,mp3,ttf
 #source.exclude_dirs = tests, bin, venv
 
 # (list) List of exclusions using pattern matching
+# Do not prefix with './'
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
@@ -36,7 +37,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==master
+requirements = python3,https://github.com/kengoon/KvDroid/archive/refs/heads/master.zip
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -49,7 +50,7 @@ presplash.filename = %(source.dir)s/assets/image/splash.png
 icon.filename = %(source.dir)s/assets/image/icon.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
-orientation = all
+orientation = portrait
 
 # (list) List of service to declare
 #services = NAME:ENTRYPOINT_TO_PY,NAME2:ENTRYPOINT2_TO_PY
@@ -92,7 +93,8 @@ android.presplash_color = #FFFFFF
 #icon.adaptive_background.filename = %(source.dir)s/data/icon_bg.png
 
 # (list) Permissions
-android.permissions = INTERNET, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, CALL_PHONE, CALL_PRIVILEGED, READ_CONTACTS, WRITE_CONTACTS, SET_WALLPAPER
+android.permissions = INTERNET
+
 # (list) features (adds uses-feature -tags to manifest)
 #android.features = android.hardware.usb.host
 
@@ -106,7 +108,7 @@ android.api = 31
 #android.sdk = 20
 
 # (str) Android NDK version to use
-#android.ndk = 19b
+android.ndk = 23b
 
 # (int) Android NDK API to use. This is the minimum API your app will support, it should usually match android.minapi.
 #android.ndk_api = 21
@@ -126,13 +128,13 @@ android.sdk_path = ~/Android/Sdk
 # (bool) If True, then skip trying to update the Android sdk
 # This can be useful to avoid excess Internet downloads or save time
 # when an update is due and you just want to test/build your package
-android.skip_update = True
+android.skip_update = False
 
 # (bool) If True, then automatically accept SDK license
 # agreements. This is intended for automation only. If set to False,
 # the default, you will be shown the license when first running
 # buildozer.
-# android.accept_sdk_license = False
+android.accept_sdk_license = True
 
 # (str) Android entry point, default is ok for Kivy-based app
 #android.entrypoint = org.kivy.android.PythonActivity
@@ -169,7 +171,7 @@ android.skip_update = True
 # their classes. Don't add jars that you do not need, since extra jars can slow
 # down the build process. Allows wildcards matching, for example:
 # OUYA-ODK/libs/*.jar
-# android.add_jars = jar/*.jar
+#android.add_jars = foo.jar,bar.jar,path/to/more/*.jar
 
 # (list) List of Java files to add to the android project (can be java or a
 # directory containing the files)
@@ -177,6 +179,12 @@ android.skip_update = True
 
 # (list) Android AAR archives to add
 #android.add_aars =
+
+# (list) Put these files or directories in the apk assets directory.
+# Either form may be used, and assets need not be in 'source.include_exts'.
+# 1) android.add_assets = source_asset_relative_path
+# 2) android.add_assets = source_asset_path:destination_asset_relative_path
+#android.add_assets =
 
 # (list) Gradle dependencies to add
 android.gradle_dependencies = androidx.appcompat:appcompat:1.2.0, androidx.browser:browser:1.4.0
@@ -254,7 +262,7 @@ android.logcat_filters = *:S python:D
 
 # (list) The Android archs to build for, choices: armeabi-v7a, arm64-v8a, x86, x86_64
 # In past, was `android.arch` as we weren't supporting builds for multiple archs at the same time.
-android.archs = armeabi-v7a, arm64-v8a, x86, x86_64
+android.archs = arm64-v8a, armeabi-v7a
 
 # (int) overrides automatic versionCode computation (used in build.gradle)
 # this is not the same as app version and should only be edited if you know what you're doing
