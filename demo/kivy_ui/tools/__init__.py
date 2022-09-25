@@ -216,5 +216,16 @@ kvdroid_tools = [
             )
             """
         )
+    },
+    {
+        "text": "READ SMS",
+        "exec": dedent(
+            """
+            from kvdroid.tools.notification import create_notification
+            from kvdroid.tools.sms import get_all_sms
+            
+            get_all_sms()
+            """
+        )
     }
 ]

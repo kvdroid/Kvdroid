@@ -1,3 +1,5 @@
+import os
+os.environ["KIVY_NO_CONSOLELOG"] = "1"
 from kivy import Config
 
 Config.set("kivy", "exit_on_escape", "0")
@@ -32,7 +34,8 @@ class KvDroid(App):
                  Permission.CALL_PHONE,
                  Permission.CALL_PRIVILEGED,
                  Permission.READ_CONTACTS,
-                 Permission.WRITE_CONTACTS]
+                 Permission.WRITE_CONTACTS,
+                 Permission.READ_SMS]
             )
         Clock.schedule_once(lambda *_: self.root.ids.rv.data.extend(kvdroid_tools), 3)
 

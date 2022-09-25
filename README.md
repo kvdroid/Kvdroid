@@ -356,14 +356,6 @@ from kvdroid.tools.path import external_sdcard
 
 print(external_sdcard)
 ```
-To get path of working app folder
-
-```python
-from kvdroid.tools.path import app_folder
-
-print(app_folder)
-
-```
 To get file mime Type
 
 ```python
@@ -531,6 +523,16 @@ send_email(
     body="This is kvdroid",
     file_path=join(getenv("PYTHONHOME"), "test.txt")
 )
+```
+To read all SMS
+
+```python
+from kvdroid.tools.sms import get_all_sms
+from android.permissions import Permission, request_permissions  # NOQA
+# remember to add READ_SMS to your buildozer `android.permissions`
+
+request_permissions([Permission.READ_SMS])
+print(get_all_sms()) # returns a tuple of message count and messages
 ```
 
 Since the release of Android 11 (API 30), the way file are stored became different

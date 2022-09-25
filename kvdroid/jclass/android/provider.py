@@ -38,3 +38,7 @@ def MediaStoreDownloads(*args, instantiate: bool = False):
 
 def MediaStoreMediaColumns(*args, instantiate: bool = False):
     return _class_call(autoclass('android.provider.MediaStore$MediaColumns'), args, instantiate)
+
+
+def TelephonySms(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.provider.Telephony$Sms'), args, instantiate)
