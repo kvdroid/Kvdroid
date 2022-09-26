@@ -1,46 +1,36 @@
 #:import ScrollEffect kivy.effects.scroll.ScrollEffect
 #:import Window kivy.core.window.Window
-<CardButton@MD3Card>:
-    elevation: 1
-    exec: ""
-    radius: [dp(20)]
-    padding: dp(20)
-    spacing: dp(10)
-    text_color: app.theme_cls.primary_color
-    ripple_color: app.theme_cls.primary_color
-    ripple_behavior: True
-    text: ""
-    icon: ""
+<LineButton>:
+    radius: dp(10)
+    padding: dp(100), dp(20)
+    text_size: self.width, None
+    markup: True
+    halign: "center"
+    line_color: 0, 0, 0, 1
+    color: 0, 0, 0, 1
     on_release: app.execute_code(self.exec)
-    MDIcon:
-        icon: root.icon
-        pos_hint: {"center_y": .5}
-        font_size: sp(50)
-        color: app.theme_cls.primary_color
-    MDLabel:
-        text: root.text
-        color: root.text_color
-        font_style: "H5"
-        halign: "center"
-        max_lines: 2
 
 BoxLayout:
     orientation: "vertical"
-    MDToolbar:
-        id: toolbar
-        elevation: 10
-        title: "KvDroid"
+    spacing: "10dp"
+    Label:
+        text: "KVDROID"
+        size_hint_y: None
+        height: self.texture_size[1]
+        font_size: "25sp"
+        padding: "20dp", "20dp"
+        color: 0, 0, 0, 1
     RecycleView:
         id: rv
         effect_cls: ScrollEffect
         scroll_distance: dp(1)
-        viewclass: "CardButton"
+        viewclass: "LineButton"
         RecycleBoxLayout:
             orientation: "vertical"
             size_hint_y: None
             size: self.minimum_size
             default_size_hint: 1, None
-            default_size: 0, dp(150)
+            default_size: 0, dp(100)
             padding: dp(15)
             spacing: dp(15)
 

@@ -62,5 +62,5 @@ if platform == "android":
     }
 else:
     Logger.error(
-        "Kvdroid: Kvdroid is only callable for Android"
+        "Kvdroid: Kvdroid is only callable from Android"
     )

@@ -14,3 +14,31 @@ def Phone(*args, instantiate: bool = False):
     return _class_call(
         autoclass('android.provider.ContactsContract$CommonDataKinds$Phone'),
         args, instantiate)
+
+
+def MediaStoreFiles(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.provider.MediaStore$Files'), args, instantiate)
+
+
+def MediaStoreAudioMedia(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.provider.MediaStore$Audio$Media'), args, instantiate)
+
+
+def MediaStoreImagesMedia(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.provider.MediaStore$Images$Media'), args, instantiate)
+
+
+def MediaStoreVideoMedia(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.provider.MediaStore$Video$Media'), args, instantiate)
+
+
+def MediaStoreDownloads(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.provider.MediaStore$Downloads'), args, instantiate)
+
+
+def MediaStoreMediaColumns(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.provider.MediaStore$MediaColumns'), args, instantiate)
+
+
+def TelephonySms(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.provider.Telephony$Sms'), args, instantiate)
