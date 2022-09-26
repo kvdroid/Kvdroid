@@ -12,16 +12,16 @@ def get_all_sms(content_resolver=activity.getContentResolver()):
     if cursor:
         total_sms = cursor.getCount()
         messages = []
-        if cursor.moveToFirst():
-            sms_types = {0: "all", 1: "inbox", 2: "sent", 3: "draft", 4: "outbox", 5: "failed", 6: "queued"}
-            for _ in range(total_sms):
+        sms_types = {0: "all", 1: "inbox", 2: "sent", 3: "draft", 4: "outbox", 5: "failed", 6: "queued"}
+        try:
+            while cursor.moveToNext():
                 messages.append({
                     "date": get_date(float(cursor.getString(cursor.getColumnIndexOrThrow("date"))) / 1000),
                     "number": cursor.getString(cursor.getColumnIndexOrThrow("address")),
                     "body": cursor.getString(cursor.getColumnIndexOrThrow("body")),
                     "type": sms_types[cursor.getInt(cursor.getColumnIndexOrThrow("type"))]
                 })
-                cursor.moveToNext()
-        cursor.close()
+        finally:
+            cursor.close()
         return total_sms, messages
     return

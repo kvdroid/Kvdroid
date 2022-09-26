@@ -14,5 +14,5 @@ def sdcard():
 def external_sdcard():
     try:
         return os.path.join("/storage", os.listdir("/storage")[1])
-    except:
+    except Exception:
         return None
