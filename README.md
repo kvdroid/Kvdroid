@@ -534,6 +534,16 @@ from android.permissions import Permission, request_permissions  # NOQA
 request_permissions([Permission.READ_SMS])
 print(get_all_sms()) # returns a tuple of message count and messages
 ```
+To read all Call Log
+
+```python
+from kvdroid.tools.call import get_call_log
+from android.permissions import Permission, request_permissions  # NOQA
+# remember to add READ_CALL_LOG to your buildozer `android.permissions`
+
+request_permissions([Permission.READ_CALL_LOG])
+print(get_call_log()) # returns a tuple of call log count and call_log
+```
 
 Since the release of Android 11 (API 30), the way file are stored became different
 ### License

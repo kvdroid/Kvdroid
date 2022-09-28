@@ -42,3 +42,7 @@ def MediaStoreMediaColumns(*args, instantiate: bool = False):
 
 def TelephonySms(*args, instantiate: bool = False):
     return _class_call(autoclass('android.provider.Telephony$Sms'), args, instantiate)
+
+
+def CallLogCalls(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.provider.CallLog$Calls'), args, instantiate)
