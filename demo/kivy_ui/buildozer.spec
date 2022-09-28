@@ -92,7 +92,7 @@ android.presplash_color = #FFFFFF
 #icon.adaptive_background.filename = %(source.dir)s/data/icon_bg.png
 
 # (list) Permissions
-android.permissions = INTERNET, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, CALL_PHONE, CALL_PRIVILEGED, READ_CONTACTS, WRITE_CONTACTS, SET_WALLPAPER, READ_SMS
+android.permissions = INTERNET, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, CALL_PHONE, CALL_PRIVILEGED, READ_CONTACTS, WRITE_CONTACTS, SET_WALLPAPER, READ_SMS, READ_CALL_LOG, WRITE_CALL_LOG
 # (list) features (adds uses-feature -tags to manifest)
 #android.features = android.hardware.usb.host
 

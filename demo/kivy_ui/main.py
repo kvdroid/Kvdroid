@@ -35,7 +35,10 @@ class KvDroid(App):
                  Permission.CALL_PRIVILEGED,
                  Permission.READ_CONTACTS,
                  Permission.WRITE_CONTACTS,
-                 Permission.READ_SMS]
+                 Permission.READ_SMS,
+                 Permission.WRITE_CALL_LOG,
+                 Permission.READ_CALL_LOG
+                 ]
             )
         Clock.schedule_once(lambda *_: self.root.ids.rv.data.extend(kvdroid_tools), 3)
 

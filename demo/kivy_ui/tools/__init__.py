@@ -224,7 +224,18 @@ kvdroid_tools = [
             from kvdroid.tools.notification import create_notification
             from kvdroid.tools.sms import get_all_sms
             
-            get_all_sms()
+            print(get_all_sms())
+            """
+        )
+    },
+    {
+        "text": "READ CALL LOGS",
+        "exec": dedent(
+            """
+            from kvdroid.tools.notification import create_notification
+            from kvdroid.tools.call import get_call_log
+
+            print(get_call_log())
             """
         )
     }
