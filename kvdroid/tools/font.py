@@ -72,11 +72,6 @@ class Test(App):
 Test().run()
 """
 
-import re
-import os
-from kvdroid.tools.iso import iso_codes
-from kvdroid.tools.lang import device_lang
-
 
 import os.path
 from xml.etree.ElementTree import ElementTree
