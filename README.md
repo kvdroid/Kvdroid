@@ -10,7 +10,7 @@ Android native UI is created with only python codes.
 
 ### Compiling into APK
 To compile, kivy [p4a](https://github.com/kivy/python-for-android) or kivy [buildozer](https://github.com/kivy/buildozer) is
-required, and bootstrap must be set to `sdl2`
+required, and bootstrap must be set to `sdl2` or `webview`
 ### Dependencies
 ```sh
 Android min-api21
@@ -42,15 +42,24 @@ To use system-provided fonts
 
 :warning: `That function is so experimental. It should work for Android 7 and above but not been tested on much devices. It is actually for multilingual purposes to use system-provided fonts for no Latin languages. system_font() will always return the supported font from /system/fonts for the current device language.  Also, you could use any language-supported font from the system just by calling the system_font function with the target language's iso639-1 or iso639-2 abbreviation such as font_name = system_font('zh') or system_font('zho'). `
 
+Available Android System Font Names
+
+:information_source: `Roboto', 'RobotoStatic', 'NotoSerif', 'DroidSansMono', 'CutiveMono','ComingSoon', 'DancingScript', 'CarroisGothicSC', 'SourceSansPro', 'NotoNaskhArabic', 'NotoNaskhArabicUI', 'NotoSansEthiopic', 'NotoSerifEthiopic', 'NotoSansHebrew', 'NotoSerifHebrew', 'NotoSansThai', 'NotoSerifThai', 'NotoSansThaiUI', 'NotoSansArmenian', 'NotoSerifArmenian', 'NotoSansGeorgian', 'NotoSerifGeorgian', 'NotoSansDevanagari', 'NotoSerifDevanagari', 'NotoSansDevanagariUI', 'NotoSansGujarati', 'NotoSerifGujarati', 'NotoSansGujaratiUI', 'NotoSansGurmukhi', 'NotoSerifGurmukhi', 'NotoSansGurmukhiUI', 'NotoSansTamil', 'NotoSerifTamil', 'NotoSansTamilUI', 'NotoSansMalayalam', 'NotoSerifMalayalam', 'NotoSansMalayalamUI', 'NotoSansBengali', 'NotoSerifBengali', 'NotoSansBengaliUI', 'NotoSansTelugu', 'NotoSerifTelugu', 'NotoSansTeluguUI', 'NotoSansKannada', 'NotoSerifKannada', 'NotoSansKannadaUI', 'NotoSansOriya', 'NotoSansOriyaUI', 'NotoSansSinhala', 'NotoSerifSinhala', 'NotoSansSinhalaUI', 'NotoSansKhmer', 'NotoSerifKhmer', 'NotoSansKhmerUI', 'NotoSansLao', 'NotoSerifLao', 'NotoSansLaoUI', 'NotoSansMyanmar', 'NotoSerifMyanmar', 'NotoSansMyanmarUI', 'NotoSansThaana', 'NotoSansCham', 'NotoSansAhom', 'NotoSansAdlam', 'NotoSansAvestan', 'NotoSansBalinese', 'NotoSansBamum', 'NotoSansBatak', 'NotoSansBrahmi', 'NotoSansBuginese', 'NotoSansBuhid', 'NotoSansCanadianAboriginal', 'NotoSansCarian', 'NotoSansChakma', 'NotoSansCherokee', 'NotoSansCoptic', 'NotoSansCuneiform', 'NotoSansCypriot', 'NotoSansDeseret', 'NotoSansEgyptianHieroglyphs', 'NotoSansElbasan', 'NotoSansGlagolitic', 'NotoSansGothic', 'NotoSansHanunoo', 'NotoSansImperialAramaic', 'NotoSansInscriptionalPahlavi', 'NotoSansInscriptionalParthian', 'NotoSansJavanese', 'NotoSansKaithi', 'NotoSansKayahLi', 'NotoSansKharoshthi', 'NotoSansLepcha', 'NotoSansLimbu', 'NotoSansLinearB', 'NotoSansLisu', 'NotoSansLycian', 'NotoSansLydian', 'NotoSansMandaic', 'NotoSansMeeteiMayek', 'NotoSansNewTaiLue', 'NotoSansNKo', 'NotoSansOgham', 'NotoSansOlChiki', 'NotoSansOldItalic', 'NotoSansOldPersian', 'NotoSansOldSouthArabian', 'NotoSansOldTurkic', 'NotoSansOsage', 'NotoSansOsmanya', 'NotoSansPhoenician', 'NotoSansRejang', 'NotoSansRunic', 'NotoSansSamaritan', 'NotoSansSaurashtra', 'NotoSansShavian', 'NotoSansSundanese', 'NotoSansSylotiNagri', 'NotoSansSyriacEstrangela', 'NotoSansSyriacEastern', 'NotoSansSyriacWestern', 'NotoSansTagalog', 'NotoSansTagbanwa', 'NotoSansTaiTham', 'NotoSansTaiViet', 'NotoSerifTibetan', 'NotoSansTifinagh', 'NotoSansUgaritic', 'NotoSansVai', 'NotoSansSymbols', 'NotoSansCJK', 'NotoSerifCJK', 'NotoColorEmojiLegacy', 'NotoColorEmoji', 'NotoColorEmojiFlags', 'NotoSansTaiLe', 'NotoSansYi', 'NotoSansMongolian', 'NotoSansPhagsPa', 'NotoSansAnatolianHieroglyphs', 'NotoSansBassaVah', 'NotoSansBhaiksuki', 'NotoSansHatran', 'NotoSansLinearA', 'NotoSansManichaean', 'NotoSansMarchen', 'NotoSansMeroitic', 'NotoSansMiao', 'NotoSansMro', 'NotoSansMultani', 'NotoSansNabataean', 'NotoSansNewa', 'NotoSansOldNorthArabian', 'NotoSansOldPermic', 'NotoSansPahawhHmong', 'NotoSansPalmyrene', 'NotoSansPauCinHau', 'NotoSansSharada', 'NotoSansSoraSompeng', 'NotoSansGunjalaGondi', 'NotoSansHanifiRohingya', 'NotoSansKhojki', 'NotoSansMasaramGondi', 'NotoSansWancho', 'NotoSansWarangCiti', 'NotoSansGrantha', 'NotoSansModi', 'NotoSerifDogra', 'NotoSansMedefaidrin', 'NotoSansSoyombo', 'NotoSansTakri', 'NotoSerifNyiakengPuachueHmong', 'NotoSerifYezidi'
+`
+
 ```python
 from kivy.uix.label import Label
-from kvdroid.tools.font import system_font
+from kvdroid.tools.font import system_font, register_system_font
 
-# that will return the default font for the device's current language.
-Label(text = "example", font_name = system_font())
+# registering the Android System Font to use the name directly
+# in kivy Label widget
+register_system_font()
+Label(text = "example", font_name='NotoNaskhArabic')
 
 # for the specific language font
-Label(text = "你好世界", font_name = system_font('zho')) # Language definition must be iso639-1 or iso639-2 abbreviation.  https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+Label(text="你好世界", 
+      font_name=system_font('NotoSansCJKjp')['fn_regular']
+)
 ```
 
 To send notification

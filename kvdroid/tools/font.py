@@ -15,7 +15,7 @@ Builder.load_string(""
     RCList:
         id: rclist
         size_hint: 1,1
-    
+
 <RCList>:
     viewclass: 'XBox'
     RecycleBoxLayout:
@@ -58,9 +58,8 @@ class MainApp(Screen):
             try:
                 item = {"name": locale.getDisplayLanguage(Locale("en")),
                         "native": locale.getDisplayLanguage(Locale(locale.getLanguage())),
-                        "font_name": system_font(locale.getLanguage())}
-                if system_font(locale.getLanguage()) != "Roboto" and not item in self.ids.rclist.data:
-                    self.ids.rclist.data.append(item)
+                        "font_name": system_font('NotoNaskhArabic')['fn_regular']}
+                self.ids.rclist.data.append(item)
             except:
                 print(locale.getLanguage(), locale.getDisplayLanguage())
 
@@ -73,107 +72,59 @@ class Test(App):
 Test().run()
 """
 
-
 import re
 import os
 from kvdroid.tools.iso import iso_codes
-from kivy.core.text import LabelBase
 from kvdroid.tools.lang import device_lang
 
 
-def system_font(language=None):
-    if language != None:
-        if language.lower() in iso_codes.keys():
-            try:
-                return font_dict[iso_codes[language.lower()]]
-            except:
-                return "Roboto"
-        else:
-            raise ValueError(
-                "The language definition must be in iso639-1 or iso639-2 code formats such as 'en' or 'eng'")
-    else:
-        locale = device_lang()
-        try:
-            return font_dict[iso_codes[locale]]
-        except:
-            return "Roboto"
-
-
-def register_font(lang, font):
-    if not lang in font_dict.keys():
-        font_dict[lang] = font["name"]
-        LabelBase.register(name=font["name"],
-                           fn_regular=path + font["regular"],
-                           fn_bold=path +
-                           font["bold"] if "bold" in font.keys() else None,
-                           fn_italic=path +
-                           font["italic"] if "italic" in font.keys() else None,
-                           fn_bolditalic=path + font["bolditalic"] if "bolditalic" in font.keys() else None)
-
-
-def is_font_exist(font):
-    if os.path.exists(path + font):
-        return font
-    else:
-        new_font = font.split('.')[0]+'.otf'
-        if os.path.exists(new_font):
-            return new_font
-        else:
-            return None
-
-
-def define_font(lang, item):
-    temp = {}
-    split_item = item.splitlines()
-    for f in split_item:
-        font = re.findall(
-            "(?<=\s)[A-Z].*\.ttf|(?<=\s)[A-Z].*\.ttc|(?<=\s)[A-Z].*\.otf|(?<=\">)[A-Z].*\.ttf|(?<=\">)[A-Z].*\.ttc|(?<=\">)[A-Z].*\.otf", f)
-        if font:
-            font = is_font_exist(font[0])
-            if font:
-                name = font.split("-")[0]
-                if not name.startswith('Roboto'):
-                    temp["name"] = name
-                    if "-Regular" in font:
-                        if not "regular" in temp.keys():
-                            temp["regular"] = font
-                    elif "-Bold" in font:
-                        if not "bold" in temp.keys():
-                            temp["bold"] = font
-                    elif "-Italic" in font:
-                        if not "italic" in temp.keys():
-                            temp["italic"] = font
-                    elif "-BoldItalic" in font:
-                        if not "bolditalic" in font:
-                            temp["bolditalic"] = font
-                    else:
-                        if not "regular" in temp.keys():
-                            temp["regular"] = font
-    if temp:
-        register_font(lang, temp)
-
-
-path = "/system/fonts/"
-font_dict = {}
+import os.path
+from xml.etree.ElementTree import ElementTree
 
 if os.path.exists("/system/etc/fonts.xml"):
-    r = open("/system/etc/fonts.xml").read()
-elif os.path.exists("/system/etc/system_fonts.xml"):
-    r = open("/system/etc/system_fonts.xml").read()
+    SYSTEM_FONT_PATH = "/system/etc/fonts.xml"
 else:
-    pass
-if r:
-    langs = re.findall("<family lang=[\s\S]*?</family>", r)
-    if langs:
-        for i in langs:
-            lang = re.findall("\"(.*?)\"", i)[0]
-            split_lang = lang.split(',')
-            for s in split_lang:
-                lang = s.split("-")[-1]
-                if lang == "ja":
-                    lang = "Jpan"
-                if lang == "ko":
-                    lang = "Kore"
-                if lang == 'Hans':
-                    define_font('Hant', i)
-                define_font(lang, i)
+    SYSTEM_FONT_PATH = "/system/etc/system_fonts.xml"
+
+
+# noinspection PyTypedDict
+def get_system_font():
+    font_dict = {}
+    tree = ElementTree().parse(SYSTEM_FONT_PATH)
+    for family in tree.findall("family"):
+        for font in family.findall("./"):
+            font_basename = font.text.strip()
+            if font_basename.split('-')[0] not in font_dict:
+                font_dict[font_basename.split('-')[0]] = dict(
+                    fn_italic=None,
+                    fn_bold=None,
+                    fn_bolditalic=None,
+                    fn_regular=None,
+                    name=font_basename.split('-')[0]
+                )
+            font_name = font_dict[font_basename.split('-')[0]]
+            if font.get("weight") == "400":
+                if "italic" in font_basename.lower():
+                    font_name["fn_italic"] = f"/system/fonts/{font_basename}"
+                else:
+                    font_name["fn_regular"] = f"/system/fonts/{font_basename}"
+
+            elif font.get("weight") == "700":
+                if "bolditalic" in font_basename.lower():
+                    font_name["fn_bolditalic"] = f"/system/fonts/{font_basename}"
+                elif "bold" in font_basename.lower():
+                    font_name["fn_bold"] = f"/system/fonts/{font_basename}"
+    return font_dict
+
+
+# This only works on apps that makes use of the Kivy GUI Framework
+def register_system_font():
+    from kivy.core.text import LabelBase
+    font_list = get_system_font().values()
+    for font_data in font_list:
+        LabelBase.register(**font_data)
+
+
+def system_font(name):
+    return get_system_font()[name]
+
