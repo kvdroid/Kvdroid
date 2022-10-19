@@ -129,9 +129,11 @@ def register_system_font(iso: bool = False):
 
 
 def system_font(iso: str = "", font_name: str = ""):
+    # cache font in memory parsed from xml for future use
     global FONT_REGISTERED
     if not FONT_REGISTERED:
-        register_system_font(True)
+        register_system_font(bool(iso))
+        register_system_font(not bool(iso))
         FONT_REGISTERED = True
     if iso:
         return iso_codes[iso]
