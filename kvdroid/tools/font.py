@@ -71,10 +71,10 @@ class Test(App):
 
 Test().run()
 """
-
-
+import contextlib
 import os.path
 from kvdroid.tools.iso import iso_codes
+from kvdroid.tools.lang import device_lang
 from xml.etree.ElementTree import ElementTree
 
 if os.path.exists("/system/etc/fonts.xml"):
@@ -124,7 +124,8 @@ def register_system_font(iso: bool = False):
     from kivy.core.text import LabelBase
     font_list = get_system_font(iso).values()
     for font_data in font_list:
-        LabelBase.register(**font_data)
+        with contextlib.suppress(OSError, IndexError):
+            LabelBase.register(**font_data)
 
 
 def system_font(iso: str = "", font_name: str = ""):
@@ -137,5 +138,8 @@ def system_font(iso: str = "", font_name: str = ""):
     elif font_name:
         return font_name
     else:
-        raise KeyError("Please specify `font_name` or `iso`")
+        try:
+            return iso_codes[device_lang()]
+        except KeyError:
+            return "Roboto"
 
