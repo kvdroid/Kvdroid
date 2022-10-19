@@ -1,4 +1,4 @@
-from kvdroid.jclass.java.util import Locale
+from kvdroid.jclass.java import Locale
 
 
 def device_lang(option="Language", display_lang=None):

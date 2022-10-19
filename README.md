@@ -51,15 +51,13 @@ Available Android System Font Names
 from kivy.uix.label import Label
 from kvdroid.tools.font import system_font, register_system_font
 
-# registering the Android System Font to use the name directly
+# Using the Android System Font name directly
 # in kivy Label widget
-register_system_font()
-Label(text = "example", font_name='NotoNaskhArabic')
+Label(text = "example", 
+      font_name=system_font(font_name='NotoNaskhArabic'))
 
-# for the specific language font
-Label(text="你好世界", 
-      font_name=system_font('NotoSansCJKjp')['fn_regular']
-)
+# Using iso for the specific language font
+Label(text="你好世界", font_name=system_font('zh'))
 ```
 
 To send notification

@@ -74,6 +74,7 @@ Test().run()
 
 
 import os.path
+from kvdroid.tools.iso import iso_codes
 from xml.etree.ElementTree import ElementTree
 
 if os.path.exists("/system/etc/fonts.xml"):
@@ -81,23 +82,29 @@ if os.path.exists("/system/etc/fonts.xml"):
 else:
     SYSTEM_FONT_PATH = "/system/etc/system_fonts.xml"
 
+FONT_REGISTERED = False
+
 
 # noinspection PyTypedDict
-def get_system_font():
+def get_system_font(iso: bool = False):
     font_dict = {}
     tree = ElementTree().parse(SYSTEM_FONT_PATH)
     for family in tree.findall("family"):
         for font in family.findall("./"):
             font_basename = font.text.strip()
-            if font_basename.split('-')[0] not in font_dict:
-                font_dict[font_basename.split('-')[0]] = dict(
+            if iso:
+                font_id = font_basename.split('-')[0].split(".")[0]
+            else:
+                font_id = family.get("lang", family.get("name", "symbol")).split("und-")[-1]
+            if font_id not in font_dict:
+                font_dict[font_id] = dict(
                     fn_italic=None,
                     fn_bold=None,
                     fn_bolditalic=None,
                     fn_regular=None,
-                    name=font_basename.split('-')[0]
+                    name=font_id
                 )
-            font_name = font_dict[font_basename.split('-')[0]]
+            font_name = font_dict[font_id]
             if font.get("weight") == "400":
                 if "italic" in font_basename.lower():
                     font_name["fn_italic"] = f"/system/fonts/{font_basename}"
@@ -113,13 +120,22 @@ def get_system_font():
 
 
 # This only works on apps that makes use of the Kivy GUI Framework
-def register_system_font():
+def register_system_font(iso: bool = False):
     from kivy.core.text import LabelBase
-    font_list = get_system_font().values()
+    font_list = get_system_font(iso).values()
     for font_data in font_list:
         LabelBase.register(**font_data)
 
 
-def system_font(name):
-    return get_system_font()[name]
+def system_font(iso: str = "", font_name: str = ""):
+    global FONT_REGISTERED
+    if not FONT_REGISTERED:
+        register_system_font(True)
+        FONT_REGISTERED = True
+    if iso:
+        return iso_codes[iso]
+    elif font_name:
+        return font_name
+    else:
+        raise KeyError("Please specify `font_name` or `iso`")
 

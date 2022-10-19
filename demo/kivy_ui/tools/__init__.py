@@ -128,7 +128,9 @@ kvdroid_tools = [
             """
             from kvdroid.tools.audio import Player
 
-            Player().play('assets/audio/Egedege.mp3')
+            player = Player(content='assets/audio/Egedege.mp3')
+            print(player.request_audio_focus())
+            player.play()
             """
         )
     },
