@@ -92,10 +92,11 @@ def get_system_font(iso: bool = False):
     for family in tree.findall("family"):
         for font in family.findall("./"):
             font_basename = font.text.strip()
-            if iso:
+            if not iso:
                 font_id = font_basename.split('-')[0].split(".")[0]
             else:
                 font_id = family.get("lang", family.get("name", "symbol")).split("und-")[-1]
+                font_id = font_id.split(",")[0].split("zh-")[-1]
             if font_id not in font_dict:
                 font_dict[font_id] = dict(
                     fn_italic=None,
