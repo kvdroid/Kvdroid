@@ -139,9 +139,8 @@ def system_font(iso: str = "", font_name: str = ""):
         return iso_codes[iso]
     elif font_name:
         return font_name
-    else:
-        try:
-            return iso_codes[device_lang()]
-        except KeyError:
-            return "Roboto"
+    try:
+        return iso_codes[device_lang()]
+    except KeyError:
+        return "Roboto"
 
