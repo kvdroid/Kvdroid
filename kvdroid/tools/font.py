@@ -72,6 +72,7 @@ class Test(App):
 Test().run()
 """
 import contextlib
+import logging
 import os.path
 from kvdroid.tools.iso import iso_codes
 from kvdroid.tools.lang import device_lang
@@ -83,6 +84,7 @@ else:
     SYSTEM_FONT_PATH = "/system/etc/system_fonts.xml"
 
 FONT_REGISTERED = False
+Logger = logging.getLogger('kivy')
 
 
 # noinspection PyTypedDict
@@ -137,8 +139,12 @@ def system_font(iso: str = "", font_name: str = ""):
         register_system_font(not bool(iso))
         FONT_REGISTERED = True
     if iso:
+        if iso_codes[iso] not in get_system_font(True).values():
+            raise KeyError(f"{iso} font file not found in the system's default fonts")
         return iso_codes[iso]
     elif font_name:
+        if font_name not in get_system_font().values():
+            raise KeyError(f"{font_name} font file not found in the system's default fonts")
         return font_name
     try:
         return iso_codes[device_lang()]
