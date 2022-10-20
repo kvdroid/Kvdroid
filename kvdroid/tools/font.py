@@ -147,6 +147,8 @@ def system_font(iso: str = "", font_name: str = ""):
             raise KeyError(f"{font_name} font file not found in the system's default fonts")
         return font_name
     try:
+        if iso_codes[device_lang()] not in get_system_font(True).values():
+            raise KeyError()
         return iso_codes[device_lang()]
     except KeyError:
         return "Roboto"
