@@ -139,15 +139,15 @@ def system_font(iso: str = "", font_name: str = ""):
         register_system_font(not bool(iso))
         FONT_REGISTERED = True
     if iso:
-        if iso_codes[iso] not in get_system_font(True).values():
+        if iso_codes[iso] not in get_system_font(True).keys():
             raise KeyError(f"{iso} font file not found in the system's default fonts")
         return iso_codes[iso]
     elif font_name:
-        if font_name not in get_system_font().values():
+        if font_name not in get_system_font().keys():
             raise KeyError(f"{font_name} font file not found in the system's default fonts")
         return font_name
     try:
-        if iso_codes[device_lang()] not in get_system_font(True).values():
+        if iso_codes[device_lang()] not in get_system_font(True).keys():
             raise KeyError()
         return iso_codes[device_lang()]
     except KeyError:
