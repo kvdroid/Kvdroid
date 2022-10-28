@@ -1,5 +1,6 @@
 from kvdroid import activity
 from kvdroid.jclass.android import ApplicationInfo, PackageManager, ComponentName
+from kvdroid.jclass.java import File
 
 
 def all_packages():
@@ -35,7 +36,7 @@ def is_system_package(package):
     
 def is_package_enabled(package):
     pManager = activity.getPackageManager()
-    return pManager.getApplicationInfo(package,0).enabled
+    return pManager.getApplicationInfo(package, 0).enabled
 
 
 def package_source(package):
@@ -48,16 +49,25 @@ def package_source(package):
 
 def package_info(package):
     pManager = activity.getPackageManager()
-    package = pManager.getApplicationInfo(
+    appInfo = pManager.getPackageInfo(package, 0)
+    installTime = appInfo.firstInstallTime
+    updateTime = appInfo.lastUpdateTime
+    versionCode = appInfo.getLongVersionCode()
+    versionName = appInfo.versionName
+    targetSdkVersion = appInfo.applicationInfo.targetSdkVersion
+    minSdkVersion = appInfo.applicationInfo.minSdkVersion
+    enabled = is_package_enabled(package)    
+    application = pManager.getApplicationInfo(
         package, PackageManager().GET_META_DATA)
-    loadLabel = package.loadLabel(pManager)
-    loadIcon = package.loadIcon(pManager)
-    packageName = package.packageName
-    sourceDir = package.sourceDir
-    dataDir = package.dataDir
-    processName = package.processName
-    publicSourceDir = package.publicSourceDir
-    sharedLibraryFiles = package.sharedLibraryFiles
+    size = File(application.publicSourceDir).length()
+    loadLabel = application.loadLabel(pManager)
+    loadIcon = application.loadIcon(pManager)
+    packageName = application.packageName
+    sourceDir = application.sourceDir
+    dataDir = application.dataDir
+    processName = application.processName
+    publicSourceDir = application.publicSourceDir
+    sharedLibraryFiles = application.sharedLibraryFiles
     packagePerms = pManager.getPackageInfo(
         packageName, PackageManager().GET_PERMISSIONS)
     requestedPermissions = packagePerms.requestedPermissions
@@ -79,8 +89,16 @@ def package_info(package):
              "processName": processName,
              "publicSourceDir": publicSourceDir,
              "sharedLibraryFiles": sharedLibraryFiles,
+             "installTime": installTime,
+             "updateTime": updateTime,
+             "versionName": versionName,
+             "versionCode": versionCode,
+             "targetSdkVersion": targetSdkVersion,
+             "minSdkVersion": minSdkVersion,
              "permissions": permissions,
-             "activities": activities
+             "activities": activities,
+             "enabled": enabled,
+             "size": size
              }
     return infos
 
