@@ -198,7 +198,9 @@ def immersive_mode(status='enable'):
     View = View()
     if status == "disable":
         return window.getDecorView().setSystemUiVisibility(
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            | View.SYSTEM_UI_FLAG_VISIBLE)
     else:
         return window.getDecorView().setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
