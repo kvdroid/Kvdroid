@@ -82,25 +82,35 @@ def package_info(package):
         for act in activity_list:
             activities.append(act.name)
     infos = {"packageName": packageName,
-             "loadLabel": loadLabel,
-             "loadIcon": loadIcon,
-             "sourceDir": sourceDir,
-             "dataDir": dataDir,
-             "processName": processName,
-             "publicSourceDir": publicSourceDir,
-             "sharedLibraryFiles": sharedLibraryFiles,
-             "installTime": installTime,
-             "updateTime": updateTime,
-             "versionName": versionName,
-             "versionCode": versionCode,
-             "targetSdkVersion": targetSdkVersion,
-             "minSdkVersion": minSdkVersion,
-             "permissions": permissions,
-             "activities": activities,
-             "enabled": enabled,
-             "size": size
-             }
+            "loadLabel": loadLabel,
+            "loadIcon": loadIcon,
+            "sourceDir": sourceDir,
+            "dataDir": dataDir,
+            "processName": processName,
+            "publicSourceDir": publicSourceDir,
+            "sharedLibraryFiles": sharedLibraryFiles,
+            "installTime": installTime,
+            "updateTime": updateTime,
+            "versionName": versionName,
+            "versionCode": versionCode,
+            "targetSdkVersion": targetSdkVersion,
+            "minSdkVersion": minSdkVersion,
+            "permissions": permissions,
+            "activities": activities,
+            "enabled": enabled,
+            "size": size
+            }
     return infos
+
+    
+def is_activity_exported(package, act):
+    component = ComponentName(package, act)
+    activityInfo = activity.getPackageManager().getActivityInfo(
+        component, PackageManager().MATCH_DEFAULT_ONLY)
+    if activityInfo != None and activityInfo.exported:
+        return True
+    else:
+        return False
 
 
 def activity_info(package, act):
@@ -110,8 +120,10 @@ def activity_info(package, act):
         component, PackageManager().GET_META_DATA)
     loadLabel = activityInfo.loadLabel(pManager)
     loadIcon = activityInfo.loadIcon(pManager)
+    exported = is_activity_exported(package,act)
     infos = {
         "loadLabel": loadLabel,
-        "loadIcon": loadIcon
+        "loadIcon": loadIcon,
+        "exported": exported
     }
     return infos
