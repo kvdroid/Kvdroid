@@ -103,12 +103,12 @@ def register_font(lang, font):
     if not lang in font_dict.keys():
         font_dict[lang] = font["name"]
         LabelBase.register(name=font["name"],
-                           fn_regular=path + font["regular"],
-                           fn_bold=path +
-                           font["bold"] if "bold" in font.keys() else None,
-                           fn_italic=path +
-                           font["italic"] if "italic" in font.keys() else None,
-                           fn_bolditalic=path + font["bolditalic"] if "bolditalic" in font.keys() else None)
+                            fn_regular=path + font["regular"],
+                            fn_bold=path +
+                            font["bold"] if "bold" in font.keys() else None,
+                            fn_italic=path +
+                            font["italic"] if "italic" in font.keys() else None,
+                            fn_bolditalic=path + font["bolditalic"] if "bolditalic" in font.keys() else None)
 
 
 def is_font_exist(font):

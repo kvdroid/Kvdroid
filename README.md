@@ -38,20 +38,6 @@ requirement = https://github.com/kvdroid/Kvdroid/archive/refs/heads/master.zip
 
 ### Usage
 
-To use system-provided fonts
-
-:warning: `That function is so experimental. It should work for Android 7 and above but not been tested on much devices. It is actually for multilingual purposes to use system-provided fonts for no Latin languages. system_font() will always return the supported font from /system/fonts for the current device language.  Also, you could use any language-supported font from the system just by calling the system_font function with the target language's iso639-1 or iso639-2 abbreviation such as font_name = system_font('zh') or system_font('zho'). `
-
-```python
-from kivy.uix.label import Label
-from kvdroid.tools.font import system_font
-
-# that will return the default font for the device's current language.
-Label(text = "example", font_name = system_font())
-
-# for the specific language font
-Label(text = "你好世界", font_name = system_font('zho')) # Language definition must be iso639-1 or iso639-2 abbreviation.  https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
-```
 
 To send notification
 
@@ -220,6 +206,26 @@ from kvdroid.tools.appsource import app_source
 
 print(app_source())
 ```
+
+To get application infos
+`name` `pkg_name` `version_name` `version_code`
+
+```python
+from kvdroid.tools.appsource import app_info
+
+print(app_info("name"))
+```
+
+To get application directories
+`data` `app` `files` `cache` `ext_files` `ext_cache`
+
+```python
+from kvdroid.tools.appsource import app_dirs
+
+print(app_dirs("files")) #/data/data/package/files
+print(app_dirs("ext_files"), slash = True) #/storage/sdcard0/Android/data/package/files/
+```
+
 To get absolute screen size in dp-pixel and detect current orientation
 
 ```python
@@ -342,19 +348,23 @@ from kvdroid.tools import toast
 
 toast("hello world")
 ```
-To get absolute sdcard path
+To get absolute sdcard path and media directories
+`alarm` `dcim` `download` `documents` `movies` `music` `notifications` `pictures` `podcasts` `ringtones`
 
 ```python
 from kvdroid.tools.path import sdcard
 
-print(sdcard)
+print(sdcard()) #/storage/sdcard0
+print(sdcard("download")) #/storage/sdcard0/Download
+print(sdcard("download", slash = True)) #/storage/sdcard0/Download/
+
 ```
 To get absolute external_sdcard
 
 ```python
 from kvdroid.tools.path import external_sdcard
 
-print(external_sdcard)
+print(external_sdcard()) 
 ```
 To get file mime Type
 
@@ -429,6 +439,22 @@ player.is_playing()
 player.get_duration()
 player.current_position()
 ```
+
+To use system-provided fonts
+
+:warning: `That function is so experimental. It should work for Android 7 and above but not been tested on much devices. It is actually for multilingual purposes to use system-provided fonts for no Latin languages. system_font() will always return the supported font from /system/fonts for the current device language.  Also, you could use any language-supported font from the system just by calling the system_font function with the target language's iso639-1 or iso639-2 abbreviation such as font_name = system_font('zh') or system_font('zho'). `
+
+```python
+from kivy.uix.label import Label
+from kvdroid.tools.font import system_font
+
+# that will return the default font for the device's current language.
+Label(text = "example", font_name = system_font())
+
+# for the specific language font
+Label(text = "你好世界", font_name = system_font('zho')) # Language definition must be iso639-1 or iso639-2 abbreviation.  https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+```
+
 To cast Java Object
 
 ```python
@@ -455,6 +481,7 @@ parcelable = cast("android.os.Parcelabel", uri)
  castables
 '''
 ```
+
 
 To access WebView cookies\
 (i.e if you compiled your app with webview bootstrap or have Webview in your app)
