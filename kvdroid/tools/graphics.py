@@ -6,6 +6,7 @@ from kvdroid.jclass.java import InputStream
 from kvdroid.jclass.java import FileOutputStream
 from kvdroid import activity
 from kvdroid.jclass.android import BitmapFactory
+BitmapFactory = BitmapFactory()
 
 
 def save_drawable(drawable, path, name):
@@ -29,7 +30,6 @@ def save_drawable(drawable, path, name):
 
 
 def bitmap_to_drawable(bitmap: Union[int, str, InputStream()]):
-    BitmapFactory = BitmapFactory()
     if isinstance(bitmap, int):
         bitmap = BitmapFactory.decodeResource(activity.getResources(), bitmap)
     elif isinstance(bitmap, str):
