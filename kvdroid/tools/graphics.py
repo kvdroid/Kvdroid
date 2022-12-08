@@ -36,4 +36,4 @@ def bitmap_to_drawable(bitmap: Union[int, str, InputStream()]):
         bitmap = BitmapFactory.decodeFile(bitmap)
     else:
         bitmap = BitmapFactory.decodeStream(bitmap)
-    return BitmapDrawable(activity.getResource(), bitmap)
+    return BitmapDrawable(activity.getResources(), bitmap)
