@@ -39,6 +39,15 @@ def is_package_enabled(package):
     return pManager.getApplicationInfo(package, 0).enabled
 
 
+def is_package_installed(package):
+    pManager = activity.getPackageManager()
+    try:
+        pManager.getApplicationInfo(package, 0)
+        return True
+    except:
+        return False
+
+
 def package_source(package):
     installer = activity.getPackageManager().getInstallerPackageName(package)
     if installer == "com.android.vending":
