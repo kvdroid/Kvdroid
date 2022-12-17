@@ -3,8 +3,8 @@ import os
 from kvdroid.jclass.android.os import Environment
 
 
-def path():
-    return os.path.dirname(os.path.abspath("__main__"))
+def path(slash: bool = False):
+    return os.path.dirname(os.path.abspath("__main__")) + ( "/" if slash else "")
 
 
 def sdcard(directory: str = "",  slash: bool = False):
@@ -29,8 +29,8 @@ def sdcard(directory: str = "",  slash: bool = False):
             return None
 
 
-def external_sdcard():
+def external_sdcard(slash: bool = False):
     try:
-        return os.path.join("/storage", os.listdir("/storage")[1])
+        return os.path.join("/storage", os.listdir("/storage")[1]) + ( "/" if slash else "")
     except Exception:
         return None
