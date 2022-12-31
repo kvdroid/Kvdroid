@@ -183,10 +183,11 @@ def speech(text: str, lang: str):
 
 def keyboard_height():
     try:
-        decor_view = activity.getWindow().getDecorView()
-        height = activity.getWindowManager().getDefaultDisplay().getHeight()
-        decor_view.getWindowVisibleDisplayFrame(Rect)
-        return height - Rect().bottom
+        rect = Rect(instantiate = True)
+        activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect)
+        rect.top = 0
+        height = activity.getWindowManager().getDefaultDisplay().getHeight() - (rect.bottom - rect.top)
+        return height
     except JavaException:
         return 0
 
