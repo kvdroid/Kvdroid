@@ -46,7 +46,11 @@ def ComponentName(*args, instantiate: bool = False):
 def ApplicationInfo(*args, instantiate: bool = False):
     return _class_call(autoclass("android.content.pm.ApplicationInfo"), args, instantiate)
 
-    
+
+def ActivityInfo(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.content.pm.ActivityInfo'), args, instantiate)
+
+
 def PackageManager(*args, instantiate: bool = False):
     return _class_call(autoclass("android.content.pm.PackageManager"), args, instantiate)
 

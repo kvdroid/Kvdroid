@@ -230,3 +230,32 @@ def app_details(app_package):
     uri = Uri().parse(f"package:{app_package}")
     intent.setData(uri)
     activity.startActivity(intent)
+    
+def set_orientation(mode="user"):
+    '''
+    This function is adapted from the Pykivdroid project (https://github.com/Sahil-pixel/Pykivdroid).
+    '''
+    from kvdroid.jclass.android import ActivityInfo
+    options={
+    'portrait':ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
+    'landscape':ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE,
+    'behind':ActivityInfo.SCREEN_ORIENTATION_BEHIND,
+    'full_sensor':ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR,
+    'full_user':ActivityInfo.SCREEN_ORIENTATION_FULL_USER,
+    'locked':ActivityInfo.SCREEN_ORIENTATION_LOCKED,
+    'no_sensor':ActivityInfo.SCREEN_ORIENTATION_NOSENSOR,
+    'user': ActivityInfo.SCREEN_ORIENTATION_USER,
+    'user_portrait': ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT,
+    'user_landscape': ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE,
+    'unspecified': ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED,
+    'sensor_portrait':ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT,
+    'sensor_landscape':ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE,
+    'sensor':ActivityInfo.SCREEN_ORIENTATION_SENSOR,
+    'reverse_portrait':ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT,
+    'reverse_landscape':ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE,
+    }
+    try:
+        if mode in options:
+            activity.setRequestedOrientation(options[mode])
+    except:
+        pass
