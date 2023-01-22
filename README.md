@@ -252,7 +252,7 @@ To check if device is  in dark mode or not
 ```python
 from kvdroid.tools.darkmode import dark_mode
 
-print(dark_mode)
+print(dark_mode())
 ```
 To get device informations.
 Available options are;
