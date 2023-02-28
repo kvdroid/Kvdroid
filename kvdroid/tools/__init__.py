@@ -14,10 +14,18 @@ from kvdroid.jclass.android import (
     Color,
     BitmapFactory,
     Rect,
-    URLUtil
+    URLUtil,
+    VERSION
 )
 from android.runnable import run_on_ui_thread  # NOQA
 
+
+def _android_version():
+    version = VERSION(instantiate=True)
+    release_version = version.RELEASE
+    return release_version
+
+android_version = _android_version()
 
 def toast(message):
     return activity.toastError(str(message))
