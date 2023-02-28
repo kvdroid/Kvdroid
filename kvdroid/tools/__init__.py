@@ -15,7 +15,8 @@ from kvdroid.jclass.android import (
     BitmapFactory,
     Rect,
     URLUtil,
-    VERSION
+    VERSION,
+    ComponentName
 )
 from android.runnable import run_on_ui_thread  # NOQA
 
@@ -221,9 +222,16 @@ def immersive_mode(status='enable'):
 
 
 def launch_app_activity(app_package, app_activity):
-    intent = Intent(Intent().ACTION_VIEW)
-    intent.setClassName(app_package, app_activity)
-    return activity.startActivity(intent)
+    if android_version <= 12:
+        intent = Intent(Intent().ACTION_VIEW)
+        intent.setClassName(app_package, app_activity)
+        return activity.startActivity(intent)
+    else:
+        intent = Intent(Intent().ACTION_MAIN)
+        intent.setFlags(Intent().FLAG_ACTIVITY_NEW_TASK | Intent().FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+        component_name = ComponentName(app_package, app_activity, instantiate=True)
+        intent.setComponent(component_name)
+        return activity.startActivity(intent)
 
 
 def launch_app(app_package):
