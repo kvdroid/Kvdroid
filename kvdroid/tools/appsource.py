@@ -1,5 +1,4 @@
 from kvdroid import activity
-from kvdroid.jclass.android import Environment
 
 
 def app_source():

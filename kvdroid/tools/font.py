@@ -6,11 +6,9 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.recycleview import RecycleView
 from kivy.lang import Builder
 from kvdroid.jclass.java import Locale
-
 from kvdroid.tools.font import system_font
 
 Builder.load_string(""
-
 <MainApp>:
     RCList:
         id: rclist
@@ -25,6 +23,7 @@ Builder.load_string(""
         size_hint_y: None
         height: self.minimum_height
         orientation: 'vertical'
+        
 <XBox>:
     Button:
         text: root.name
@@ -34,22 +33,17 @@ Builder.load_string(""
         font_name: root.font_name
         font_size: "22sp"
         on_press: print(root.font_name)
-
-
 "")
-
 
 class XBox(BoxLayout):
     name = StringProperty()
     native = StringProperty()
     font_name = StringProperty()
 
-
 class RCList(RecycleView):
     def __init__(self, **kwargs):
         super(RCList, self).__init__(**kwargs)
         self.data = []
-
 
 class MainApp(Screen):
     def __init__(self, **kwargs):
@@ -64,116 +58,71 @@ class MainApp(Screen):
             except:
                 print(locale.getLanguage(), locale.getDisplayLanguage())
 
-
 class Test(App):
     def build(self):
         return MainApp()
 
-
 Test().run()
 """
 
-
-import re
 import os
 from kvdroid.tools.iso import iso_codes
 from kivy.core.text import LabelBase
 from kvdroid.tools.lang import device_lang
+from kivy.utils import platform
+import xml.etree.ElementTree as ET
 
+FONT_PATH = os.path.join("/", "system", "fonts/")
+FONT_XML_PATHS = [os.path.join("/", "system", "etc", "fonts.xml"), os.path.join("/", "system", "etc", "system_fonts.xml")]
+FONT_DICT = {}
 
 def system_font(language=None):
-    if language != None:
-        if language.lower() in iso_codes.keys():
-            try:
-                return font_dict[iso_codes[language.lower()]]
-            except:
-                return "Roboto"
-        else:
-            raise ValueError(
-                "The language definition must be in iso639-1 or iso639-2 code formats such as 'en' or 'eng'")
+    if not language:
+        language = device_lang()
     else:
-        locale = device_lang()
-        try:
-            return font_dict[iso_codes[locale]]
-        except:
+        language = language.split("-")[0]
+    if language.lower() in iso_codes.keys():
+        if iso_codes[language.lower()] in FONT_DICT.keys():
+            return FONT_DICT[iso_codes[language.lower()]]
+        else:
             return "Roboto"
-
-
-def register_font(lang, font):
-    if not lang in font_dict.keys():
-        font_dict[lang] = font["name"]
-        LabelBase.register(name=font["name"],
-                            fn_regular=path + font["regular"],
-                            fn_bold=path +
-                            font["bold"] if "bold" in font.keys() else None,
-                            fn_italic=path +
-                            font["italic"] if "italic" in font.keys() else None,
-                            fn_bolditalic=path + font["bolditalic"] if "bolditalic" in font.keys() else None)
-
+    else:
+        raise ValueError(
+            "The language definition must be in iso639-1 or iso639-2 code formats such as 'en' or 'eng'")
 
 def is_font_exist(font):
-    if os.path.exists(path + font):
+    if os.path.isfile(os.path.join(FONT_PATH, font)):
         return font
-    else:
-        new_font = font.split('.')[0]+'.otf'
-        if os.path.exists(new_font):
-            return new_font
-        else:
-            return None
+        
+def register_font(lang, name, font):
+    if not lang in FONT_DICT.keys():
+        LabelBase.register(name= name,
+                            fn_regular=FONT_PATH + font,
+                            fn_bold= None,
+                            fn_italic= None,
+                            fn_bolditalic= None)
+        FONT_DICT[lang] = name
 
+if platform == "android":
+    for font_xml_path in FONT_XML_PATHS:
+        if os.path.exists(font_xml_path):
+            tree = ET.parse(font_xml_path)
+            root = tree.getroot()
+            lang_families = [item for item in root.findall("family") if item and 'lang' in item.attrib]
 
-def define_font(lang, item):
-    temp = {}
-    split_item = item.splitlines()
-    for f in split_item:
-        font = re.findall(
-            "(?<=\s)[A-Z].*\.ttf|(?<=\s)[A-Z].*\.ttc|(?<=\s)[A-Z].*\.otf|(?<=\">)[A-Z].*\.ttf|(?<=\">)[A-Z].*\.ttc|(?<=\">)[A-Z].*\.otf", f)
-        if font:
-            font = is_font_exist(font[0])
-            if font:
-                name = font.split("-")[0]
-                if not name.startswith('Roboto'):
-                    temp["name"] = name
-                    if "-Regular" in font:
-                        if not "regular" in temp.keys():
-                            temp["regular"] = font
-                    elif "-Bold" in font:
-                        if not "bold" in temp.keys():
-                            temp["bold"] = font
-                    elif "-Italic" in font:
-                        if not "italic" in temp.keys():
-                            temp["italic"] = font
-                    elif "-BoldItalic" in font:
-                        if not "bolditalic" in font:
-                            temp["bolditalic"] = font
-                    else:
-                        if not "regular" in temp.keys():
-                            temp["regular"] = font
-    if temp:
-        register_font(lang, temp)
-
-
-path = "/system/fonts/"
-font_dict = {}
-
-if os.path.exists("/system/etc/fonts.xml"):
-    r = open("/system/etc/fonts.xml").read()
-elif os.path.exists("/system/etc/system_fonts.xml"):
-    r = open("/system/etc/system_fonts.xml").read()
-else:
-    pass
-if r:
-    langs = re.findall("<family lang=[\s\S]*?</family>", r)
-    if langs:
-        for i in langs:
-            lang = re.findall("\"(.*?)\"", i)[0]
-            split_lang = lang.split(',')
-            for s in split_lang:
-                lang = s.split("-")[-1]
-                if lang == "ja":
-                    lang = "Jpan"
-                if lang == "ko":
-                    lang = "Kore"
-                if lang == 'Hans':
-                    define_font('Hant', i)
-                define_font(lang, i)
+            for family in lang_families:
+                lang_code = family.attrib["lang"]
+                if lang_code == "ja":
+                    lang_code = "Jpan"
+                elif lang_code == "ko":
+                    lang_code = "Kore"
+                else:
+                    lang_code = lang_code.split("-")[1].split(",")[0].strip()
+                font_elements = family.findall("font")
+                if font_elements:
+                    font_name = font_elements[0].text.strip()
+                    if is_font_exist(font_name):
+                        name = font_name.split(".")[0].split("-")[0]
+                        register_font(lang_code,name,font_name)
+                        
+#print(system_font("ar"))
