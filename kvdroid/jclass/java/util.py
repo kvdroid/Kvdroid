@@ -6,5 +6,9 @@ def Locale(*args, instantiate: bool = False):
     return _class_call(autoclass('java.util.Locale'), args, instantiate)
 
 
+def Date(*args, instantiate: bool = False):
+    return _class_call(autoclass('java.util.Date'), args, instantiate)
+
+
 def ArrayList(*args, instantiate: bool = False):
     return _class_call(autoclass('java.util.ArrayList'), args, instantiate)

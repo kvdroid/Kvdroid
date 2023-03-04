@@ -12,3 +12,7 @@ def URLUtil(*args, instantiate: bool = False):
 
 def MimeTypeMap(*args, instantiate: bool = False):
     return _class_call(autoclass('android.webkit.MimeTypeMap'), args, instantiate)
+
+
+def WebView(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.webkit.WebView'), args, instantiate)

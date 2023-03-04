@@ -1,5 +1,37 @@
-from jnius import autoclass # NOQA
+from jnius import autoclass
 from kvdroid.jclass import _class_call
+
+
+def Activity(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.app.Activity"), args, instantiate)
+
+
+def ActivityManager(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.app.ActivityManager"), args, instantiate)
+
+
+def AlarmManager(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.app.AlarmManager"), args, instantiate)
+
+
+def AlertDialog(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.app.AlertDialog"), args, instantiate)
+
+
+def Application(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.app.Application"), args, instantiate)
+
+
+def ApplicationInfo(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.content.pm.ApplicationInfo"), args, instantiate)
+
+
+def Fragment(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.app.Fragment"), args, instantiate)
+
+
+def FragmentManager(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.app.FragmentManager"), args, instantiate)
 
 
 def NotificationManager(*args, instantiate: bool = False):
@@ -23,10 +55,6 @@ def Request(*args, instantiate: bool = False):
     return _class_call(autoclass("android.app.DownloadManager$Request"), args, instantiate)
 
 
-def Activity(*args, instantiate: bool = False):
-    return _class_call(autoclass('android.app.Activity'), args, instantiate)
-
-
 def PendingIntent(*args, instantiate: bool = False):
     return _class_call(autoclass("android.app.PendingIntent"), args, instantiate)
 
@@ -34,17 +62,9 @@ def PendingIntent(*args, instantiate: bool = False):
 def MemoryInfo(*args, instantiate: bool = False):
     return _class_call(autoclass('android.app.ActivityManager$MemoryInfo'), args, instantiate)
 
-
-def ActivityManager(*args, instantiate: bool = False):
-    return _class_call(autoclass("android.app.ActivityManager"), args, instantiate)
-
     
 def ComponentName(*args, instantiate: bool = False):
     return _class_call(autoclass("android.content.ComponentName"), args, instantiate)
-
-    
-def ApplicationInfo(*args, instantiate: bool = False):
-    return _class_call(autoclass("android.content.pm.ApplicationInfo"), args, instantiate)
 
 
 def ActivityInfo(*args, instantiate: bool = False):

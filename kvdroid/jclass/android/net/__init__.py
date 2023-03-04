@@ -8,3 +8,7 @@ def Uri(*args, instantiate: bool = False):
 
 def ConnectivityManager(*args, instantiate: bool = False):
     return _class_call(autoclass("android.net.ConnectivityManager"), args, instantiate)
+
+
+def NetworkInfo(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.net.NetworkInfo"), args, instantiate)

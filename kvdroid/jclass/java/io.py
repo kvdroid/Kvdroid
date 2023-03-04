@@ -20,3 +20,12 @@ def ByteArrayOutputStream(*args, instantiate: bool = False):
 
 def InputStream(*args, instantiate: bool = False):
     return _class_call(autoclass('java.io.InputStream'), args, instantiate)
+
+
+def DataInputStream(*args, instantiate: bool = False):
+    return _class_call(autoclass('java.io.DataInputStream'), args, instantiate)
+
+
+def OutputStream(*args, instantiate: bool = False):
+    return _class_call(autoclass('java.io.OutputStream'), args, instantiate)
+

@@ -20,3 +20,15 @@ def ContentValues(*args, instantiate: bool = False):
 
 def ContentUris(*args, instantiate: bool = False):
     return _class_call(autoclass('android.content.ContentUris'), args, instantiate)
+
+
+def SharedPreferences(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.content.SharedPreferences'), args, instantiate)
+
+
+def BroadcastReceiver(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.content.BroadcastReceiver'), args, instantiate)
+
+
+def ContentResolver(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.content.ContentResolver'), args, instantiate)
