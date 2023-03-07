@@ -240,13 +240,29 @@ print(screen.resolution())
 To check if device has a data connection.
 
 ```python
-from kvdroid.tools.network import network_status, wifi_status, mobile_status, get_wifi_signal
+from kvdroid.tools.network import network_status, wifi_status, mobile_status
 
 print(network_status())  # for both wifi and mobile
 print(wifi_status())    # only for wifi
 print(mobile_status())    # only for mobile
 print(get_wifi_signal())    # only for wifi
 ```
+To get Wi-Fi signal strenght.
+
+```python
+from kvdroid.tools.network import  get_wifi_signal
+
+print(get_wifi_signal()) 
+```
+
+To get network latency.
+
+```python
+from kvdroid.tools.network import  network_latency
+
+print(network_latency()) 
+```
+
 To check if device is  in dark mode or not
 
 ```python
