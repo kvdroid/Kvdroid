@@ -240,12 +240,12 @@ print(screen.resolution())
 To check if device has a data connection.
 
 ```python
-from kvdroid.tools.network import network_status, wifi_status, mobile_status
+from kvdroid.tools.network import network_status, wifi_status, mobile_status, get_wifi_signal
 
 print(network_status())  # for both wifi and mobile
 print(wifi_status())    # only for wifi
 print(mobile_status())    # only for mobile
-
+print(get_wifi_signal())    # only for wifi
 ```
 To check if device is  in dark mode or not
 
@@ -256,7 +256,7 @@ print(dark_mode())
 ```
 To get device informations.
 Available options are;
-```'model','brand','manufacturer','version','sdk','product','base','rom','security','hardware','tags','sdk_int','total_mem','used_mem','avail_ram','total_ram','used_ram','bat_level','bat_capacity','bat_temperature','bat_voltage','bat_technology'```
+```'model','brand','manufacturer','version','sdk','product','base','rom','security','hardware','tags','sdk_int','total_mem','used_mem','avail_ram','total_ram','used_ram','bat_level','bat_capacity','bat_temperature','bat_voltage','bat_technology', 'bat_status', 'bat_health'```
 
 ```python
 from kvdroid.tools.deviceinfo import device_info

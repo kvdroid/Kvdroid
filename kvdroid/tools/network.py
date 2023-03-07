@@ -58,3 +58,14 @@ def get_wifi_ip_address() -> str:
     context = activity.getApplicationContext()
     wifi_manager = cast(WifiManager(), context.getSystemService(Context().WIFI_SERVICE))
     return formatter.formatIpAddress(wifi_manager.getConnectionInfo().getIpAddress())
+    
+    
+def get_wifi_signal():
+    wm = activity.getSystemService(activity.WIFI_SERVICE)
+    wifi_info = wm.getConnectionInfo()
+    signal_strength = wifi_info.getRssi()
+    if signal_strength < -100:
+        signal_percent = 0.0
+    else:
+        signal_percent = 100.0 * (signal_strength + 100) / 200.0
+    return signal_percent
