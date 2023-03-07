@@ -58,9 +58,24 @@ def get_wifi_ip_address() -> str:
     context = activity.getApplicationContext()
     wifi_manager = cast(WifiManager(), context.getSystemService(Context().WIFI_SERVICE))
     return formatter.formatIpAddress(wifi_manager.getConnectionInfo().getIpAddress())
-    
-    
-def get_wifi_signal():
+
+
+def network_latency() -> float:
+    import time
+    from kvdroid.jclass.java import InetAddress
+    InetAddress = InetAddress()
+    def ping(host):
+        start_time = time.time()
+        address = InetAddress.getByName(host)
+        if address.isReachable(1000):
+            end_time = time.time()
+            return (end_time - start_time) * 1000
+        else:
+            return None
+    return ping('google.com')
+
+
+def get_wifi_signal() -> float:
     wm = activity.getSystemService(activity.WIFI_SERVICE)
     wifi_info = wm.getConnectionInfo()
     signal_strength = wifi_info.getRssi()
