@@ -10,12 +10,32 @@ def Environment(*args, instantiate: bool = False):
     return _class_call(autoclass("android.os.Environment"), args, instantiate)
 
 
+def BatteryManager(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.os.BatteryManager"), args, instantiate)
+
+
 def Build(*args, instantiate: bool = False):
     return _class_call(autoclass("android.os.Build"), args, instantiate)
 
 
 def Bundle(*args, instantiate: bool = False):
     return _class_call(autoclass("android.os.Bundle"), args, instantiate)
+
+
+def Debug(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.os.Debug"), args, instantiate)
+
+
+def FileUtils(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.os.FileUtils'), args, instantiate)
+
+
+def Handler(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.os.Handler"), args, instantiate)
+
+
+def HandlerThread(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.os.HandlerThread"), args, instantiate)
 
 
 def Looper(*args, instantiate: bool = False):
@@ -32,6 +52,10 @@ def Parcelable(*args, instantiate: bool = False):
 
 def PowerManager(*args, instantiate: bool = False):
     return _class_call(autoclass("android.os.PowerManager"), args, instantiate)
+
+
+def Process(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.os.Process"), args, instantiate)
 
 
 def Vibrator(*args, instantiate: bool = False):
@@ -54,17 +78,5 @@ def StatFs(*args, instantiate: bool = False):
     return _class_call(autoclass("android.os.StatFs"), args, instantiate)
 
 
-def BatteryManager(*args, instantiate: bool = False):
-    return _class_call(autoclass("android.os.BatteryManager"), args, instantiate)
-
-
-def Handler(*args, instantiate: bool = False):
-    return _class_call(autoclass("android.os.Handler"), args, instantiate)
-
-
-def HandlerThread(*args, instantiate: bool = False):
-    return _class_call(autoclass("android.os.HandlerThread"), args, instantiate)
-
-
-def FileUtils(*args, instantiate: bool = False):
-    return _class_call(autoclass('android.os.FileUtils'), args, instantiate)
+def SystemClock(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.os.SystemClock"), args, instantiate)
