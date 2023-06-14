@@ -23,8 +23,7 @@ from android.runnable import run_on_ui_thread  # NOQA
 
 def _android_version():
     version = VERSION(instantiate=True)
-    release_version = version.RELEASE
-    return int(release_version)
+    return version.RELEASE
 
 android_version = _android_version()
 
