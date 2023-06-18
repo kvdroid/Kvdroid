@@ -221,7 +221,7 @@ def immersive_mode(status='enable'):
 
 
 def launch_app_activity(app_package, app_activity):
-    if android_version <= 12:
+    if int(android_version.split(".")[0]) <= 12:
         intent = Intent(Intent().ACTION_VIEW)
         intent.setClassName(app_package, app_activity)
         return activity.startActivity(intent)
