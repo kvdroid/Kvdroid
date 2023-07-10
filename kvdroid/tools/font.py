@@ -109,20 +109,27 @@ if platform == "android":
             tree = ET.parse(font_xml_path)
             root = tree.getroot()
             lang_families = [item for item in root.findall("family") if item and 'lang' in item.attrib]
-
             for family in lang_families:
-                lang_code = family.attrib["lang"]
-                if lang_code == "ja":
-                    lang_code = "Jpan"
-                elif lang_code == "ko":
-                    lang_code = "Kore"
-                else:
-                    lang_code = lang_code.split("-")[1].split(",")[0].strip()
                 font_elements = family.findall("font")
                 if font_elements:
                     font_name = font_elements[0].text.strip()
                     if is_font_exist(font_name):
                         name = font_name.split(".")[0].split("-")[0]
-                        register_font(lang_code,name,font_name)
+                        lang_code = family.attrib["lang"].split(",")
+                        if len(lang_code) >= 2:
+                            for lang in lang_code:
+                                lang_code = lang.split("-")[-1].strip()
+                                register_font(lang_code,name,font_name)
+                        else:
+                            if lang_code[0] == "ja":
+                                lang_code = "Jpan"
+                            elif lang_code[0] == "ko":
+                                lang_code = "Kore"
+                            elif lang_code[0] == "zh":
+                                lang_code = "Hant"
+                            else:
+                                lang_code = lang_code[0].split("-")[-1].strip()
+                            register_font(lang_code,name,font_name)
+
                         
 #print(system_font("ar"))
