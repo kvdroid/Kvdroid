@@ -1,3 +1,8 @@
+"""
+Androidx Notification
+=====================
+"""
+
 from typing import Union
 from jnius import cast, JavaException  # NOQA
 from android import python_act  # NOQA
