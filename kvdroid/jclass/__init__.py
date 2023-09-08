@@ -1,4 +1,4 @@
-from jnius import autoclass, JavaException
+from jnius import autoclass, JavaException  # NOQA
 
 
 def _class_call(cls, args: tuple, instantiate: bool):
