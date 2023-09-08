@@ -29,18 +29,13 @@ platform = _get_platform()
 Logger = logging.getLogger('kivy')
 
 if platform == "android":
-    try:
-        from android import config # NOQA
-
-        ns = config.JAVA_NAMESPACE
-    except (ImportError, AttributeError):
-        ns = 'org.renpy.android'
+    from android.config import ACTIVITY_CLASS_NAME, SERVICE_CLASS_NAME # NOQA
 
     if 'PYTHON_SERVICE_ARGUMENT' in environ:
-        PythonService = autoclass(f'{ns}.PythonService')
+        PythonService = autoclass(SERVICE_CLASS_NAME)
         activity = PythonService.mService
     else:
-        PythonActivity = autoclass(f'{ns}.PythonActivity')
+        PythonActivity = autoclass(ACTIVITY_CLASS_NAME)
         activity = PythonActivity.mActivity
 
     packages = {
