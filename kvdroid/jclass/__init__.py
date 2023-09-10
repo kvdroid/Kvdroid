@@ -15,4 +15,4 @@ def _browserx_except_cls_call(namespace: str, args: tuple, instantiate: bool):
         raise JavaException(
             f"{e}\nEnable androidx in your buildozer.spec file\nadd 'androidx.browser:browser:1.4.0' to "
             f"buildozer.spec file: android.gradle_dependencies"
-        )
+        ) from e
