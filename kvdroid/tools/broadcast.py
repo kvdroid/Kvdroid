@@ -2,7 +2,7 @@
 # Broadcast receiver bridge
 
 from jnius import autoclass, PythonJavaClass, java_method  # NOQA
-from android.config import JAVA_NAMESPACE, JNI_NAMESPACE, ACTIVITY_CLASS_NAME, SERVICE_CLASS_NAME
+from android.config import JNI_NAMESPACE  # NOQA
 from kvdroid.jclass.org import GenericBroadcastReceiver
 from kvdroid.jclass.android import IntentFilter, HandlerThread, Intent, Handler
 from kvdroid import activity
