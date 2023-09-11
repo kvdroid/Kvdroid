@@ -11,7 +11,6 @@ from kvdroid.cast import cast_object
 from kvdroid.jclass.java import InputStream
 from kvdroid.tools import get_resource
 
-
 try:
     from kvdroid.jclass.androidx import (
         ContextCompat,
@@ -20,7 +19,8 @@ try:
         NotificationCompatActionBuilder,
         RemoteInputBuilder,
         NotificationCompatBigPictureStyle,
-        NotificationBigTextStyle
+        NotificationBigTextStyle,
+        RemoteInput
     )
     from kvdroid.jclass.android import (
         Intent,
@@ -33,35 +33,34 @@ try:
         VERSION
     )
     from kvdroid.jclass.java.lang import String, System
+    from kvdroid.jclass.org import GenericBroadcastReceiver
+    from android.broadcast import BroadcastReceiver  # NOQA
 
 
-    def _create_intent(extras, java_class):
-        intent = Intent(activity.getApplication().getApplicationContext(), java_class)
+    def _create_intent(extras, java_class, broadcast):
+        if broadcast:
+            intent = Intent(f'{activity.getPackageName()}.KVDROID_NOTIFICATION_BROADCAST')
+            if extras:
+                intent.putExtra(*extras)
+            return PendingIntent().getBrodcast(activity, 0, intent, PendingIntent().FLAG_UPDATE_CURRENT)
+        intent = Intent(activity, java_class)
         if extras:
             intent.putExtra(*extras)
         intent.setFlags(Intent().FLAG_ACTIVITY_CLEAR_TOP | Intent().FLAG_ACTIVITY_SINGLE_TOP)
         intent.setAction(Intent().ACTION_MAIN)
         intent.addCategory(Intent().CATEGORY_LAUNCHER)
-        return (
-            PendingIntent().getActivity(
-                activity.getApplication().getApplicationContext(),
-                0,
-                intent,
-                PendingIntent().FLAG_MUTABLE,
-            )
+        return PendingIntent().getActivity(
+            activity,
+            0,
+            intent,
+            PendingIntent().FLAG_MUTABLE
             if VERSION().SDK_INT >= 31
-            else PendingIntent().getActivity(
-                activity.getApplication().getApplicationContext(),
-                0,
-                intent,
-                PendingIntent().FLAG_UPDATE_CURRENT
-                | Notification().FLAG_AUTO_CANCEL,
-            )
+            else PendingIntent().FLAG_UPDATE_CURRENT | Notification().FLAG_AUTO_CANCEL,
         )
 
 
     def _create_notification_channel(channel_id, channel_name, notification_manager):
-        importance: int = NotificationManager().IMPORTANCE_HIGH
+        importance = NotificationManager().IMPORTANCE_HIGH
         channel = NotificationChannel(String(channel_id), String(channel_name), importance)
         channel.setDescription("notification")
         # Register the channel with the system; you can't change the importance
@@ -100,6 +99,7 @@ try:
         builder.setContentInfo("INFO")
         builder.setStyle(NotificationBigTextStyle(instantiate=True).bigText(String(text)).setBigContentTitle(title))
 
+
     def _build_notification_actions(
             action_title1,
             action_title2,
@@ -110,26 +110,27 @@ try:
             extras,
             java_class,
             reply_title,
+            broadcast
     ):
         if extra := action_title1 and extras.get("action1"):
             builder.addAction(
                 get_resource("mipmap").icon,
                 cast_object("charSequence", String(action_title1)),
-                _create_intent(extras=extra, java_class=java_class)
+                _create_intent(extra, java_class, broadcast)
             )
 
         if extra := action_title2 and extras.get("action2"):
             builder.addAction(
                 get_resource("mipmap").icon,
                 cast_object("charSequence", String(action_title2)),
-                _create_intent(extras=extra, java_class=java_class)
+                _create_intent(extra, java_class, broadcast)
             )
 
         if extra := action_title3 and extras.get("action3"):
             builder.addAction(
                 get_resource("mipmap").icon,
                 cast_object("charSequence", String(action_title3)),
-                _create_intent(extras=extra, java_class=java_class)
+                _create_intent(extra, java_class, broadcast)
             )
 
         if reply_title:
@@ -137,11 +138,12 @@ try:
                 NotificationCompatActionBuilder(
                     get_resource("mipmap").icon,
                     String(reply_title),
-                    _create_intent(extras=extra, java_class=java_class)
+                    _create_intent(extra, java_class, broadcast)
                 ).addRemoteInput(
                     RemoteInputBuilder(String(key_text_reply)).setLabel(String(reply_title)).build()
                 ).build()
             ).setAutoCancel(auto_cancel)
+
 
     def _set_big_picture(big_picture, builder):
         large_picture = NotificationCompatBigPictureStyle(instantiate=True)
@@ -152,6 +154,7 @@ try:
         else:
             large_picture.bigPicture(BitmapFactory().decodeStream(big_picture))
         builder.setStyle(large_picture)
+
 
     def _set_large_icon(large_icon, builder):
         if isinstance(large_icon, int):
@@ -179,27 +182,63 @@ try:
             auto_cancel: bool = True,
             extras: dict = None,
             small_icon_color: int = None,
-            java_class: object = None,
+            activity_class: object = None,
+            broadcast_class: object = None,
             priority: int = None,
-            defaults: int = None
-    ):  # sourcery no-metrics
+            defaults: int = None,
+            broadcast=False,
+            action_callback=None,
+    ) -> object:  # sourcery no-metrics
+        """
+
+        :param small_icon:
+        :param channel_id:
+        :param title:
+        :param text:
+        :param ids:
+        :param channel_name:
+        :param large_icon:
+        :param big_picture:
+        :param action_title1:
+        :param action_title2:
+        :param action_title3:
+        :param key_text_reply:
+        :param reply_title:
+        :param auto_cancel:
+        :param extras:
+        :param small_icon_color:
+        :param activity_class:
+        :param broadcast_class:
+        :param priority:
+        :param defaults:
+        :param broadcast:
+        :param action_callback:
+        :return: notification_manager
+        """
         if not priority:
             priority = NotificationCompat().PRIORITY_HIGH
         if not defaults:
             defaults = NotificationCompat().DEFAULT_ALL
-        if java_class:
-            java_class = python_act
+        if not activity_class:
+            activity_class = python_act
+        if not broadcast_class:
+            broadcast_class = GenericBroadcastReceiver()
 
-        tap_pending_intent = _create_intent(extras=extras.get("tap"), java_class=java_class)
-        builder = NotificationCompatBuilder(activity.getApplication().getApplicationContext(), channel_id)
+        java_class = broadcast_class if broadcast else activity_class
+
+        # use activity_class instead of java_class because notifications are meant to open
+        # are meant to open the app when the content (not the action buttons) is tapped
+        tap_pending_intent = _create_intent(extras.get("tap"), activity_class, broadcast)
+        builder = NotificationCompatBuilder(activity.getApplicationContext(), channel_id)
         _build_notification_content(
             auto_cancel, channel_id, tap_pending_intent, small_icon, small_icon_color, text, title, priority, defaults,
             builder
         )
-        _build_notification_actions(
-            action_title1, action_title2, action_title3, auto_cancel, key_text_reply, builder, extras, java_class,
-            reply_title,
-        )
+        if action_callback:
+            _build_notification_actions(
+                action_title1, action_title2, action_title3, auto_cancel, key_text_reply, builder, extras, java_class,
+                reply_title, broadcast
+            )
 
         if big_picture:
             _set_big_picture(big_picture, builder)
@@ -216,9 +255,15 @@ try:
             _create_notification_channel(channel_id, channel_name, notification_manager)
         # notificationId is a unique int for each notification that you must define
         notification_manager.notify(ids, builder.build())
-except JavaException as error:
-    Logger.error(
-        f"{str(error)}\n"
+        return notification_manager
+
+
+    def get_reply_text(intent, key_text_reply):
+        if remote_input := RemoteInput().getResultsFromIntent(intent):
+            return remote_input.getCharSequence(key_text_reply)
+except JavaException as e:
+    raise JavaException(
+        f"{e}\n"
         "Kvdroid: Androidx not Enabled, Cannot Import create_notification\n"
         "Use official kivy plyer module instead or enable androidx in buildozer.spec file"
-    )
+    ) from e
