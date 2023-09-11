@@ -4,7 +4,7 @@ from typing import Union
 from kvdroid import _convert_color
 from jnius import JavaException  # NOQA
 from kvdroid import activity
-from kvdroid.jclass.java import URL
+from kvdroid.jclass.java import URL, Runtime
 from kvdroid.jclass.android import (
     Intent,
     Context,
@@ -116,7 +116,6 @@ def restart_app():
     componentName = intent.getComponent()
     mainIntent = Intent().makeRestartActivityTask(componentName)
     context.startActivity(mainIntent)
-    from kvdroid.jclass.java.lang import Runtime
     Runtime().getRuntime().exit(0)
 
 
