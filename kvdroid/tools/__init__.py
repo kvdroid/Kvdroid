@@ -25,7 +25,9 @@ def _android_version():
     version = VERSION(instantiate=True)
     return version.RELEASE
 
+
 android_version = _android_version()
+
 
 def toast(message):
     return activity.toastError(str(message))
@@ -191,11 +193,12 @@ def speech(text: str, lang: str):
 
 def keyboard_height():
     try:
-        rect = Rect(instantiate = True)
+        rect = Rect(instantiate=True)
         activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect)
         rect.top = 0
-        height = activity.getWindowManager().getDefaultDisplay().getHeight() - (rect.bottom - rect.top)
-        return height
+        return activity.getWindowManager().getDefaultDisplay().getHeight() - (
+            rect.bottom - rect.top
+        )
     except JavaException:
         return 0
 
@@ -224,13 +227,13 @@ def launch_app_activity(app_package, app_activity):
     if int(android_version.split(".")[0]) <= 12:
         intent = Intent(Intent().ACTION_VIEW)
         intent.setClassName(app_package, app_activity)
-        return activity.startActivity(intent)
     else:
         intent = Intent(Intent().ACTION_MAIN)
         intent.setFlags(Intent().FLAG_ACTIVITY_NEW_TASK | Intent().FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
         component_name = ComponentName(app_package, app_activity, instantiate=True)
         intent.setComponent(component_name)
-        return activity.startActivity(intent)
+
+    return activity.startActivity(intent)
 
 
 def launch_app(app_package):
@@ -245,32 +248,31 @@ def app_details(app_package):
     uri = Uri().parse(f"package:{app_package}")
     intent.setData(uri)
     activity.startActivity(intent)
-    
+
+
 def set_orientation(mode="user"):
     '''
     This function is adapted from the Pykivdroid project (https://github.com/Sahil-pixel/Pykivdroid).
     '''
     from kvdroid.jclass.android import ActivityInfo
-    options={
-    'portrait':ActivityInfo().SCREEN_ORIENTATION_PORTRAIT,
-    'landscape':ActivityInfo().SCREEN_ORIENTATION_LANDSCAPE,
-    'behind':ActivityInfo().SCREEN_ORIENTATION_BEHIND,
-    'full_sensor':ActivityInfo().SCREEN_ORIENTATION_FULL_SENSOR,
-    'full_user':ActivityInfo().SCREEN_ORIENTATION_FULL_USER,
-    'locked':ActivityInfo().SCREEN_ORIENTATION_LOCKED,
-    'no_sensor':ActivityInfo().SCREEN_ORIENTATION_NOSENSOR,
-    'user': ActivityInfo().SCREEN_ORIENTATION_USER,
-    'user_portrait': ActivityInfo().SCREEN_ORIENTATION_USER_PORTRAIT,
-    'user_landscape': ActivityInfo().SCREEN_ORIENTATION_USER_LANDSCAPE,
-    'unspecified': ActivityInfo().SCREEN_ORIENTATION_UNSPECIFIED,
-    'sensor_portrait':ActivityInfo().SCREEN_ORIENTATION_SENSOR_PORTRAIT,
-    'sensor_landscape':ActivityInfo().SCREEN_ORIENTATION_SENSOR_LANDSCAPE,
-    'sensor':ActivityInfo().SCREEN_ORIENTATION_SENSOR,
-    'reverse_portrait':ActivityInfo().SCREEN_ORIENTATION_REVERSE_PORTRAIT,
-    'reverse_landscape':ActivityInfo().SCREEN_ORIENTATION_REVERSE_LANDSCAPE,
+    options = {
+        'portrait': ActivityInfo().SCREEN_ORIENTATION_PORTRAIT,
+        'landscape': ActivityInfo().SCREEN_ORIENTATION_LANDSCAPE,
+        'behind': ActivityInfo().SCREEN_ORIENTATION_BEHIND,
+        'full_sensor': ActivityInfo().SCREEN_ORIENTATION_FULL_SENSOR,
+        'full_user': ActivityInfo().SCREEN_ORIENTATION_FULL_USER,
+        'locked': ActivityInfo().SCREEN_ORIENTATION_LOCKED,
+        'no_sensor': ActivityInfo().SCREEN_ORIENTATION_NOSENSOR,
+        'user': ActivityInfo().SCREEN_ORIENTATION_USER,
+        'user_portrait': ActivityInfo().SCREEN_ORIENTATION_USER_PORTRAIT,
+        'user_landscape': ActivityInfo().SCREEN_ORIENTATION_USER_LANDSCAPE,
+        'unspecified': ActivityInfo().SCREEN_ORIENTATION_UNSPECIFIED,
+        'sensor_portrait': ActivityInfo().SCREEN_ORIENTATION_SENSOR_PORTRAIT,
+        'sensor_landscape': ActivityInfo().SCREEN_ORIENTATION_SENSOR_LANDSCAPE,
+        'sensor': ActivityInfo().SCREEN_ORIENTATION_SENSOR,
+        'reverse_portrait': ActivityInfo().SCREEN_ORIENTATION_REVERSE_PORTRAIT,
+        'reverse_landscape': ActivityInfo().SCREEN_ORIENTATION_REVERSE_LANDSCAPE,
     }
-    try:
+    with contextlib.suppress(JavaException):
         if mode in options:
             activity.setRequestedOrientation(options[mode])
-    except:
-        pass
