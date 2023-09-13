@@ -74,18 +74,8 @@ try:
         notification_manager.createNotificationChannel(channel)
 
 
-    def _build_notification_content(
-            auto_cancel,
-            channel_id,
-            pending_intent,
-            small_icon,
-            small_icon_color,
-            text,
-            title,
-            priority,
-            defaults,
-            builder
-    ):
+    def _build_notification_content(auto_cancel, channel_id, pending_intent, small_icon, small_icon_color, text,
+                                    title, priority, defaults, builder):
         builder.setSmallIcon(small_icon)
         if small_icon_color:
             try:
@@ -106,18 +96,8 @@ try:
         builder.setStyle(NotificationBigTextStyle(instantiate=True).bigText(String(text)).setBigContentTitle(title))
 
 
-    def _build_notification_actions(
-            action_title1,
-            action_title2,
-            action_title3,
-            auto_cancel,
-            key_text_reply,
-            builder,
-            extras,
-            java_class,
-            reply_title,
-            broadcast
-    ):
+    def _build_notification_actions(action_title1, action_title2, action_title3, auto_cancel, key_text_reply,
+                                    builder, extras, java_class, reply_title, broadcast):
         if extra := action_title1 and extras.get("action1"):
             builder.addAction(
                 get_resource("mipmap").icon,
@@ -352,7 +332,7 @@ try:
         _build_notification_actions(
             action_title1, action_title2, action_title3, auto_cancel, key_text_reply, builder, extras, java_class,
             reply_title, broadcast
-            )
+        )
 
         if big_picture:
             _set_big_picture(big_picture, builder)
