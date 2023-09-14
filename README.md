@@ -8,15 +8,15 @@ The aim is to provide full access to Android API which can be used together with
 [kivy](https://github.com/kivy/kivy), [kivymd](https://github.com/kivymd/kivymd), etc... Or as a standalone, in which
 Android native UI is created with only python codes.
 
-### Compiling into APK
+## Compiling into APK
 To compile, kivy [p4a](https://github.com/kivy/python-for-android) or kivy [buildozer](https://github.com/kivy/buildozer) is
 required, and bootstrap must be set to `sdl2`
-### Dependencies
+## Dependencies
 ```sh
 Android min-api21
 ```
 
-### Installation
+## Installation
 
 ```
 pip install kvdroid
@@ -27,7 +27,7 @@ pip install https://github.com/kvdroid/Kvdroid/archive/refs/heads/master.zip # m
 # Note: this works on android only, but you can install it on your desktop for code completion assistance
 ```
 
-### Buildozer Requirement
+## Buildozer Requirement
 ```
 requirement = kvdroid
 
@@ -36,10 +36,10 @@ or
 requirement = https://github.com/kvdroid/Kvdroid/archive/refs/heads/master.zip
 ```
 
-### Usage
+## Usage
 
 
-To send notification
+### To send notification
 
 ```python
 from kvdroid.jclass.android.graphics import Color
@@ -279,7 +279,7 @@ Further notification description
         clicked or reply is sent from your apps notification
 :return: notification_manager
 ```
-To read Contacts
+### To read Contacts
 
 ```python
 from kvdroid.tools.contact import get_contact_details
@@ -289,7 +289,7 @@ get_contact_details("names") # gets a list of all contact names
 get_contact_details("mobile_no") # gets a list of all contact phone numbers
 ```
 
-To get a list of all installed packages (Applications)
+### To get a list of all installed packages (Applications)
 
 ```python
 from kvdroid.tools.package import all_packages
@@ -305,7 +305,7 @@ print(all_packages())
 """
 ```
 
-To get all main activities
+### To get all main activities
 
 ```python
 from kvdroid.tools.package import all_main_activities
@@ -320,7 +320,7 @@ print(all_main_activities())
 """
 ```
 
-To check if the package is a system application
+### To check if the package is a system application
 
 ```python
 from kvdroid.tools.package import is_system_package
@@ -328,7 +328,7 @@ from kvdroid.tools.package import is_system_package
 print(is_system_package("com.android.settings"))
 ```
 
-To check if the package is enabled
+### To check if the package is enabled
 
 ```python
 from kvdroid.tools.package import is_package_enabled
@@ -336,7 +336,7 @@ from kvdroid.tools.package import is_package_enabled
 print(is_package_enabled("com.android.settings"))
 ```
 
-To get a specific app details
+### To get a specific app details
 
 ```python
 from kvdroid.tools.package import package_info
@@ -364,7 +364,7 @@ print(package_info("com.android.settings"))
 """
 ```
  
-To get an activity info
+### To get an activity info
 
 ```python
 from kvdroid.tools.package import activity_info
@@ -377,7 +377,7 @@ print(activity_info("com.android.settings","com.android.settings.network.Network
 """
 ```
  
-To save a drawable object to given path as png
+### To save a drawable object to given path as png
 
 ```python
 from kvdroid.tools.package import package_info
@@ -399,7 +399,7 @@ Image(source=save_drawable(app_icon, "< path >", "< file_name >"))
 ```
 
 
-To check if the given app is installed from PlayStore
+### To check if the given app is installed from PlayStore
 
 ```python
 from kvdroid.tools.package import package_source
@@ -407,21 +407,21 @@ from kvdroid.tools.package import package_source
 print(package_source("< package_name >"))
 ```
 
-To get Android WebView Cookies
+### To get Android WebView Cookies
 
 ```python
 from kvdroid.tools.webkit import get_cookies
 
 get_cookies("https://google.login")
 ```
-To detect keyboard height
+### To detect keyboard height
 
 ```python
 from kvdroid.tools import keyboard_height
 
 print(keyboard_height())
 ```
-To detect if app is installed from Play Store or not
+### To detect if app is installed from Play Store or not
 
 ```python
 from kvdroid.tools.appsource import app_source
@@ -429,7 +429,7 @@ from kvdroid.tools.appsource import app_source
 print(app_source())
 ```
 
-To get application infos
+### To get application infos
 `name` `pkg_name` `version_name` `version_code`
 
 ```python
@@ -438,7 +438,7 @@ from kvdroid.tools.appsource import app_info
 print(app_info("name"))
 ```
 
-To get application directories
+### To get application directories
 `data` `app` `files` `cache` `ext_files` `ext_cache`
 
 ```python
@@ -448,7 +448,7 @@ print(app_dirs("files")) #/data/data/package/files
 print(app_dirs("ext_files"), slash = True) #/storage/sdcard0/Android/data/package/files/
 ```
 
-To get absolute screen size in dp-pixel and detect current orientation
+### To get absolute screen size in dp-pixel and detect current orientation
 
 ```python
 from kvdroid.tools.metrics import Metrics
@@ -459,17 +459,17 @@ print(screen.width_dp())
 print(screen.height_px())
 print(screen.resolution())
 ```
-To check if device has a data connection.
+### To check if device has a data connection.
 
 ```python
-from kvdroid.tools.network import network_status, wifi_status, mobile_status
+from kvdroid.tools.network import network_status, wifi_status, mobile_status, get_wifi_signal
 
 print(network_status())  # for both wifi and mobile
 print(wifi_status())    # only for wifi
 print(mobile_status())    # only for mobile
 print(get_wifi_signal())    # only for wifi
 ```
-To get Wi-Fi signal strenght.
+### To get Wi-Fi signal strenght.
 
 ```python
 from kvdroid.tools.network import  get_wifi_signal
@@ -477,7 +477,7 @@ from kvdroid.tools.network import  get_wifi_signal
 print(get_wifi_signal()) 
 ```
 
-To get network latency.
+### To get network latency.
 
 ```python
 from kvdroid.tools.network import  network_latency
@@ -485,7 +485,7 @@ from kvdroid.tools.network import  network_latency
 print(network_latency()) 
 ```
 
-To check if device is  in dark mode or not
+### To check if device is  in dark mode or not
 
 ```python
 from kvdroid.tools.darkmode import dark_mode
@@ -502,35 +502,35 @@ from kvdroid.tools.deviceinfo import device_info
 print(device_info("model"))
 print(device_info("avail_ram", convert=True))
 ```
-To enable immersive mode
+### To enable immersive mode
 
 ```python
 from kvdroid.tools import immersive_mode
 
 immersive_mode()
 ```
-To launch an application
+### To launch an application
 
 ```python
 from kvdroid.tools import launch_app
 
 launch_app("< app_package >")
 ```
-To launch a specific application activity
+### To launch a specific application activity
 
 ```python
 from kvdroid.tools import launch_app_activity
 
 launch_app_activity("< app_package >", "< app_activity >")
 ```
-To open target app's details page
+### To open target app's details page
 
 ```python
 from kvdroid.tools import app_details
 
 app_details("< app_package >")
 ```
-To detect current device's language
+### To detect current device's language
 
 ```python
 from kvdroid.tools.lang import device_lang
@@ -554,7 +554,7 @@ LanguageTag        ---> en-US
 """
 ```
 
-To get a list of supported languages on the device
+### To get a list of supported languages on the device
 
 ```python
 from kvdroid.tools.lang import supported_languages
@@ -565,28 +565,28 @@ print(supported_languages())
 """
 ```
 
-To set statusbar color
+### To set statusbar color
 
 ```python
 from kvdroid.tools import change_statusbar_color
 
 change_statusbar_color("#FFFFFF", "black")
 ```
-To set navigationbar color
+### To set navigationbar color
 
 ```python
 from kvdroid.tools import navbar_color
 
 navbar_color("#FFFFFF")
 ```
-To display a toast message
+### To display a toast message
 
 ```python
 from kvdroid.tools import toast
 
 toast("hello world")
 ```
-To get absolute sdcard path and media directories
+### To get absolute sdcard path and media directories
 `alarm` `dcim` `download` `documents` `movies` `music` `notifications` `pictures` `podcasts` `ringtones`
 
 ```python
@@ -597,14 +597,14 @@ print(sdcard("download")) #/storage/sdcard0/Download
 print(sdcard("download", slash = True)) #/storage/sdcard0/Download/
 
 ```
-To get absolute external_sdcard
+### To get absolute external_sdcard
 
 ```python
 from kvdroid.tools.path import external_sdcard
 
 print(external_sdcard()) 
 ```
-To get file mime Type
+### To get file mime Type
 
 ```python
 from kvdroid.tools import mime_type
@@ -613,35 +613,35 @@ mime_type = mime_type("path/to/file")
 print(mime_type)
 ```
 
-To change default wallpaper
+### To change default wallpaper
 
 ```python
 from kvdroid.tools import set_wallpaper
 
 set_wallpaper("/sdcard/test.jpg")
 ```
-To use text-to-speech
+### To use text-to-speech
 
 ```python
 from kvdroid.tools import speech
 
 speech("hello world", "en")
 ```
-To use default Download Manager
+### To use default Download Manager
 
 ```python
 from kvdroid.tools import download_manager
 
 download_manager("< title >", "< description >", "< URL >", "< path >", "< file >")
 ```
-To restart the app
+### To restart the app
 
 ```python
 from kvdroid.tools import restart_app
 
 restart_app()
 ```
-To share text via Android Share menu
+### To share text via Android Share menu
 
 ```python
 from kvdroid.tools import share_text
@@ -649,7 +649,7 @@ from kvdroid.tools import share_text
 share_text("hello world", title="Share", chooser=False, app_package=None,
            call_playstore=False, error_msg="application unavailable")
 ```
-To share any file via Android Share menu
+### To share any file via Android Share menu
 
 ```python
 from kvdroid.tools import share_file
@@ -660,7 +660,7 @@ share_file(
 share_file("/sdcard/test.pdf", title='Share', chooser=False, app_package=None,
            call_playstore=False, error_msg="application unavailable")
 ```
-To play supported music format or radio stream through Android Media Player
+### To play supported music format or radio stream through Android Media Player
 ```player.mPLayer = Android Media PLayer```
 
 ```python
@@ -678,7 +678,7 @@ player.get_duration()
 player.current_position()
 ```
 
-To use system-provided fonts
+### To use system-provided fonts
 
 :warning: `That function is so experimental. It should work for Android 7 and above but not been tested on much devices. It is actually for multilingual purposes to use system-provided fonts for no Latin languages. system_font() will always return the supported font from /system/fonts for the current device language.  Also, you could use any language-supported font from the system just by calling the system_font function with the target language's iso639-1 or iso639-2 abbreviation such as font_name = system_font('zh') or system_font('zho'). `
 
@@ -693,7 +693,7 @@ Label(text = "example", font_name = system_font())
 Label(text = "你好世界", font_name = system_font('zho')) # Language definition must be iso639-1 or iso639-2 abbreviation.  https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 ```
 
-To cast Java Object
+### To cast Java Object
 
 ```python
 from kvdroid.cast import cast_object
@@ -721,7 +721,7 @@ parcelable = cast("android.os.Parcelabel", uri)
 ```
 
 
-To access WebView cookies\
+### To access WebView cookies
 (i.e if you compiled your app with webview bootstrap or have Webview in your app)
 
 ```python
@@ -729,8 +729,8 @@ from kvdroid.tools.webkit import get_cookies
 
 print(get_cookies("https://google.com"))
 ```
-To access android package resource folders like:
-- drawble
+### To access android package resource folders like:
+- drawable
 - layout
 - menu
 - values
@@ -742,12 +742,12 @@ from kvdroid.tools import get_resource
 
 drawable = get_resource("drawable")
 ```
-To get Wi-Fi IP Address
+### To get Wi-Fi IP Address
 ```python
 from kvdroid.tools.network import get_wifi_ip_address
 print(get_wifi_ip_address())
 ```
-To send email
+### To send email
 ```python
 from kvdroid.tools.email import send_email
 send_email(
@@ -756,7 +756,7 @@ send_email(
     body="This is kvdroid"
 )
 ```
-To send an email with an attachment (androidx is required). \
+### To send an email with an attachment (androidx is required)
 Also note before you can share files on Android version greater \
 than 10, you must specify a provider in the AndroidManifest.xml \
 inside the \<application> tag e.g
@@ -789,7 +789,7 @@ send_email(
     file_path=join(getenv("PYTHONHOME"), "test.txt")
 )
 ```
-To read all SMS
+### To read all SMS
 
 ```python
 from kvdroid.tools.sms import get_all_sms
@@ -799,7 +799,7 @@ from android.permissions import Permission, request_permissions  # NOQA
 request_permissions([Permission.READ_SMS])
 print(get_all_sms()) # returns a tuple of message count and messages
 ```
-To read all Call Log
+### To read all Call Log
 
 ```python
 from kvdroid.tools.call import get_call_log
