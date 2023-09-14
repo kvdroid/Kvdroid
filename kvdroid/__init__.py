@@ -28,39 +28,31 @@ def _convert_color(color: Union[str, list]):
 platform = _get_platform()
 Logger = logging.getLogger('kivy')
 
-if platform == "android":
-    try:
-        from android import config # NOQA
+if platform != "android":
+    raise ImportError("Kvdroid: Kvdroid is only callable from Android")
+from android.config import ACTIVITY_CLASS_NAME, SERVICE_CLASS_NAME # NOQA
 
-        ns = config.JAVA_NAMESPACE
-    except (ImportError, AttributeError):
-        ns = 'org.renpy.android'
-
-    if 'PYTHON_SERVICE_ARGUMENT' in environ:
-        PythonService = autoclass(ns + '.PythonService')
-        activity = PythonService.mService
-    else:
-        PythonActivity = autoclass(ns + '.PythonActivity')
-        activity = PythonActivity.mActivity
-
-    packages = {
-        "whatsapp": "com.whatsapp",
-        "facebook": "com.facebook.katana",
-        "facebookLite": "com.facebook.lite",
-        "oldFacebook": "com.facebook.android",
-        "linkedin": "com.linkedin.android",
-        "fbMessenger": "com.facebook.orca",
-        "fbMessengerLite": "com.facebook.mlite",
-        "tiktok": "com.zhiliaoapp.musically",
-        "tiktokLite": "com.zhiliaoapp.musically.go",
-        "twitter": "com.twitter.android",
-        "twitterLite": "com.twitter.android.lite",
-        "telegram": "org.telegram.messenger",
-        "telegramX": "org.thunderdog.challegram",
-        "snapchat": "com.snapchat.android",
-        "chrome": "com.android.chrome"
-    }
+if 'PYTHON_SERVICE_ARGUMENT' in environ:
+    PythonService = autoclass(SERVICE_CLASS_NAME)
+    activity = PythonService.mService
 else:
-    Logger.error(
-        "Kvdroid: Kvdroid is only callable from Android"
-    )
+    PythonActivity = autoclass(ACTIVITY_CLASS_NAME)
+    activity = PythonActivity.mActivity
+
+packages = {
+    "whatsapp": "com.whatsapp",
+    "facebook": "com.facebook.katana",
+    "facebookLite": "com.facebook.lite",
+    "oldFacebook": "com.facebook.android",
+    "linkedin": "com.linkedin.android",
+    "fbMessenger": "com.facebook.orca",
+    "fbMessengerLite": "com.facebook.mlite",
+    "tiktok": "com.zhiliaoapp.musically",
+    "tiktokLite": "com.zhiliaoapp.musically.go",
+    "twitter": "com.twitter.android",
+    "twitterLite": "com.twitter.android.lite",
+    "telegram": "org.telegram.messenger",
+    "telegramX": "org.thunderdog.challegram",
+    "snapchat": "com.snapchat.android",
+    "chrome": "com.android.chrome"
+}
