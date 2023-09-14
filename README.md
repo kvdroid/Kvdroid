@@ -43,19 +43,241 @@ To send notification
 
 ```python
 from kvdroid.jclass.android.graphics import Color
-from kvdroid.tools.notification import create_notification
+from kvdroid.tools.notification import (
+    create_notification, 
+    get_notification_reply_text,
+    KVDROID_TAP_ACTION_NOTIFICATION,
+    KVDROID_ACTION_1_NOTIFICATION,
+    KVDROID_REPLY_ACTION_NOTIFICATION
+)
 from kvdroid.tools import get_resource
+from kvdroid.tools.broadcast import BroadcastReceiver
+from android.activuty import bind as activity_bind  # noqa
+
+
+def perform_intent_action(intent):
+    if extras := intent.getExtras():
+        if value := extras.getString("tap"):
+            # replace below code with whatever action you want to perform
+            print("it is a tap")
+            # incase you want to use the value too
+            print(value)
+        elif value := extras.getString("action1"):
+            # replace below code with whatever action you want to perform
+            print("it is an action1")
+            # incase you want to use the value too
+            print(value)
+        elif value := extras.getString("reply"):
+            # replace "TEST_KEY" with whatever 'key_reply_text' you used in creating
+            # your notification
+            reply = get_notification_reply_text(intent, "TEST_KEY")
+            print(reply)
+            # incase you want to use the value too
+            print(value)
+
+
+def get_notification_intent(intent):
+    perform_intent_action(intent)
+
+
+def get_notification_broadcast(context, intent):
+    perform_intent_action(intent)
+    
+# This should be binded only once, else you get weird behaviors
+# if you are creating different notifications for different purpose,
+# you can bind different functions but only bind them once
+activity_bind(on_new_intent=get_notification_intent)
+
+br = BroadcastReceiver(
+    callback=get_notification_broadcast, 
+    actions=[
+        KVDROID_TAP_ACTION_NOTIFICATION,
+        KVDROID_ACTION_1_NOTIFICATION,
+        KVDROID_REPLY_ACTION_NOTIFICATION
+    ],
+    use_intent_action=False
+)
+# start BroadcastReceiver before launching your notification.
+br.start()
+
+"""
+stop your broad cast receiver when your app is closed
+>>>
+def on_stop(self):
+    br.stop()
+>>>
+"""
 
 create_notification(
-    small_icon=get_resource("drawable").ico_nocenstore,  # app icon
-    channel_id="1", title="You have a message",
-    text="hi, just wanted to check on you",
-    ids=1, channel_name=f"ch1",
+    small_icon=get_resource("mipmap").icon,  # replace `.icon` with the image filename you set as your app icon without the file extension (e.g without .png, .jpg ...)
+    channel_id="ch1", # you must set this to any string value of your choice
+    title="You have a message", # title of your notification
+    text="hi, just wanted to check on you", # notification content text
+    ids=1, # notification id, can be used to update certain notification
+    channel_name=f"message", # provides a user-friendly label for the channel, helping users understand the purpose or category of notifications associated with that channel.
     large_icon="assets/image.png",
-    expandable=True,
     small_icon_color=Color().rgb(0x00, 0xC8, 0x53),  # 0x00 0xC8 0x53 is same as 00C853
-    big_picture="assets/image.png"
+    big_picture="assets/image.png",
+    action_title1="action1",
+    reply_title="reply",
+    key_text_reply="TEST_KEY",
+    # for effective use of this, please read the extras section of the documentation below
+    # There are only 3 actions and 1 reply, but the 3 actions cannot exist together all at once
+    # together with the reply. 1 of the actions must go.
+    # The 3 actions must be declared with this names: 'action1', 'action2', 'action3'
+    # the reply must retain the name: 'reply'. Same with tap: 'tap'
+    extras={
+        "tap": ("tap", "I tapped the notification"), 
+        "action1": ("action1", "I pressed action1 button"),
+        "reply": ("reply", "use get_notification_reply_text(intent, key_text_reply) to get my text")
+    },
+    # if you set this to true, it means that you don't want your app to open
+    # when you tap on the notification or tap on any of the action button or reply
+    # so you don't need to bind an intent function, here you make use of BrodcastReceiver
+    # check the above code
+    broadcast=False
 )
+```
+
+Further notification description
+```
+:Parameters:
+    `small_icon`: int
+        The icon that appears at the top left conner of the android notification.
+        Icon can be accessed by calling `get_resource(resource, activity_type=activity)`
+        from kvdroid.tools module
+    `channel_id`: str
+        In Android, a channel ID is used to categorize and manage notifications.
+        It's a unique identifier associated with a notification channel, which is
+        a way to group and configure notifications in a specific way. Notification
+        channels were introduced in Android Oreo (API level 26) to give users more
+        control over how they receive and interact with notifications.
+    `title`: str
+        The title is a short, descriptive text that provides context for the
+        notification's content. It's often displayed prominently at the top of the notification.
+    `text`: str
+        Text provides additional information related to the notification's title and
+        helps users understand the purpose or context of the notification.
+    `ids`: int
+        The ids is an identifier used to uniquely identify a notification.
+        It allows you to manage and update notifications, especially when you have
+        multiple notifications displayed or want to update an existing notification with a new one.
+    `channel_name`: str
+        The channel_name is a human-readable name or description associated with a notification
+        channel. It provides a user-friendly label for the channel, helping users understand
+        the purpose or category of notifications associated with that channel.
+    `large_icon`: Union[int, str, InputStream()]
+        The large_icon is an optional image or icon that can be displayed alongside the
+        notification's content. It's typically a larger image than the smallIcon and
+        is used to provide additional context or visual appeal to the notification.
+    `big_picture`: Union[int, str, InputStream()]
+        the big_picture is a style of notification that allows you to display a large
+        image, often associated with the notification's content. This style is
+        particularly useful for notifications that include rich visual content,
+        such as image-based messages or news articles.
+    `action_title1`: str
+        text that are displayed on notification buttons, used to also create notification
+        buttons too.
+    `action_title2`: str
+        text that are displayed on notification buttons, used to also create notification
+        buttons too.
+    `action_title3`: str
+        text that are displayed on notification buttons, used to also create notification
+        buttons too.
+    `key_text_reply`: str
+        When you want to enable users to reply to notifications by entering text,
+        you can use Remote Input, which is a feature that allows you to capture text input
+        from users in response to a notification. key_text_reply is a symbolic
+        representation or a constant used in your code to identify and process the
+        user's text input when responding to notifications.
+    `reply_title`: str
+        text that is displayed on notification reply buttons, used to also create notification
+        reply buttons too.
+    `auto_cancel`: bool
+        In Android notifications, the auto_cancel behavior is typically implemented by
+        setting the setAutoCancel(true) method on the notification builder. When you
+        set autoCancel to true, it means that the notification will be automatically
+        canceled (dismissed) when the user taps on it. This is a common behavior for
+        notifications where tapping the notification is expected to take the user to a
+        corresponding activity or open a specific screen within the app.
+    `extras`: dict
+        A dictionary of string (keys) and tuple (values). Must be in this format
+        ```python
+        {
+            "tap": (key, value),
+            "action1": (key, value),
+            "action2": (key, value),
+            "action3": (key, value),
+            "action1": (key, value),
+            "reply": (key, value)
+        }
+
+        or 
+
+        {"action1": (key, value)} or {"reply": (key, value)} or
+        {"action1": (key, value), "reply": (key, value)} ...
+        ```
+        Extras are used to add additional data or key-value pairs to a notification.
+        This allows you to attach custom data to a notification so that you can retrieve
+        and process it when the user interacts with the notification
+    `small_icon_color`: int
+        the small_icon_color is primarily used to set the background color for the
+        small icon in the notification header. It influences the color of the small
+        circle that appears behind the small icon in the notification.
+
+        Example using Color class from kvdroid.jclass.android module:
+        `Color().BLUE`, `Color().rgb(0x00, 0xC8, 0x53),  # 0x00 0xC8 0x53 is same as 00C853`
+    `java_class`: object
+        an activity or any suitable java class
+    `priority`: int
+        the priority is used to set the priority level of a notification. The priority
+        level determines how the notification should be treated in terms of importance
+        and visibility. It helps the Android system and user to understand
+        the significance of the notification.
+
+        Here are the values that cn be used `from kvdroid.jclass.androidx` module:
+
+        `NotificationCompat().PRIORITY_DEFAULT`:
+            This is the default priority level. Notifications
+            with this priority are treated as regular notifications. They are displayed in the
+            notification shade but do not make any special sound or vibration. The user may see
+            these notifications if they expand the notification shade.
+
+        `NotificationCompat().PRIORITY_LOW`:
+            Notifications with this priority are considered
+            low-priority. They are displayed in a less prominent way and do not typically make a
+            sound or vibration. They are often used for less important notifications that the user
+            may not need to see immediately.
+
+        `NotificationCompat().PRIORITY_MIN`:
+            This is the minimum priority level. Notifications with
+            this priority are considered the least important. They are not shown to the user unless the
+            user explicitly opens the notification shade.
+
+        `NotificationCompat().PRIORITY_HIGH:
+            Notifications with this priority are considered high-priority.
+            They are displayed prominently, may make a sound or vibration, and are intended to grab the user's
+            attention. These are often used for important notifications that require immediate user interaction.
+
+        `NotificationCompat().PRIORITY_MAX`:
+            This is the maximum priority level. Notifications with this priority are treated as the most
+            important and are displayed prominently with sound and vibration. They are typically used for
+            critical notifications that require immediate attention.
+    `defaults`: int
+        the setDefaults() method is used to set the default behavior for a notification, such as whether
+        it should make a sound, vibrate, or use the device's LED indicator. This method allows you to
+        specify a combination of default notification behaviors.
+
+        Here are the values that cn be used `from kvdroid.jclass.androidx` module:
+
+        `NotificationCompat().DEFAULT_SOUND`: Use the default notification sound.
+        `NotificationCompat().DEFAULT_VIBRATE: Make the device vibrate.
+        `NotificationCompat().DEFAULT_LIGHTS`: Use the device's LED indicator (if available).
+        `NotificationCompat().DEFAULT_ALL`: Use all default behaviors (sound, vibration, and LED).
+    `broadcast`: bool
+        sends out a broadcast message to your app to perform an action when an action button is
+        clicked or reply is sent from your apps notification
+:return: notification_manager
 ```
 To read Contacts
 

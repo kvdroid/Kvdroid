@@ -22,7 +22,7 @@ class BroadcastReceiver(object):
         def onReceive(self, context, intent):
             self.callback(context, intent)
 
-    def __init__(self, callback, actions=None, categories=None, use_intent_action=False):
+    def __init__(self, callback, actions=None, categories=None, use_intent_action=True):
         super().__init__()
         self.handler = None
         self.callback = callback

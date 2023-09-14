@@ -247,7 +247,7 @@ try:
                     "action3": (key, value),
                     "action1": (key, value),
                     "reply": (key, value)
-                )
+                }
 
                 or {"action1": (key, value)} or {"reply": (key, value)} or
                 {"action1": (key, value), "reply": (key, value)} ...
@@ -320,6 +320,8 @@ try:
             defaults = NotificationCompat().DEFAULT_ALL
         if not java_class:
             java_class = python_act
+        if not extras:
+            extras = {"tap": ()}
 
         # use activity_class instead of java_class because notifications are meant to open
         # are meant to open the app when the content (not the action buttons) is tapped
