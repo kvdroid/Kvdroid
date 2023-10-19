@@ -283,6 +283,7 @@ Further notification description
 
 ```python
 from kvdroid.tools.contact import get_contact_details
+#add this in buildozer permission 'android.permission.READ_CONTACTS'
 
 get_contact_details("phone_book") # gets a dictionary of all contact both contact name and phone mumbers
 get_contact_details("names") # gets a list of all contact names
