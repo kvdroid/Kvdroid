@@ -284,6 +284,19 @@ Further notification description
 ```python
 from kvdroid.tools.contact import get_contact_details
 
+
+def request_android_permissions(self):
+    #call this function on_start function
+    from android.permissions import request_permissions, Permission
+    def callback(permissions, results):
+        if all([res for res in results]):
+            print("callback. All permissions granted.")
+        else:
+            print("callback. Some permissions refused.")
+
+    request_permissions([Permission.READ_CONTACTS, Permission.WRITE_CONTACTS, ], callback)
+
+
 get_contact_details("phone_book") # gets a dictionary of all contact both contact name and phone mumbers
 get_contact_details("names") # gets a list of all contact names
 get_contact_details("mobile_no") # gets a list of all contact phone numbers
