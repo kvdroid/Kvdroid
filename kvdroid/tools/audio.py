@@ -1,25 +1,10 @@
 from threading import Thread
 from typing import Callable
-
-from jnius import PythonJavaClass
-from jnius.jnius import JavaException, java_method
+from jnius import JavaException
 from kvdroid.jclass.android import MediaPlayer, AudioManager
 from kvdroid.cast import cast_object
 from kvdroid import activity
 from kvdroid.jclass.android import Context
-
-
-class OnAudioFocusChangeListener(PythonJavaClass):
-    __javainterfaces__ = ["android/media/AudioManager$OnAudioFocusChangeListener"]
-    __javacontext__ = "app"
-
-    def __init__(self, callback, **kwargs):
-        super(OnAudioFocusChangeListener, self).__init__(**kwargs)
-        self.callback = callback
-
-    @java_method("(I)V")
-    def onAudioFocusChange(self, focus_change):
-        self.callback(focus_change)
 
 
 class Player:
