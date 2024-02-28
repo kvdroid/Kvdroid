@@ -10,9 +10,14 @@ def Contacts(*args, instantiate: bool = False):
     return _class_call(autoclass('android.provider.ContactsContract$Contacts'), args, instantiate)
 
 
+def DocumentsContract(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.provider.DocumentsContract'), args, instantiate)
+
+
 def Phone(*args, instantiate: bool = False):
     return _class_call(
-        autoclass('android.provider.ContactsContract$CommonDataKinds$Phone'), args, instantiate)
+        autoclass('android.provider.ContactsContract$CommonDataKinds$Phone'),
+        args, instantiate)
 
 
 def MediaStore(*args, instantiate: bool = False):
