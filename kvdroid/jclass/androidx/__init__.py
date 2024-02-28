@@ -11,3 +11,4 @@ from .browser.customtabs import *
 from .core.app import *
 from .core.content import *
 from .activity import *
+from .appcompat.app import *
