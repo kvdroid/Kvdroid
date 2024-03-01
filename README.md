@@ -295,7 +295,7 @@ def request_android_permissions(self):
         else:
             print("callback. Some permissions refused.")
 
-    request_permissions([Permission.READ_CONTACTS, Permission.WRITE_CONTACTS, ], callback)
+request_permissions([Permission.READ_CONTACTS, Permission.WRITE_CONTACTS, ], callback)
 
 
 get_contact_details("phone_book") # gets a dictionary of all contact both contact name and phone mumbers
