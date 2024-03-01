@@ -12,3 +12,7 @@ def Date(*args, instantiate: bool = False):
 
 def ArrayList(*args, instantiate: bool = False):
     return _class_call(autoclass('java.util.ArrayList'), args, instantiate)
+
+
+def HashMap(*args, instantiate: bool = False):
+    return _class_call(autoclass('java.util.HashMap'), args, instantiate)

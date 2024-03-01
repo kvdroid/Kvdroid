@@ -20,3 +20,7 @@ def StringBuilder(*args, instantiate: bool = False):
 
 def System(*args, instantiate: bool = False):
     return _class_call(autoclass("java.lang.System"), args, instantiate)
+
+
+def Long(*args, instantiate: bool = False):
+    return _class_call(autoclass("java.lang.Long"), args, instantiate)

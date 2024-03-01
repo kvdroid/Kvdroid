@@ -36,5 +36,3 @@ class EventLoop(EventDispatcher):
     def close(self):
         self.quit = True
         self.status = "destroyed"
-
-
