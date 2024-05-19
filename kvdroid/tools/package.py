@@ -68,6 +68,7 @@ def package_info(package):
     enabled = is_package_enabled(package)    
     application = pManager.getApplicationInfo(
         package, PackageManager().GET_META_DATA)
+    applicationName=pManager.getApplicationLabel(pManager.getApplicationInfo(package, pManager.GET_META_DATA))
     size = File(application.publicSourceDir).length()
     loadLabel = application.loadLabel(pManager)
     loadIcon = application.loadIcon(pManager)
@@ -91,6 +92,7 @@ def package_info(package):
         for act in activity_list:
             activities.append(act.name)
     infos = {"packageName": packageName,
+             "applicationName":applicationName,
             "loadLabel": loadLabel,
             "loadIcon": loadIcon,
             "sourceDir": sourceDir,
