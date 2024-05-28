@@ -1,5 +1,5 @@
 from kvdroid import activity
-from kvdroid.jclass.android import ApplicationInfo, PackageManager, ComponentName
+from kvdroid.jclass.android import ApplicationInfo, PackageManager, ComponentName, VERSION
 from kvdroid.jclass.java import File
 
 
@@ -61,7 +61,8 @@ def package_info(package):
     appInfo = pManager.getPackageInfo(package, 0)
     installTime = appInfo.firstInstallTime
     updateTime = appInfo.lastUpdateTime
-    versionCode = appInfo.getLongVersionCode()
+    if VERSION().SDK_INT >= 28:
+        versionCode = appInfo.getLongVersionCode()
     versionName = appInfo.versionName
     targetSdkVersion = appInfo.applicationInfo.targetSdkVersion
     minSdkVersion = appInfo.applicationInfo.minSdkVersion
