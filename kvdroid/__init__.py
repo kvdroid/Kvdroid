@@ -16,7 +16,7 @@ def _get_platform():
 
 
 def get_hex_from_color(color: list):
-    return "#" + "".join([f"{i * 255:02x}" for i in color])
+    return "#" + "".join([f"{int(i * 255):02x}" for i in color])
 
 
 def _convert_color(color: Union[str, list]):
