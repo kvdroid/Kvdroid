@@ -1,7 +1,10 @@
 from random import randint
 from typing import Callable
+
+from jnius import JavaException
+
 from kvdroid import activity
-from kvdroid.jclass.android import Intent, Activity
+from kvdroid.jclass.android import Intent, Activity, VERSION_CODES, VERSION, SdkExtensions
 from kvdroid.jclass.androidx import (
     PickVisualMedia,
     PickMultipleVisualMedia,
@@ -68,19 +71,43 @@ _selection_multiple_code = None
 _callback: Callable = lambda *_: None
 
 
-def action_pick_image(callback, pick_max=MediaStore().getPickImagesMaxLimit(), multiple: bool = False):
+def get_pick_images_max_limit():
+    if VERSION().SDK_INT >= 33:
+        return MediaStore().getPickImagesMaxLimit()
+    if VERSION().SDK_INT >= 30:
+        if SdkExtensions().getExtensionVersion(VERSION_CODES().R) >= 2:
+            return MediaStore().getPickImagesMaxLimit()
+    return 100
+
+
+def is_photo_picker_available():
+    if VERSION().SDK_INT >= 33:
+        return True
+    if VERSION().SDK_INT >= 30:
+        if SdkExtensions().getExtensionVersion(VERSION_CODES().R) >= 2:
+            return True
+    return False
+
+
+def action_pick_image(callback, pick_max=get_pick_images_max_limit(), multiple: bool = False):
     global _selection_single_code, _selection_multiple_code, _callback
     _selection_single_code = randint(12345, 654321)
     _selection_multiple_code = randint(654321, 754321)
     _callback = callback
-    intent = Intent(MediaStore().ACTION_PICK_IMAGES)
-    if multiple:
-        intent.putExtra(MediaStore().EXTRA_PICK_IMAGES_MAX, pick_max)
-    activity.startActivityForResult(intent, _selection_multiple_code if multiple else _selection_single_code)
+    if is_photo_picker_available():
+        intent = Intent(MediaStore().ACTION_PICK_IMAGES)
+        if multiple:
+            intent.putExtra(MediaStore().EXTRA_PICK_IMAGES_MAX, pick_max)
+        activity.startActivityForResult(intent, _selection_multiple_code if multiple else _selection_single_code)
+    else:
+        raise JavaException(
+            "Photo picker is not available on this android device. "
+            "Possibly the android version is 10 or below or it's an Android Go device. "
+            "Use 'chooser' instead from 'androidstorage4kivy' package"
+        )
 
 
 def _on_activity_result(request_code, result_code, data):
-    print(request_code, result_code, data)
     if request_code not in (_selection_single_code, _selection_multiple_code):
         return
 
@@ -100,4 +127,3 @@ def _on_activity_result(request_code, result_code, data):
 
 
 act.bind(on_activity_result=_on_activity_result)
-

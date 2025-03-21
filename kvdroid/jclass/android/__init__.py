@@ -9,6 +9,7 @@ from .location import *
 from .media import *
 from .net import *
 from .os import *
+from .os.ext import *
 from .provider import *
 from .view import *
 from .webkit import *
