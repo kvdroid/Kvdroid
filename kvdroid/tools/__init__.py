@@ -4,7 +4,8 @@ from typing import Union
 from kvdroid import _convert_color
 from jnius import JavaException  # NOQA
 from kvdroid import activity
-from kvdroid.jclass.java import URL, Runtime
+from kvdroid.jclass.androidx.core.view import ViewCompat, WindowInsetsCompatType
+from kvdroid.jclass.java import URL, Runtime, String
 from kvdroid.jclass.android import (
     Intent,
     Context,
@@ -16,7 +17,8 @@ from kvdroid.jclass.android import (
     Rect,
     URLUtil,
     VERSION,
-    ComponentName
+    ComponentName,
+    Toast,
 )
 from android.runnable import run_on_ui_thread  # NOQA
 
@@ -29,8 +31,30 @@ def _android_version():
 android_version = _android_version()
 
 
-def toast(message):
-    return activity.toastError(str(message))
+@run_on_ui_thread
+def toast(text, length_long=False, gravity=0, y=0, x=0):
+    """
+    Displays a toast.
+
+    :param length_long: the amount of time (in seconds) that the toast is
+           visible on the screen;
+    :param text: text to be displayed in the toast;
+    :param length_long:  duration of the toast, if `True` the toast
+           will last 2.3s but if it is `False` the toast will last 3.9s;
+    :param gravity: refers to the toast position, if it is 80 the toast will
+           be shown below, if it is 40 the toast will be displayed above;
+    :param y: refers to the vertical position of the toast;
+    :param x: refers to the horizontal position of the toast;
+
+    Important: if only the text value is specified and the value of
+    the `gravity`, `y`, `x` parameters is not specified, their values will
+    be 0 which means that the toast will be shown in the center.
+    """
+
+    duration = Toast().LENGTH_SHORT if length_long else Toast().LENGTH_LONG
+    t = Toast().makeText(activity, String(text), duration)
+    t.setGravity(gravity, x, y)
+    t.show()
 
 
 def share_text(text, title='Share', chooser=False, app_package=None, call_playstore=True, error_msg=""):
@@ -191,6 +215,7 @@ def speech(text: str, lang: str):
 
 
 def keyboard_height():
+
     try:
         rect = Rect(instantiate=True)
         activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect)
@@ -198,8 +223,21 @@ def keyboard_height():
         return activity.getWindowManager().getDefaultDisplay().getHeight() - (
             rect.bottom - rect.top
         )
-    except JavaException:
+    except JavaException as e:
+        print(e)
         return 0
+
+
+def check_keyboad_visibility_and_get_height():
+    """
+    https://developer.android.com/develop/ui/views/layout/sw-keyboard
+    """
+
+    view = activity.getWindow().getDecorView()
+    insets = ViewCompat().getRootWindowInsets(view)
+    ime_visible = insets.isVisible(WindowInsetsCompatType().ime())
+    ime_height = insets.getInsets(WindowInsetsCompatType().ime()).bottom
+    return ime_visible, ime_height
 
 
 @run_on_ui_thread
