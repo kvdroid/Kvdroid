@@ -1,6 +1,8 @@
 KvDroid
 =========
 
+<!-- GitAds-Verify: FQNUQIK3LDGRA8V91UOY1X8PFDSEBSNR -->
+
 A re-implementation of android java API in python with easy access to some Android functionality like Notification,
 Reading of Contacts, accessing Webview Cookies, etc...
 
