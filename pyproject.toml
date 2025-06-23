@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "kvdroid"
-version = "0.5.0"
+version = "0.6.0"
 description ="A re-implementation of android java API in python with easy access to some Android functionalitylike Notification,Reading of Contacts, accessing Webview Cookies, etc..."
 authors = ["Yunus Ceyhan <yunus.ceyhn@gmail.com>", "Kenechukwu Akubue <kengoon19@gmail.com>"]
 readme = "README.md"
