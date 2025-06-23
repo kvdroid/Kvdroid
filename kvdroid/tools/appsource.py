@@ -17,7 +17,7 @@ def app_info(info: str):
     return infos.get(info)
 
 
-def app_dirs(directory: str, slash: bool = False):
+def app_dirs(directory: str):
     dirs = {
         "files": activity.getFilesDir().getAbsolutePath(),
         "cache": activity.getCacheDir().getAbsolutePath(),
@@ -26,4 +26,4 @@ def app_dirs(directory: str, slash: bool = False):
         "ext_cache": activity.getExternalCacheDir().getAbsolutePath(),
         "data": activity.getFilesDir().getParent(),
     }
-    return f'{dirs[directory]} {"/" if slash else ""}' if directory in dirs else None
+    return dirs[directory] if directory in dirs else None

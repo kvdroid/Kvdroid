@@ -32,6 +32,14 @@ def MediaStoreAudioMedia(*args, instantiate: bool = False):
     return _class_call(autoclass('android.provider.MediaStore$Audio$Media'), args, instantiate)
 
 
+def MediaStoreAudioCoulmns(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.provider.MediaStore$Audio$AudioColumns'), args, instantiate)
+
+
+def MediaStoreAudioAlbumColumns(*args, instantiate: bool = False):
+    return _class_call(autoclass('android.provider.MediaStore$Audio$AlbumColumns'), args, instantiate)
+
+
 def MediaStoreImagesMedia(*args, instantiate: bool = False):
     return _class_call(autoclass('android.provider.MediaStore$Images$Media'), args, instantiate)
 

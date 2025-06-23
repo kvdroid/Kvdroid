@@ -13,3 +13,5 @@ from .core.content import *
 from .activity import *
 from .appcompat.app import *
 from .core.view import *
+from .media3.exoplayer import *
+from .media3.common import *
