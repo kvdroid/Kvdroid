@@ -2,7 +2,7 @@ from threading import Semaphore
 from kvdroid.jclass.androidx import ExoPlayerBuilder, MediaItem
 from kvdroid import activity
 from android.runnable import run_on_ui_thread  # NOQA
-
+from kvdroid.util import garbage_collect
 from kvdroid.jinterface.media3 import PlayerListener
 
 
@@ -105,6 +105,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def add_listener():
             self.exoplayer.addListener(listener)
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -162,6 +163,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def set_media_item():
             self.exoplayer.setMediaItem(media_item)
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -185,6 +187,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def set_media_items():
             self.exoplayer.setMediaItems(media_items)
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -207,6 +210,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def set_shuffle_mode_enabled():
             self.exoplayer.setShuffleModeEnabled(shuffle_mode_enabled)
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -230,6 +234,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def set_repeat_mode():
             self.exoplayer.setRepeatMode(repeat_mode)
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -252,6 +257,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def set_media_items_reset_position():
             self.exoplayer.setMediaItems(media_items, reset_position)
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -281,6 +287,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def set_media_items_start_index_start_position():
             self.exoplayer.setMediaItems(media_items, start_index, start_position_ms)
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -301,6 +308,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def add_media_item():
             self.exoplayer.addMediaItem(media_item)
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -321,6 +329,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def clear_media_items():
             self.exoplayer.clearMediaItems()
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -346,6 +355,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def prepare():
             self.exoplayer.prepare()
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -369,6 +379,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def play():
             self.exoplayer.play()
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -393,6 +404,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def pause():
             self.exoplayer.pause()
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -420,6 +432,7 @@ class ExoPlayer:
         def is_command_available():
             nonlocal available
             available = self.exoplayer.isCommandAvailable(command)
+            garbage_collect()
             lock.release()
 
         available = False
@@ -445,6 +458,7 @@ class ExoPlayer:
         def is_playing():
             nonlocal playing
             playing = self.exoplayer.isPlaying()
+            garbage_collect()
             lock.release()
 
         playing = False
@@ -469,6 +483,7 @@ class ExoPlayer:
         def get_current_position():
             nonlocal position
             position = self.exoplayer.getCurrentPosition()
+            garbage_collect()
             lock.release()
 
         position = 0
@@ -490,6 +505,7 @@ class ExoPlayer:
         def get_duration():
             nonlocal duration
             duration = self.exoplayer.getDuration()
+            garbage_collect()
             lock.release()
 
         duration = 0
@@ -519,6 +535,7 @@ class ExoPlayer:
         def get_current_media_item_index():
             nonlocal index
             index = self.exoplayer.getCurrentMediaItemIndex()
+            garbage_collect()
             lock.release()
 
         index = -1
@@ -543,6 +560,7 @@ class ExoPlayer:
         def get_next_media_item_index():
             nonlocal index
             index = self.exoplayer.getNextMediaItemIndex()
+            garbage_collect()
             lock.release()
 
         index = -1
@@ -571,6 +589,7 @@ class ExoPlayer:
         def get_previous_media_item_index():
             nonlocal index
             index = self.exoplayer.getPreviousMediaItemIndex()
+            garbage_collect()
             lock.release()
 
         index = -1
@@ -599,6 +618,7 @@ class ExoPlayer:
         def get_playback_state():
             nonlocal state
             state = self.exoplayer.getPlaybackState()
+            garbage_collect()
             lock.release()
 
         state = self.STATE_IDLE
@@ -622,6 +642,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def seek_to():
             self.exoplayer.seekTo(position_ms)
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -646,6 +667,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def seek_to():
             self.exoplayer.seekTo(media_item_index, position_ms)
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -667,6 +689,7 @@ class ExoPlayer:
                 self.exoplayer.seekToDefaultPosition(media_item_index)
             else:
                 self.exoplayer.seekToDefaultPosition()
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -692,6 +715,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def seek_to_next():
             self.exoplayer.seekToNext()
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -716,6 +740,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def seek_to_next_media_item():
             self.exoplayer.seekToNextMediaItem()
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -738,6 +763,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def seek_to_previous():
             self.exoplayer.seekToPrevious()
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
@@ -759,6 +785,7 @@ class ExoPlayer:
         @run_on_ui_thread
         def seek_to_previous_media_item():
             self.exoplayer.seekToPreviousMediaItem()
+            garbage_collect()
             lock.release()
 
         lock = Semaphore(0)
