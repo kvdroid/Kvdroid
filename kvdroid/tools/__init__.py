@@ -182,7 +182,10 @@ def change_statusbar_color(color: Union[str, list], foreground_color: str):
             window.getDecorView().setSystemUiVisibility(0)
     else:
         raise TypeError("Available options are ['white','black'] for StatusBar text color")
-    window.clearFlags(WindowManagerLayoutParams().FLAG_TRANSLUCENT_STATUS)
+    if VERSION().SDK_INT <= 29:
+        window.clearFlags(WindowManagerLayoutParams().FLAG_TRANSLUCENT_STATUS)
+    else:
+        window.setNavigationBarContrastEnforced(False)
     window.addFlags(WindowManagerLayoutParams().FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     window.setStatusBarColor(Color().parseColor(color))
 
@@ -212,7 +215,11 @@ def navbar_color(color: Union[str, list], foreground_color: str):
             )
         else:
             window.getDecorView().setSystemUiVisibility(0)
-
+    if VERSION().SDK_INT <= 29:
+        window.clearFlags(WindowManagerLayoutParams().FLAG_TRANSLUCENT_NAVIGATION)
+    else:
+        window.setNavigationBarContrastEnforced(False)
+    window.addFlags(WindowManagerLayoutParams().FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     window.setNavigationBarColor(Color().parseColor(color))
 
 
