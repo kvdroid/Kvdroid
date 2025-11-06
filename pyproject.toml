@@ -9,7 +9,7 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-pyjnius = "^1.6.1"
+pyjnius = "^1.7.0"
 
 
 [tool.poetry.group.dev.dependencies]

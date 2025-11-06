@@ -830,6 +830,21 @@ request_permissions([Permission.READ_CALL_LOG])
 print(get_call_log()) # returns a tuple of call log count and call_log
 ```
 
+### To set egde to edge
+```python
+from kvdroid.tools.display import set_edge_to_edge
+
+set_edge_to_edge()
+```
+
+### To get navbar height and statusbar height
+```python
+from kvdroid.tools.display import get_navbar_height, get_statusbar_height
+
+sh = get_statusbar_height()
+nh = get_navbar_height()
+```
+
 Since the release of Android 11 (API 30), the way file are stored became different
 ### License
 MIT
