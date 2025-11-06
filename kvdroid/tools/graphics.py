@@ -2,10 +2,12 @@ from typing import Union
 
 from kvdroid.cast import cast_object
 from kvdroid.jclass.android import Bitmap, CompressFormat, Config, Canvas, AdaptiveIconDrawable, BitmapDrawable
+from kvdroid.jclass.androidx.core.content.res import ResourcesCompat
 from kvdroid.jclass.java import InputStream
 from kvdroid.jclass.java import FileOutputStream
 from kvdroid import activity
 from kvdroid.jclass.android import BitmapFactory
+
 BitmapFactory = BitmapFactory()
 
 
@@ -37,3 +39,8 @@ def bitmap_to_drawable(bitmap: Union[int, str, InputStream()]):
     else:
         bitmap = BitmapFactory.decodeStream(bitmap)
     return BitmapDrawable(activity.getResources(), bitmap)
+
+
+def get_drawable(resource_id):
+    res = activity.getResources()
+    return ResourcesCompat().getDrawable(res, resource_id, None)

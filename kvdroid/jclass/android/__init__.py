@@ -22,6 +22,7 @@ from .support.v4.app import *
 from .content.pm import *
 from .R import *
 from .telephony import *
+from .util import *
 
 from jnius import autoclass
 from kvdroid.jclass import _class_call

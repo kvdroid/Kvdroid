@@ -6,6 +6,10 @@ def ViewCompat(*args, instantiate: bool = False):
     return _class_call(autoclass("androidx.core.view.ViewCompat"), args, instantiate)
 
 
+def WindowCompat(*args, instantiate: bool = False):
+    return _class_call(autoclass("androidx.core.view.WindowCompat"), args, instantiate)
+
+
 def WindowInsetsCompat(*args, instantiate: bool = False):
     return _class_call(autoclass("androidx.core.view.WindowInsetsCompat"), args, instantiate)
 

@@ -24,3 +24,7 @@ def System(*args, instantiate: bool = False):
 
 def Long(*args, instantiate: bool = False):
     return _class_call(autoclass("java.lang.Long"), args, instantiate)
+
+
+def Array(*args, instantiate: bool = False):
+    return _class_call(autoclass("java.lang.reflect.Array"), args, instantiate)
