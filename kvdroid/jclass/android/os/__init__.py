@@ -27,7 +27,7 @@ def Debug(*args, instantiate: bool = False):
 
 
 def FileUtils(*args, instantiate: bool = False):
-    return _class_call(autoclass('android.os.FileUtils'), args, instantiate)
+    return _class_call(autoclass("android.os.FileUtils"), args, instantiate)
 
 
 def Handler(*args, instantiate: bool = False):
@@ -62,8 +62,12 @@ def Vibrator(*args, instantiate: bool = False):
     return _class_call(autoclass("android.os.Vibrator"), args, instantiate)
 
 
+def VibrationEffect(*args, instantiate: bool = False):
+    return _class_call(autoclass("android.os.VibrationEffect"), args, instantiate)
+
+
 def VERSION(*args, instantiate: bool = False):
-    return _class_call(autoclass('android.os.Build$VERSION'), args, instantiate)
+    return _class_call(autoclass("android.os.Build$VERSION"), args, instantiate)
 
 
 def VERSION_CODES(*args, instantiate: bool = False):
@@ -71,7 +75,7 @@ def VERSION_CODES(*args, instantiate: bool = False):
 
 
 def StrictMode(*args, instantiate: bool = False):
-    return _class_call(autoclass('android.os.StrictMode'), args, instantiate)
+    return _class_call(autoclass("android.os.StrictMode"), args, instantiate)
 
 
 def StatFs(*args, instantiate: bool = False):

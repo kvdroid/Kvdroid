@@ -1,7 +1,14 @@
 from typing import Union
 
 from kvdroid.cast import cast_object
-from kvdroid.jclass.android import Bitmap, CompressFormat, Config, Canvas, AdaptiveIconDrawable, BitmapDrawable
+from kvdroid.jclass.android import (
+    Bitmap,
+    CompressFormat,
+    Config,
+    Canvas,
+    AdaptiveIconDrawable,
+    BitmapDrawable,
+)
 from kvdroid.jclass.androidx.core.content.res import ResourcesCompat
 from kvdroid.jclass.java import InputStream
 from kvdroid.jclass.java import FileOutputStream
@@ -31,13 +38,17 @@ def save_drawable(drawable, path, name):
     return path + name + ".png"
 
 
-def bitmap_to_drawable(bitmap: Union[int, str, InputStream()]):
-    if isinstance(bitmap, int):
-        bitmap = BitmapFactory.decodeResource(activity.getResources(), bitmap)
-    elif isinstance(bitmap, str):
-        bitmap = BitmapFactory.decodeFile(bitmap)
+def get_bitmap(image: int | str | object):  # object must be a java InputStream
+    if isinstance(image, int):
+        bitmap = BitmapFactory.decodeResource(activity.getResources(), image)
+    elif isinstance(image, str):
+        bitmap = BitmapFactory.decodeFile(image)
     else:
-        bitmap = BitmapFactory.decodeStream(bitmap)
+        bitmap = BitmapFactory.decodeStream(image)
+    return bitmap
+
+
+def bitmap_to_drawable(bitmap):
     return BitmapDrawable(activity.getResources(), bitmap)
 
 

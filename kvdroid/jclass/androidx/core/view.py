@@ -11,8 +11,18 @@ def WindowCompat(*args, instantiate: bool = False):
 
 
 def WindowInsetsCompat(*args, instantiate: bool = False):
-    return _class_call(autoclass("androidx.core.view.WindowInsetsCompat"), args, instantiate)
+    return _class_call(
+        autoclass("androidx.core.view.WindowInsetsCompat"), args, instantiate
+    )
 
 
 def WindowInsetsCompatType(*args, instantiate: bool = False):
-    return _class_call(autoclass("androidx.core.view.WindowInsetsCompat$Type"), args, instantiate)
+    return _class_call(
+        autoclass("androidx.core.view.WindowInsetsCompat$Type"), args, instantiate
+    )
+
+
+def ViewGroupCompat(*args, instantiate: bool = False):
+    return _class_call(
+        autoclass("androidx.core.view.ViewGroupCompat"), args, instantiate
+    )
