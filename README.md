@@ -1,4 +1,4 @@
-KvDroid
+from kvdroid.tools.notification.constants import PendingIntentFlagKvDroid
 =========
 
 <!-- GitAds-Verify: FQNUQIK3LDGRA8V91UOY1X8PFDSEBSNR -->
@@ -10,7 +10,7 @@ KvDroid
 A re-implementation of android java API in python with easy access to some Android functionality like Notification,
 Reading of Contacts, accessing Webview Cookies, etc...
 
-The aim is to provide full access to Android API which can be used together with Python frameworks like:
+The aim is to provide full access to Android API, which can be used together with Python frameworks like:
 [kivy](https://github.com/kivy/kivy), [kivymd](https://github.com/kivymd/kivymd), etc... Or as a standalone, in which
 Android native UI is created with only python codes.
 
@@ -47,259 +47,160 @@ requirement = https://github.com/kvdroid/Kvdroid/archive/refs/heads/master.zip
 
 ### To send notification
 
+**Step 1: Create a notification channel (required for Android 8.0+)**
+
 ```python
-from kvdroid.jclass.android.graphics import Color
-from kvdroid.tools.notification import (
-    create_notification, 
-    get_notification_reply_text,
-    KVDROID_TAP_ACTION_NOTIFICATION,
-    KVDROID_ACTION_1_NOTIFICATION,
-    KVDROID_REPLY_ACTION_NOTIFICATION
+from kvdroid.tools.notification.channel import NotificationChannel, create_notification_channel
+from kvdroid.tools.notification.constants import Importance
+
+# Create and configure a notification channel using the builder pattern
+channel = (
+    NotificationChannel(channel_id="messages", channel_name="Messages", importance=Importance.HIGH)
+    .set_description("Notifications for new messages")
+    .enable_vibration(True)
+    .set_vibration_pattern([0, 300, 200, 300])
+    .enable_lights(True)
+    .set_show_badge(True)
 )
-from kvdroid.tools import get_resource
+
+# Register the channel with the system
+create_notification_channel(channel)
+```
+
+**Step 2: Create and send notifications using the new builder API**
+
+```python
+from kvdroid.tools.notification.basic import Notification, create_notification
+from kvdroid.tools import get_resource_identifier
+
+# Build a simple notification using method chaining
+notification = (
+    Notification(channel_id="messages")
+    .set_small_icon(get_resource_identifier("icon", "mipmap"))
+    .set_content_title("New Message")
+    .set_content_text("You have a new message!")
+    .set_auto_cancel(True)
+)
+
+# Post the notification
+manager = create_notification(1, notification)
+
+# To cancel a notification later:
+# manager.cancel(1)
+```
+
+**Advanced: Notification with actions and intents**
+
+```python
+from kvdroid.tools.notification.basic import Notification, create_notification
+from kvdroid.tools.notification.utils import Intent, PendingIntent
+from kvdroid.tools.notification.constants import PendingIntentFlag, Priority
+from kvdroid.tools import get_resource_identifier
+from kvdroid import get_android_sdk_int
+from android import python_act  # noqa
+
+# Create intents for tap and action buttons
+tap_intent = (
+    Intent()
+    .set_action("TAP_ACTION")
+    .put_extra("message_id", 12345)
+)
+
+flag = PendingIntentFlag.FLAG_IMMUTABLE if get_android_sdk_int() >= 31 else PendingIntentFlag.FLAG_UPDATE_CURRENT
+tap_pending_intent = PendingIntent.get_activity(0, tap_intent, flag)
+
+mark_read_intent = (
+    Intent()
+    .set_action("MARK_READ")
+    .put_extra("action", "mark_read")
+)
+
+flag = (PendingIntentFlag.FLAG_MUTABLE | PendingIntentFlag.FLAG_UPDATE_CURRENT
+        if get_android_sdk_int() >= 31 else PendingIntentFlag.FLAG_UPDATE_CURRENT)
+mark_read_pending_intent = PendingIntent.get_broadcast(1, tap_intent, flag)
+
+# Build notification with actions
+notification = (
+    Notification(channel_id="messages")
+    .set_small_icon(get_resource_identifier("icon", "mipmap"))
+    .set_content_title("New Message")
+    .set_content_text("John: How are you?")
+    .set_large_icon("assets/profile.png")
+    .set_content_intent(tap_pending_intent)
+    .add_action(0, "Mark Read", mark_read_pending_intent)
+    .set_auto_cancel(True)
+    .set_priority(Priority.HIGH)
+)
+
+# Post the notification
+manager = create_notification(1, notification)
+```
+
+**Available notification builder methods:**
+
+The `Notification` class supports extensive customization through these methods:
+- **Content:** `set_content_title()`, `set_content_text()`, `set_sub_text()`, `set_ticker()`
+- **Icons:** `set_small_icon()`, `set_large_icon()`, `set_color()`, `set_colorized()`
+- **Actions:** `add_action()`, `set_content_intent()`, `set_delete_intent()`, `set_full_screen_intent()`
+- **Behavior:** `set_auto_cancel()`, `set_ongoing()`, `set_silent()`, `set_only_alert_once()`
+- **Priority:** `set_priority()`, `set_defaults()`
+- **Grouping:** `set_group()`, `set_group_summary()`
+- **Progress:** `set_progress(max, current, indeterminate)`
+- **Badge:** `set_number()`, `set_show_badge()`
+- **Alerts:** `set_sound()`, `set_vibrate()`, `set_lights()`, `enable_vibration()`
+- **Visibility:** `set_visibility()`, `set_lockscreen_visibility()`
+- **Timing:** `set_when()`, `set_timeout_after()`, `set_uses_chronometer()`
+- **Styles:** `set_style()` (for big picture, big text, inbox, messaging styles)
+- **Advanced:** `set_foreground_service_behavior()`, `set_remote_input_history()`, `set_shortcut_id()`
+
+**To handle notification intents and actions:**
+
+```python
 from kvdroid.tools.broadcast import BroadcastReceiver
-from android.activuty import bind as activity_bind  # noqa
+from android.activity import bind as activity_bind  # noqa
 
-
-def perform_intent_action(intent):
+def handle_notification_action(intent):
     if extras := intent.getExtras():
-        if value := extras.getString("tap"):
-            # replace below code with whatever action you want to perform
-            print("it is a tap")
-            # incase you want to use the value too
-            print(value)
-        elif value := extras.getString("action1"):
-            # replace below code with whatever action you want to perform
-            print("it is an action1")
-            # incase you want to use the value too
-            print(value)
-        elif value := extras.getString("reply"):
-            # replace "TEST_KEY" with whatever 'key_reply_text' you used in creating
-            # your notification
-            reply = get_notification_reply_text(intent, "TEST_KEY")
-            print(reply)
-            # incase you want to use the value too
-            print(value)
+        if message_id := extras.getString("message_id"):
+            print(f"Notification tapped: {message_id}")
+        elif action := extras.getString("action"):
+            print(f"Action pressed: {action}")
 
+def on_new_intent(intent):
+    handle_notification_action(intent)
 
-def get_notification_intent(intent):
-    perform_intent_action(intent)
+def on_broadcast(_, intent):
+    handle_notification_action(intent)
 
+# Bind activity intent handler (do this once)
+activity_bind(on_new_intent=on_new_intent)
 
-def get_notification_broadcast(context, intent):
-    perform_intent_action(intent)
-    
-# This should be binded only once, else you get weird behaviors
-# if you are creating different notifications for different purpose,
-# you can bind different functions but only bind them once
-activity_bind(on_new_intent=get_notification_intent)
-
+# Set up broadcast receiver for notification actions
 br = BroadcastReceiver(
-    callback=get_notification_broadcast, 
-    actions=[
-        KVDROID_TAP_ACTION_NOTIFICATION,
-        KVDROID_ACTION_1_NOTIFICATION,
-        KVDROID_REPLY_ACTION_NOTIFICATION
-    ],
+    callback=on_broadcast,
+    actions=["TAP_ACTION", "ACTION_1"],
     use_intent_action=False
 )
-# start BroadcastReceiver before launching your notification.
 br.start()
 
-"""
-stop your broad cast receiver when your app is closed
->>>
-def on_stop(self):
-    br.stop()
->>>
-"""
-
-create_notification(
-    small_icon=get_resource("mipmap").icon,  # replace `.icon` with the image filename you set as your app icon without the file extension (e.g without .png, .jpg ...)
-    channel_id="ch1", # you must set this to any string value of your choice
-    title="You have a message", # title of your notification
-    text="hi, just wanted to check on you", # notification content text
-    ids=1, # notification id, can be used to update certain notification
-    channel_name=f"message", # provides a user-friendly label for the channel, helping users understand the purpose or category of notifications associated with that channel.
-    large_icon="assets/image.png",
-    small_icon_color=Color().rgb(0x00, 0xC8, 0x53),  # 0x00 0xC8 0x53 is same as 00C853
-    big_picture="assets/image.png",
-    action_title1="action1",
-    reply_title="reply",
-    key_text_reply="TEST_KEY",
-    # for effective use of this, please read the extras section of the documentation below
-    # There are only 3 actions and 1 reply, but the 3 actions cannot exist together all at once
-    # together with the reply. 1 of the actions must go.
-    # The 3 actions must be declared with this names: 'action1', 'action2', 'action3'
-    # the reply must retain the name: 'reply'. Same with tap: 'tap'
-    extras={
-        "tap": ("tap", "I tapped the notification"), 
-        "action1": ("action1", "I pressed action1 button"),
-        "reply": ("reply", "use get_notification_reply_text(intent, key_text_reply) to get my text")
-    },
-    # if you set this to true, it means that you don't want your app to open
-    # when you tap on the notification or tap on any of the action button or reply
-    # so you don't need to bind an intent function, here you make use of BrodcastReceiver
-    # check the above code
-    broadcast=False
-)
-```
-
-Further notification description
-```
-:Parameters:
-    `small_icon`: int
-        The icon that appears at the top left conner of the android notification.
-        Icon can be accessed by calling `get_resource(resource, activity_type=activity)`
-        from kvdroid.tools module
-    `channel_id`: str
-        In Android, a channel ID is used to categorize and manage notifications.
-        It's a unique identifier associated with a notification channel, which is
-        a way to group and configure notifications in a specific way. Notification
-        channels were introduced in Android Oreo (API level 26) to give users more
-        control over how they receive and interact with notifications.
-    `title`: str
-        The title is a short, descriptive text that provides context for the
-        notification's content. It's often displayed prominently at the top of the notification.
-    `text`: str
-        Text provides additional information related to the notification's title and
-        helps users understand the purpose or context of the notification.
-    `ids`: int
-        The ids is an identifier used to uniquely identify a notification.
-        It allows you to manage and update notifications, especially when you have
-        multiple notifications displayed or want to update an existing notification with a new one.
-    `channel_name`: str
-        The channel_name is a human-readable name or description associated with a notification
-        channel. It provides a user-friendly label for the channel, helping users understand
-        the purpose or category of notifications associated with that channel.
-    `large_icon`: Union[int, str, InputStream()]
-        The large_icon is an optional image or icon that can be displayed alongside the
-        notification's content. It's typically a larger image than the smallIcon and
-        is used to provide additional context or visual appeal to the notification.
-    `big_picture`: Union[int, str, InputStream()]
-        the big_picture is a style of notification that allows you to display a large
-        image, often associated with the notification's content. This style is
-        particularly useful for notifications that include rich visual content,
-        such as image-based messages or news articles.
-    `action_title1`: str
-        text that are displayed on notification buttons, used to also create notification
-        buttons too.
-    `action_title2`: str
-        text that are displayed on notification buttons, used to also create notification
-        buttons too.
-    `action_title3`: str
-        text that are displayed on notification buttons, used to also create notification
-        buttons too.
-    `key_text_reply`: str
-        When you want to enable users to reply to notifications by entering text,
-        you can use Remote Input, which is a feature that allows you to capture text input
-        from users in response to a notification. key_text_reply is a symbolic
-        representation or a constant used in your code to identify and process the
-        user's text input when responding to notifications.
-    `reply_title`: str
-        text that is displayed on notification reply buttons, used to also create notification
-        reply buttons too.
-    `auto_cancel`: bool
-        In Android notifications, the auto_cancel behavior is typically implemented by
-        setting the setAutoCancel(true) method on the notification builder. When you
-        set autoCancel to true, it means that the notification will be automatically
-        canceled (dismissed) when the user taps on it. This is a common behavior for
-        notifications where tapping the notification is expected to take the user to a
-        corresponding activity or open a specific screen within the app.
-    `extras`: dict
-        A dictionary of string (keys) and tuple (values). Must be in this format
-        ```python
-        {
-            "tap": (key, value),
-            "action1": (key, value),
-            "action2": (key, value),
-            "action3": (key, value),
-            "action1": (key, value),
-            "reply": (key, value)
-        }
-
-        or 
-
-        {"action1": (key, value)} or {"reply": (key, value)} or
-        {"action1": (key, value), "reply": (key, value)} ...
-        ```
-        Extras are used to add additional data or key-value pairs to a notification.
-        This allows you to attach custom data to a notification so that you can retrieve
-        and process it when the user interacts with the notification
-    `small_icon_color`: int
-        the small_icon_color is primarily used to set the background color for the
-        small icon in the notification header. It influences the color of the small
-        circle that appears behind the small icon in the notification.
-
-        Example using Color class from kvdroid.jclass.android module:
-        `Color().BLUE`, `Color().rgb(0x00, 0xC8, 0x53),  # 0x00 0xC8 0x53 is same as 00C853`
-    `java_class`: object
-        an activity or any suitable java class
-    `priority`: int
-        the priority is used to set the priority level of a notification. The priority
-        level determines how the notification should be treated in terms of importance
-        and visibility. It helps the Android system and user to understand
-        the significance of the notification.
-
-        Here are the values that cn be used `from kvdroid.jclass.androidx` module:
-
-        `NotificationCompat().PRIORITY_DEFAULT`:
-            This is the default priority level. Notifications
-            with this priority are treated as regular notifications. They are displayed in the
-            notification shade but do not make any special sound or vibration. The user may see
-            these notifications if they expand the notification shade.
-
-        `NotificationCompat().PRIORITY_LOW`:
-            Notifications with this priority are considered
-            low-priority. They are displayed in a less prominent way and do not typically make a
-            sound or vibration. They are often used for less important notifications that the user
-            may not need to see immediately.
-
-        `NotificationCompat().PRIORITY_MIN`:
-            This is the minimum priority level. Notifications with
-            this priority are considered the least important. They are not shown to the user unless the
-            user explicitly opens the notification shade.
-
-        `NotificationCompat().PRIORITY_HIGH:
-            Notifications with this priority are considered high-priority.
-            They are displayed prominently, may make a sound or vibration, and are intended to grab the user's
-            attention. These are often used for important notifications that require immediate user interaction.
-
-        `NotificationCompat().PRIORITY_MAX`:
-            This is the maximum priority level. Notifications with this priority are treated as the most
-            important and are displayed prominently with sound and vibration. They are typically used for
-            critical notifications that require immediate attention.
-    `defaults`: int
-        the setDefaults() method is used to set the default behavior for a notification, such as whether
-        it should make a sound, vibrate, or use the device's LED indicator. This method allows you to
-        specify a combination of default notification behaviors.
-
-        Here are the values that cn be used `from kvdroid.jclass.androidx` module:
-
-        `NotificationCompat().DEFAULT_SOUND`: Use the default notification sound.
-        `NotificationCompat().DEFAULT_VIBRATE: Make the device vibrate.
-        `NotificationCompat().DEFAULT_LIGHTS`: Use the device's LED indicator (if available).
-        `NotificationCompat().DEFAULT_ALL`: Use all default behaviors (sound, vibration, and LED).
-    `broadcast`: bool
-        sends out a broadcast message to your app to perform an action when an action button is
-        clicked or reply is sent from your apps notification
-:return: notification_manager
+# Stop broadcast receiver when app closes
+# def on_stop(self):
+#     br.stop()
 ```
 ### To read Contacts
 
 ```python
 from kvdroid.tools.contact import get_contact_details
+from android.permissions import request_permissions, Permission  # noqa
+
 #add this in buildozer permission 'android.permission.READ_CONTACTS'
 
 
-def request_android_permissions(self):
-    #call this function on_start function
-    from android.permissions import request_permissions, Permission
-    def callback(permissions, results):
-        if all([res for res in results]):
-            print("callback. All permissions granted.")
-        else:
-            print("callback. Some permissions refused.")
+def callback(_, results):
+    if all([res for res in results]):
+        print("callback. All permissions granted.")
+    else:
+        print("callback. Some permissions refused.")
 
 request_permissions([Permission.READ_CONTACTS, Permission.WRITE_CONTACTS, ], callback)
 
@@ -356,7 +257,7 @@ from kvdroid.tools.package import is_package_enabled
 print(is_package_enabled("com.android.settings"))
 ```
 
-### To get a specific app details
+### To get a specific app detail
 
 ```python
 from kvdroid.tools.package import package_info
@@ -384,7 +285,7 @@ print(package_info("com.android.settings"))
 """
 ```
  
-### To get an activity info
+### To get activity info
 
 ```python
 from kvdroid.tools.package import activity_info
@@ -397,7 +298,7 @@ print(activity_info("com.android.settings","com.android.settings.network.Network
 """
 ```
  
-### To save a drawable object to given path as png
+### To save a drawable object to a given path as png
 
 ```python
 from kvdroid.tools.package import package_info
@@ -410,7 +311,7 @@ app_icon = app["loadIcon"]
 
 save_drawable(app_icon, "< path >", "< file_name >")
 
-# That will save the app icon to given path and return the path + filename
+# That will save the app icon to a given path and return the path + filename
 # can be used like
 
 from kivy.uix.image import Image
@@ -441,7 +342,7 @@ from kvdroid.tools import keyboard_height
 
 print(keyboard_height())
 ```
-### To detect if app is installed from Play Store or not
+### To detect if an app is installed from Play Store or not
 
 ```python
 from kvdroid.tools.appsource import app_source
@@ -449,7 +350,7 @@ from kvdroid.tools.appsource import app_source
 print(app_source())
 ```
 
-### To get application infos
+### To get application info
 `name` `pkg_name` `version_name` `version_code`
 
 ```python
@@ -465,7 +366,6 @@ print(app_info("name"))
 from kvdroid.tools.appsource import app_dirs
 
 print(app_dirs("files")) #/data/data/package/files
-print(app_dirs("ext_files"), slash = True) #/storage/sdcard0/Android/data/package/files/
 ```
 
 ### To get absolute screen size in dp-pixel and detect current orientation
@@ -479,15 +379,15 @@ print(screen.width_dp())
 print(screen.height_px())
 print(screen.resolution())
 ```
-### To check if device has a data connection.
+### To check if a device has a data connection.
 
 ```python
 from kvdroid.tools.network import network_status, wifi_status, mobile_status, get_wifi_signal
 
-print(network_status())  # for both wifi and mobile
-print(wifi_status())    # only for wifi
+print(network_status())  # for both Wi-Fi and mobile
+print(wifi_status())    # only for Wi-Fi
 print(mobile_status())    # only for mobile
-print(get_wifi_signal())    # only for wifi
+print(get_wifi_signal())    # only for Wi-Fi
 ```
 ### To get Wi-Fi signal strenght.
 
@@ -505,7 +405,7 @@ from kvdroid.tools.network import  network_latency
 print(network_latency()) 
 ```
 
-### To check if device is  in dark mode or not
+### To check if a device is in dark mode or not
 
 ```python
 from kvdroid.tools.darkmode import dark_mode
@@ -543,7 +443,7 @@ from kvdroid.tools import launch_app_activity
 
 launch_app_activity("< app_package >", "< app_activity >")
 ```
-### To open target app's details page
+### To open the target app's details page
 
 ```python
 from kvdroid.tools import app_details
@@ -585,19 +485,22 @@ print(supported_languages())
 """
 ```
 
-### To set statusbar color
+### To set the statusbar color
 
 ```python
 from kvdroid.tools import change_statusbar_color
 
-change_statusbar_color("#FFFFFF", "black")
+# This won't work on API 35 (android 15) and above.
+# Android advices to enable edge-to-edge instead.
+# To enable edge-to-edge, use this function `enable_edge_to_edge()`.
+change_statusbar_color(background_color="#FFFFFF", foreground_color="black")
 ```
 ### To set navigationbar color
 
 ```python
 from kvdroid.tools import navbar_color
 
-navbar_color("#FFFFFF")
+navbar_color(background_color="#FFFFFF", foreground_color="white")
 ```
 ### To display a toast message
 
@@ -669,7 +572,7 @@ from kvdroid.tools import share_text
 share_text("hello world", title="Share", chooser=False, app_package=None,
            call_playstore=False, error_msg="application unavailable")
 ```
-### To share any file via Android Share menu
+### To share any file via the Android Share menu
 
 ```python
 from kvdroid.tools import share_file
@@ -722,7 +625,7 @@ from kvdroid.jclass.android import Uri
 uri = Uri().fromFile("/home/java/my_document.pdf")
 parcelable = cast_object("parcelable", uri)
 
-# Above code  is same as below code::
+# The above code is same as the below code::
 
 from kvdroid.jclass.android import Uri
 from jnius import cast
@@ -742,7 +645,7 @@ parcelable = cast("android.os.Parcelabel", uri)
 
 
 ### To access WebView cookies
-(i.e if you compiled your app with webview bootstrap or have Webview in your app)
+(i.e., if you compiled your app with webview bootstrap or have Webview in your app)
 
 ```python
 from kvdroid.tools.webkit import get_cookies
@@ -758,9 +661,9 @@ print(get_cookies("https://google.com"))
 - etc....
 
 ```python
-from kvdroid.tools import get_resource
+from kvdroid.tools import get_resource_identifier
 
-drawable = get_resource("drawable")
+icon = get_resource_identifier("icon", "mipmap")
 ```
 ### To get Wi-Fi IP Address
 ```python
@@ -777,9 +680,9 @@ send_email(
 )
 ```
 ### To send an email with an attachment (androidx is required)
-Also note before you can share files on Android version greater \
+Also note before you can share files on an Android version greater \
 than 10, you must specify a provider in the AndroidManifest.xml \
-inside the \<application> tag e.g
+inside the \<application> tag e.g.
 ```xml
 <provider
     android:name="androidx.core.content.FileProvider"
@@ -791,7 +694,7 @@ inside the \<application> tag e.g
         android:resource="@xml/filepath" />
 </provider>
 ```
-and also specify file path in the res/xml/filepath.xml of the android project folder e.g
+and also specify a file path in the res/xml/filepath.xml of the android project folder e.g.
 ```xml
 <paths>
     <files-path name="document" path="app" />
@@ -830,11 +733,20 @@ request_permissions([Permission.READ_CALL_LOG])
 print(get_call_log()) # returns a tuple of call log count and call_log
 ```
 
-### To set egde to edge
-```python
-from kvdroid.tools.display import set_edge_to_edge
+### To enable edge-to-edge
 
-set_edge_to_edge()
+```python
+from kvdroid.tools.display import enable_edge_to_edge
+
+enable_edge_to_edge()
+```
+
+### To set edge-to-edge manually
+
+```python
+from kvdroid.tools.display import set_edge_to_edge_manually
+
+set_edge_to_edge_manually()
 ```
 
 ### To get navbar height and statusbar height
@@ -845,7 +757,188 @@ sh = get_statusbar_height()
 nh = get_navbar_height()
 ```
 
-Since the release of Android 11 (API 30), the way file are stored became different
+### To set screen orientation
+```python
+from kvdroid.tools import set_orientation
+
+# Set to portrait mode
+set_orientation("portrait")
+
+# Other available modes: 'landscape', 'sensor', 'user', 'behind', 'full_sensor',
+# 'full_user', 'locked', 'no_sensor', 'user_portrait', 'user_landscape',
+# 'unspecified', 'sensor_portrait', 'sensor_landscape', 'reverse_portrait', 'reverse_landscape'
+```
+
+### To check keyboard visibility and get its height
+```python
+from kvdroid.tools import check_keyboard_visibility_and_get_height
+
+is_visible, height = check_keyboard_visibility_and_get_height()
+print(f"Keyboard visible: {is_visible}, Height: {height}px")
+```
+
+### To use Android Photo Picker
+```python
+from kvdroid.tools.photo_picker import (
+    pick_image_only,
+    pick_video_only,
+    pick_image_and_video,
+    is_photo_picker_available,
+    get_pick_images_max_limit
+)
+
+def callback(uris):
+    if uris:
+        for uri in uris:
+            print(f"Selected: {uri}")
+
+# Check if photo picker is available (Android 11+ with specific extensions or Android 13+)
+if is_photo_picker_available():
+    # Pick single image
+    pick_image_only(multiple=False, callback=callback)
+
+    # Pick multiple images (up to system limit)
+    pick_image_only(multiple=True, callback=callback)
+
+    # Pick video only
+    pick_video_only(multiple=False, callback=callback)
+
+    # Pick both images and videos
+    pick_image_and_video(multiple=True, callback=callback)
+
+    # Get maximum number of images that can be picked
+    max_limit = get_pick_images_max_limit()
+    print(f"Max images: {max_limit}")
+```
+
+### To resolve URI to file path
+```python
+from kvdroid.tools.uri import resolve_uri
+
+# Resolve a content:// URI to an actual file path
+file_path = resolve_uri(uri)
+print(file_path)
+```
+
+### To grant or revoke URI permissions
+```python
+from kvdroid.tools.uri import grant_uri_permission, revoke_uri_permission
+from kvdroid.jclass.android import Intent
+
+# Grant URI permission to another app
+intent = Intent()
+permissions = Intent().FLAG_GRANT_READ_URI_PERMISSION
+grant_uri_permission(intent, uri, permissions)
+
+# Revoke URI permission
+revoke_uri_permission(uri, permissions)
+```
+
+### To convert Android Bitmap to Kivy Texture
+```python
+from kvdroid.tools.kivytools import bitmap_to_texture
+from kivy.uix.image import Image
+
+# Convert Android bitmap to Kivy texture
+texture = bitmap_to_texture(bitmap)
+
+# Use in Kivy Image widget
+img = Image()
+img.texture = texture
+```
+
+### To use ExoPlayer for advanced media playback
+```python
+from kvdroid.tools.exoplayer import ExoPlayer
+
+# Create ExoPlayer instance
+player = ExoPlayer()
+
+# Create media item from URI or file
+media_item = ExoPlayer.media_item_from_uri("https://example.com/music.mp3")
+# or from file
+media_item = ExoPlayer.media_item_from_file("/sdcard/music.mp3")
+
+# Set media item and prepare
+player.set_media_item(media_item)
+player.prepare()
+
+# Playback controls
+player.play()
+player.pause()
+player.seek_to(5000)  # Seek to 5 seconds
+
+# Check player state
+if player.is_playing():
+    position = player.get_current_position()
+    duration = player.get_duration()
+    print(f"Position: {position}ms / {duration}ms")
+
+# Set repeat mode
+player.set_repeat_mode(ExoPlayer.REPEAT_MODE_ALL)
+
+# Enable shuffle
+player.set_shuffle_mode_enabled(True)
+
+# Add multiple media items
+media_items = [
+    ExoPlayer.media_item_from_file("/sdcard/song1.mp3"),
+    ExoPlayer.media_item_from_file("/sdcard/song2.mp3"),
+]
+player.set_media_items(media_items)
+
+# Navigate between media items
+player.seek_to_next_media_item()
+player.seek_to_previous_media_item()
+
+# Clear all media items
+player.clear_media_items()
+```
+
+### To use BroadcastReceiver
+```python
+from kvdroid.tools.broadcast import BroadcastReceiver
+
+def on_broadcast(context, intent):
+    action = intent.getAction()
+    print(f"Received broadcast: {action}")
+
+# Create broadcast receiver with system actions
+br = BroadcastReceiver(
+    callback=on_broadcast,
+    actions=["BATTERY_LOW", "SCREEN_ON"],  # Will be expanded to ACTION_BATTERY_LOW, etc.
+    use_intent_action=True
+)
+
+# Or with custom actions
+br = BroadcastReceiver(
+    callback=on_broadcast,
+    actions=["com.example.CUSTOM_ACTION"],
+    use_intent_action=False
+)
+
+# Start listening
+br.start()
+
+# Stop listening when done
+br.stop()
+```
+
+### To get system bar heights
+
+```python
+from kvdroid.jinterface.view import Insets
+from kvdroid.tools.display import set_on_apply_window_insets_listener, request_apply_insets
+
+
+def on_apply_window_insets(insets: Insets):
+    print(insets.top, insets.bottom, insets.left, insets.right)
+    
+
+set_on_apply_window_insets_listener(on_apply_window_insets)
+request_apply_insets()
+```
+
 ### License
 MIT
 
