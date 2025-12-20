@@ -321,35 +321,32 @@ def change_statusbar_color(background_color: Union[str, list], foreground_color:
     """
     background_color = _convert_color(background_color)
     window = activity.getWindow()
-    if foreground_color == "black":
-        if VERSION().SDK_INT >= 30:
-            window_inset_controller = window.getDecorView().getWindowInsetsController()
+    view = window.getDecorView()
+
+    if VERSION().SDK_INT >= 30:
+        window_inset_controller = view.getWindowInsetsController()
+        if window_inset_controller:
+            appearance = (
+                window_inset_controller.APPEARANCE_LIGHT_STATUS_BARS
+                if foreground_color == "black"
+                else 0
+            )
             window_inset_controller.setSystemBarsAppearance(
-                window_inset_controller.APPEARANCE_LIGHT_STATUS_BARS,
-                window_inset_controller.APPEARANCE_LIGHT_STATUS_BARS,
+                appearance, window_inset_controller.APPEARANCE_LIGHT_STATUS_BARS
             )
+    elif VERSION().SDK_INT >= 23:
+        # Use bitwise logic so we don't affect the Navigation Bar flags
+        current_flags = view.getSystemUiVisibility()
+        if foreground_color == "black":
+            new_flags = current_flags | View().SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         else:
-            window.getDecorView().setSystemUiVisibility(
-                View().SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                | window.getDecorView().getSystemUiVisibility()
-            )
-    elif str(foreground_color) == "white":
-        if VERSION().SDK_INT >= 30:
-            window_inset_controller = window.getDecorView().getWindowInsetsController()
-            window_inset_controller.setSystemBarsAppearance(
-                0, window_inset_controller.APPEARANCE_LIGHT_STATUS_BARS
-            )
-        else:
-            window.getDecorView().setSystemUiVisibility(0)
-    else:
-        raise TypeError(
-            "Available options are ['white','black'] for StatusBar text color"
-        )
+            new_flags = current_flags & ~View().SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        view.setSystemUiVisibility(new_flags)
+
+    # Background implementation
+    window.addFlags(WindowManagerLayoutParams().FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     if VERSION().SDK_INT <= 29:
         window.clearFlags(WindowManagerLayoutParams().FLAG_TRANSLUCENT_STATUS)
-    else:
-        window.setStatusBarContrastEnforced(False)
-    window.addFlags(WindowManagerLayoutParams().FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     window.setStatusBarColor(Color().parseColor(background_color))
 
 
@@ -374,31 +371,35 @@ def navbar_color(background_color: Union[str, list], foreground_color: str):
     """
     background_color = _convert_color(background_color)
     window = activity.getWindow()
-    if foreground_color == "black":
-        if VERSION().SDK_INT >= 30:
-            window_inset_controller = window.getDecorView().getWindowInsetsController()
+    view = window.getDecorView()
+
+    if VERSION().SDK_INT >= 30:
+        window_inset_controller = view.getWindowInsetsController()
+        if window_inset_controller:
+            appearance = (
+                window_inset_controller.APPEARANCE_LIGHT_NAVIGATION_BARS
+                if foreground_color == "black"
+                else 0
+            )
             window_inset_controller.setSystemBarsAppearance(
-                window_inset_controller.APPEARANCE_LIGHT_NAVIGATION_BARS,
-                window_inset_controller.APPEARANCE_LIGHT_NAVIGATION_BARS,
+                appearance, window_inset_controller.APPEARANCE_LIGHT_NAVIGATION_BARS
             )
+    elif VERSION().SDK_INT >= 26:
+        # Use bitwise logic so we don't affect the Status Bar flags
+        current_flags = view.getSystemUiVisibility()
+        if foreground_color == "black":
+            new_flags = current_flags | View().SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         else:
-            window.getDecorView().setSystemUiVisibility(
-                View().SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-                | window.getDecorView().getSystemUiVisibility()
-            )
-    elif foreground_color == "white":
-        if VERSION().SDK_INT >= 30:
-            window_inset_controller = window.getDecorView().getWindowInsetsController()
-            window_inset_controller.setSystemBarsAppearance(
-                0, window_inset_controller.APPEARANCE_LIGHT_NAVIGATION_BARS
-            )
-        else:
-            window.getDecorView().setSystemUiVisibility(0)
+            new_flags = current_flags & ~View().SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        view.setSystemUiVisibility(new_flags)
+
+    # Background implementation
+    window.addFlags(WindowManagerLayoutParams().FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     if VERSION().SDK_INT <= 29:
         window.clearFlags(WindowManagerLayoutParams().FLAG_TRANSLUCENT_NAVIGATION)
     else:
+        # Prevents Android from forcing a gray overlay on light nav bars
         window.setNavigationBarContrastEnforced(False)
-    window.addFlags(WindowManagerLayoutParams().FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     window.setNavigationBarColor(Color().parseColor(background_color))
 
 
