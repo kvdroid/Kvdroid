@@ -25,11 +25,15 @@ Key Features:
     - Custom sounds, vibration patterns, and LED colors
     - Lock screen visibility controls
 
-Exported Functions:
-    create_notification(small_icon, channel_id, title, text, notification_id, **kwargs):
-        Creates and displays a notification with extensive customization options.
-        Supports action buttons, inline replies, progress bars, and rich media content.
+Exported Classes:
+    Notification:
+        A builder class for creating Android notifications with method chaining.
 
+    NotificationManagerCompat:
+        A wrapper class for Android's NotificationManagerCompat, providing methods to
+        manage notifications and notification channels.
+
+Exported Functions:
     get_notification_reply_text(intent, key_text_reply):
         Extracts user text input from notification inline reply actions.
         Used to retrieve responses submitted through notification reply fields.
@@ -48,19 +52,20 @@ Exported Constants:
 
 Quick Start:
     1. Create a notification channel (Android 8.0+):
-        >>> from kvdroid.tools.notification.channel import NotificationChannel, create_notification_channel
-        >>> from kvdroid.tools.notification.constants import IMPORTANCE
+        >>> from kvdroid.tools.notification import NotificationChannel, NotificationManagerCompat
+        >>> from kvdroid.tools.notification import Importance
         >>>
         >>> channel = (
-        ...     NotificationChannel("messages", "Messages", IMPORTANCE.HIGH)
+        ...     NotificationChannel("messages", "Messages", Importance.HIGH)
         ...     .set_description("Notifications for new messages")
         ...     .enable_vibration(True)
         ...     .set_show_badge(True)
         ... )
-        >>> create_notification_channel(channel)
+        >>> nm = NotificationManagerCompat()
+        >>> nm.create_notification_channel(channel)
 
     2. Create and display a notification using the builder API:
-        >>> from kvdroid.tools.notification import Notification, create_notification
+        >>> from kvdroid.tools.notification import Notification, NotificationManagerCompat
         >>> from kvdroid.tools import get_resource_identifier
         >>>
         >>> notification = (
@@ -70,10 +75,11 @@ Quick Start:
         ...     .set_content_text("You have a new message")
         ...     .set_auto_cancel(True)
         ... )
-        >>> manager = create_notification(1, notification)
+        >>> manager = NotificationManagerCompat()
+        >>> manager.notify(1, notification)
 
     3. Create a notification with intents and actions:
-        >>> from kvdroid.tools.notification import Notification, Intent, create_notification
+        >>> from kvdroid.tools.notification import Notification, Intent, NotificationManagerCompat
         >>> from android import python_act
         >>>
         >>> tap_intent = Intent(("msg_id", "123"), python_act._class, "TAP_ACTION", "messages", 1)
@@ -87,7 +93,8 @@ Quick Start:
         ...     .set_content_intent(tap_intent)
         ...     .add_action(0, "Archive", action_intent)
         ... )
-        >>> manager = create_notification(2, notification)
+        >>> manager = NotificationManagerCompat()
+        >>> manager.notify(2, notification)
 
     4. Handle notification actions in your activity or broadcast receiver:
         >>> from kvdroid.tools.broadcast import BroadcastReceiver
@@ -116,28 +123,37 @@ Note:
     - For detailed parameter documentation, see individual function docstrings
 
 See Also:
-    - kvdroid.tools.notification.basic: Main notification functions
-    - kvdroid.tools.notification.channel: Channel management
+    - kvdroid.tools.notification.notification: Main notification functions
     - kvdroid.tools.notification.constants: Action and extra key constants
 """
 
-__all__ = ("Builder",)
+__all__ = (
+    "Builder",
+    "Notification",
+    "NotificationChannel",
+    "NotificationManagerCompat",
+    "get_notification_reply_text",
+    "Intent",
+    "PendingIntent",
+    "Importance",
+    "Default",
+    "Foreground",
+    "Priority",
+    "PendingIntentFlag",
+)
 
-from abc import ABC, abstractmethod
-
-
-class Builder(ABC):
-    """Abstract base class for builder pattern implementations.
-
-    This class defines the interface for builder objects that construct
-    Android notification components.
-    """
-
-    @abstractmethod
-    def build(self):
-        """Build and return the Android notification component.
-
-        Returns:
-            object: The constructed Android notification component.
-        """
-        pass
+from .base import Builder
+from .notification import (
+    Notification,
+    NotificationManagerCompat,
+    NotificationChannel,
+    get_notification_reply_text,
+)
+from .utils import Intent, PendingIntent
+from .constants import (
+    Importance,
+    Default,
+    Foreground,
+    Priority,
+    PendingIntentFlag,
+)

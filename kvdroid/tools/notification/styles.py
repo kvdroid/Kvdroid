@@ -29,7 +29,6 @@ Note:
 """
 
 __all__ = (
-    "Person",
     "MessagingStyle",
     "BigTextStyle",
     "BigPictureStyle",
@@ -45,25 +44,22 @@ __all__ = (
 from abc import ABC, abstractmethod
 
 from kvdroid import require_api
-from kvdroid.jclass.android import (
-    PersonBuilder,
-    Icon,
-    NotificationCallStyle,
-    NotificationProgressStyle,
-    NotificationProgressStylePoint,
-    NotificationProgressStyleSegment,
-)
+from kvdroid.jclass.android import Icon
 from kvdroid.jclass.androidx import (
     NotificationCompatMessagingStyle,
     NotificationCompatMessagingStyleMessage,
-    NotificationBigTextStyle,
+    NotificationCompatBigTextStyle,
     NotificationCompatBigPictureStyle,
     NotificationCompatInboxStyle,
     MediaStyleNotificationHelperMediaStyle,
+    NotificationCompatCallStyle,
+    NotificationCompatProgressStyleSegment,
+    NotificationCompatProgressStylePoint,
+    NotificationCompatProgressStyle,
 )
 from kvdroid.jclass.java import List
 from kvdroid.tools.graphics import get_bitmap
-from kvdroid.tools.notification import Builder
+from kvdroid.tools.notification.base import Person
 
 
 class Style(ABC):
@@ -83,142 +79,6 @@ class Style(ABC):
         pass
 
 
-@require_api(">=", 28)
-class Person(Builder):
-    """Represents a person for use in MessagingStyle and CallStyle notifications.
-
-    Person objects are used to identify participants in messaging and call notifications,
-    providing metadata such as name, icon, and importance.
-
-    API Level: Requires API 28+ (Android P)
-
-    Attributes (conceptual):
-        name (str): Display name of the person.
-        icon (int | str | object): Icon resource as drawable ID (int), file path (str),
-            or java.io.InputStream object for loading from streams.
-        bot (bool): Whether this person is a bot. Default is False.
-        important (bool): Whether this person is important. Default is False.
-        key (str): Unique identifier for this person. Optional.
-
-    Example:
-        >>> person = (
-        ...     Person()
-        ...     .set_name("John Doe")
-        ...     .set_icon("/path/to/avatar.png")
-        ...     .set_important(True)
-        ... )
-        >>> android_person = person.build()
-    """
-
-    __slots__ = ("builder",)
-
-    def __init__(self):
-        """Initialize a Person builder.
-
-        Note:
-            This constructor takes no parameters. Use the fluent setter methods
-            like ``set_name()``, ``set_icon()``, ``set_bot()``, etc., and then
-            call ``build()`` to obtain the Android ``Person`` instance.
-        """
-        self.builder = PersonBuilder(instantiate=True)
-
-    def set_bot(self, bot: bool):
-        """Set whether this person is a bot.
-
-        Args:
-            bot: True if this person is a bot, False otherwise.
-
-        Returns:
-            Person: This Person instance for method chaining.
-        """
-        self.builder.setBot(bot)
-        return self
-
-    def set_icon(self, icon: int | str | object):
-        """Set the icon for this person.
-
-        Args:
-            icon: Icon resource as drawable ID (int), file path (str),
-                or java.io.InputStream object.
-
-        Returns:
-            Person: This Person instance for method chaining.
-        """
-        bitmap = get_bitmap(icon)
-        icon = Icon().createWithBitmap(bitmap)
-        self.builder.setIcon(icon)
-        return self
-
-    def set_important(self, important: bool):
-        """Set whether this person is important.
-
-        Important persons may be displayed with special styling in notifications.
-
-        Args:
-            important: True if this person is important, False otherwise.
-
-        Returns:
-            Person: This Person instance for method chaining.
-        """
-        self.builder.setImportant(important)
-        return self
-
-    def set_key(self, key: str):
-        """Set a unique identifier for this person.
-
-        The key is used to identify this person across app restarts and
-        should remain consistent for the same individual.
-
-        Args:
-            key: Unique identifier string for this person.
-
-        Returns:
-            Person: This Person instance for method chaining.
-        """
-        self.builder.setKey(key)
-        return self
-
-    def set_name(self, name: str):
-        """Set the display name for this person.
-
-        Args:
-            name: The name to display for this person in notifications.
-
-        Returns:
-            Person: This Person instance for method chaining.
-        """
-        self.builder.setName(name)
-        return self
-
-    def set_uri(self, uri: str):
-        """Set the URI associated with this person.
-
-        The URI can be used to link to more information about the person,
-        such as a contact profile or chat thread.
-
-        Args:
-            uri: URI string associated with this person.
-
-        Returns:
-            Person: This Person instance for method chaining.
-        """
-        self.builder.setUri(uri)
-        return self
-
-    def build(self):
-        """Build an Android Person object.
-
-        Constructs a native Android Person object using PersonBuilder,
-        converting the icon to a bitmap and setting all configured attributes.
-
-        Returns:
-            android.app.Person: The constructed Android Person object.
-
-        API Level: Requires API 28+
-        """
-        return self.builder.build()
-
-
 class MessagingStyle(Style):
     """Notification style for messaging and chat applications.
 
@@ -226,7 +86,7 @@ class MessagingStyle(Style):
     message history, and proper attribution of each message to its sender.
 
     Attributes:
-        user (Person): The current user (displayed as "You" in the notification).
+        user (kvdroid.tools.notification.base.Person): The current user (displayed as "You" in the notification).
 
     Example:
         >>> me = Person().set_name("Me").set_icon("/path/to/my_avatar.png")
@@ -329,7 +189,7 @@ class BigTextStyle(Style):
             fluent methods like ``big_text()``, ``set_big_content_title()``, and
             ``set_summary_text()``.
         """
-        self.style = NotificationBigTextStyle(instantiate=True)
+        self.style = NotificationCompatBigTextStyle(instantiate=True)
 
     def big_text(self, big_text: str):
         """Set the large text content to display when notification is expanded.
@@ -684,7 +544,6 @@ class MediaStyle(Style):
         return self.style
 
 
-@require_api(">=", 31)
 class CallStyle(Style):
     """Notification style for incoming and ongoing call notifications.
 
@@ -736,13 +595,13 @@ class CallStyle(Style):
 
         API Level: Requires API 31+
         """
-        cls.style = NotificationCallStyle().forIncomingCall(
+        cls.style = NotificationCompatCallStyle().forIncomingCall(
             person.build(), decline_intent, answer_intent
         )
         return cls()
 
     @classmethod
-    def for_ongoing_call(cls, person, hang_up_intent):
+    def for_ongoing_call(cls, person: Person, hang_up_intent):
         """Create a CallStyle for an ongoing call notification.
 
         Displays an active call with hang up action.
@@ -756,13 +615,13 @@ class CallStyle(Style):
 
         API Level: Requires API 31+
         """
-        cls.style = NotificationCallStyle().forOngoingCall(
+        cls.style = NotificationCompatCallStyle().forOngoingCall(
             person.build(), hang_up_intent
         )
         return cls()
 
     @classmethod
-    def for_screening_call(cls, person, hang_up_intent, answer_intent):
+    def for_screening_call(cls, person: Person, hang_up_intent, answer_intent):
         """Create a CallStyle for a call screening notification.
 
         Displays a call being screened with hang up and answer actions.
@@ -777,7 +636,7 @@ class CallStyle(Style):
 
         API Level: Requires API 31+
         """
-        cls.style = NotificationCallStyle().forScreeningCall(
+        cls.style = NotificationCompatCallStyle().forScreeningCall(
             person.build(), hang_up_intent, answer_intent
         )
         return cls()
@@ -890,7 +749,7 @@ class ProgressSegment:
             color: Color of the segment as ARGB integer (e.g., 0xFFFF0000 for red).
             id: Optional unique identifier for this segment.
         """
-        self.segment = NotificationProgressStyleSegment(length)
+        self.segment = NotificationCompatProgressStyleSegment(length)
 
     def set_color(self, color: int):
         """Set the color for this progress segment.
@@ -925,7 +784,6 @@ class ProgressSegment:
         return self.segment
 
 
-@require_api(">=", 36)
 class ProgressPoint:
     """Represents a colored point marker in a ProgressStyle notification.
 
@@ -943,7 +801,7 @@ class ProgressPoint:
         Args:
             position: Position of the point along the progress indicator.
         """
-        self.point = NotificationProgressStylePoint(position)
+        self.point = NotificationCompatProgressStylePoint(position)
 
     def set_color(self, color: int):
         """Set the color for this progress point marker.
@@ -1060,7 +918,7 @@ class ProgressStyle(Style):
         self.start_icon = start_icon
         self.end_icon = end_icon
 
-        self.style = NotificationProgressStyle()
+        self.style = NotificationCompatProgressStyle()
 
     def add_progress_point(self, point: ProgressPoint):
         """Add a single progress point marker to the progress bar.

@@ -55,7 +55,7 @@ Usage:
             KVDROID_REPLY_ACTION_NOTIFICATION,
             EXTRA_NOTIFICATION_ID
         )
-        from kvdroid.tools.notification.basic import get_notification_reply_text
+        from kvdroid.tools.notification.notification import get_notification_reply_text
 
         def on_notification_action(intent):
             action = intent.getAction()
