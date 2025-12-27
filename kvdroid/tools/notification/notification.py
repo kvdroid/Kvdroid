@@ -267,27 +267,18 @@ class Notification(Builder):
         self.builder.setColorized(colorized)
         return self
 
-    def set_content_intent(self, intent: Intent):
+    def set_content_intent(self, pending_intent):
         """
-        Set the intent to launch when the notification is tapped.
+        Sets the content intent for the notification. The content intent
+        defines the action to perform when the user interacts with the
+        notification.
 
-        This determines what happens when the user taps the notification body
-        (not the action buttons). Typically opens an activity in your app.
-
-        Args:
-            intent (Intent): Intent object from kvdroid.tools.notification that
-                wraps a PendingIntent to launch when notification is tapped.
-
-        Returns:
-            Notification: Returns self for method chaining.
-
-        Example:
-            >>> from kvdroid.tools.notification.utils import Intent
-            >>> intent = Intent()
-            >>> intent.put_extra("key", "value")
-            >>> notification.set_content_intent(intent)
+        :param pending_intent: The pending intent to be set for the notification.
+            It determines the specific action to be executed when the notification
+            is clicked.
+        :return: The current instance of the class to allow method chaining.
         """
-        self.builder.setContentIntent(intent.get_intent())
+        self.builder.setContentIntent(pending_intent)
         return self
 
     def set_content_text(self, text: str):
@@ -349,27 +340,19 @@ class Notification(Builder):
         self.builder.setDefaults(defaults.value)
         return self
 
-    def set_delete_intent(self, intent: Intent):
+    def set_delete_intent(self, pending_intent):
         """
-        Set the intent to launch when the notification is dismissed.
+        Sets the PendingIntent to be sent when the notification is dismissed.
 
-        This intent is triggered when the user dismisses the notification
-        (swipes it away). Useful for cleanup or tracking dismissal actions.
+        The delete intent is triggered when a notification is cleared by the user
+        either manually or by interacting with the notification.
 
-        Args:
-            intent (Intent): Intent object from kvdroid.tools.notification that
-                wraps a PendingIntent to launch when notification is dismissed.
-
-        Returns:
-            Notification: Returns self for method chaining.
-
-        Example:
-            >>> from kvdroid.tools.notification.utils import Intent
-            >>> delete_intent = Intent()
-            >>> delete_intent.set_action("delete")
-            >>> notification.set_delete_intent(delete_intent)
+        :param pending_intent: The PendingIntent to execute on notification dismissal.
+        :type pending_intent: PendingIntent
+        :return: Returns the current instance for chaining method calls.
+        :rtype: self
         """
-        self.builder.setDeleteIntent(intent.get_intent())
+        self.builder.setDeleteIntent(pending_intent)
         return self
 
     def set_foreground_service_behavior(self, behavior: Foreground):
@@ -394,26 +377,19 @@ class Notification(Builder):
 
     def set_full_screen_intent(self, pending_intent, is_pending_intent: bool):
         """
-        Set the intent to launch as a full-screen alert.
+        Sets a full-screen intent for the notification being constructed. This method is typically
+        used to assign an activity that should be launched in full-screen mode when the notification
+        is interacted with. The `pending_intent` specifies the intent to be triggered, and
+        `is_pending_intent` determines whether the intent should act in a pending state.
 
-        When triggered, this notification will launch as a full-screen intent,
-        useful for high-priority alerts like incoming calls or alarms that need
-        immediate user attention.
+        The method modifies the internal state of the notification builder by associating the
+        provided intent and configuration with the full-screen display of the notification.
 
-        Args:
-            intent (Intent): Intent object from kvdroid.tools.notification that
-                wraps a PendingIntent to launch full-screen.
-            is_pending_intent (bool): True if the intent is high priority and should
-                launch immediately.
-
-        Returns:
-            Notification: Returns self for method chaining.
-
-        Example:
-            >>> from kvdroid.tools.notification.utils import Intent
-            >>> full_screen_intent = Intent()
-            >>> full_screen_intent.set_action("alarm")
-            >>> notification.set_full_screen_intent(full_screen_intent, True)
+        :param pending_intent: The intent to execute when the notification is interacted with in
+            full-screen mode.
+        :param is_pending_intent: A boolean flag that indicates whether the intent is considered
+            pending.
+        :return: The updated instance of the notification builder configuration.
         """
         self.builder.setFullScreenIntent(pending_intent, is_pending_intent)
         return self
