@@ -43,7 +43,7 @@ def NotificationCompatBuilder(*args, instantiate: bool = False):
     )
 
 
-def NotificationBigTextStyle(*args, instantiate: bool = False):
+def NotificationCompatBigTextStyle(*args, instantiate: bool = False):
     return _class_call(
         autoclass("androidx.core.app.NotificationCompat$BigTextStyle"),
         args,
@@ -80,4 +80,38 @@ def NotificationCompatMessagingStyleMessage(*args, instantiate: bool = False):
 def NotificationCompatInboxStyle(*args, instantiate: bool = False):
     return _class_call(
         autoclass("androidx.core.app.NotificationCompat$InboxStyle"), args, instantiate
+    )
+
+
+def PersonBuilder(*args, instantiate: bool = False):
+    return _class_call(autoclass("androidx.core.app.Person$Builder"), args, instantiate)
+
+
+def NotificationCompatCallStyle(*args, instantiate: bool = False):
+    return _class_call(
+        autoclass("androidx.core.app.NotificationCompat$CallStyle"), args, instantiate
+    )
+
+
+def NotificationCompatProgressStyle(*args, instantiate: bool = False):
+    return _class_call(
+        autoclass("androidx.core.app.NotificationCompat$ProgressStyle"),
+        args,
+        instantiate,
+    )
+
+
+def NotificationCompatProgressStylePoint(*args, instantiate: bool = False):
+    return _class_call(
+        autoclass("androidx.core.app.NotificationCompat$ProgressStyle$Point"),
+        args,
+        instantiate,
+    )
+
+
+def NotificationCompatProgressStyleSegment(*args, instantiate: bool = False):
+    return _class_call(
+        autoclass("androidx.core.app.NotificationCompat$ProgressStyle$Segment"),
+        args,
+        instantiate,
     )

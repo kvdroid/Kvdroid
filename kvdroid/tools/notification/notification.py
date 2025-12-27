@@ -21,82 +21,78 @@ Key Features:
     - Lock screen visibility controls
     - Extract user reply text from notification interactions
 
-Main Functions:
-    create_notification():
-        Creates and displays a notification with extensive customization options
-        including visual styling, actions, and interaction handlers.
+Main Classes:
+    Notification:
+        A builder class for creating Android notifications with method chaining.
 
+    NotificationManagerCompat:
+        A wrapper class for Android's NotificationManagerCompat, providing methods to
+        manage notifications and notification channels.
+
+Main Functions:
     get_notification_reply_text():
         Retrieves user text input from inline reply notifications, enabling
         quick responses without opening the app.
 
 Usage:
-    from kvdroid.tools.notification.basic import create_notification
+    from kvdroid.tools.notification.notification import Notification, NotificationManagerCompat
     from kvdroid.tools import get_resource_identifier
 
-    # Create a simple notification
-    notification_manager = create_notification(
-        small_icon=get_resource_identifier("icon", "drawable"),
-        channel_id="messages",
-        title="New Message",
-        text="You have a new message from John",
-        notification_id=1
+    # Build a simple notification
+    notification = (
+        Notification("messages")
+        .set_small_icon(get_resource_identifier("icon", "drawable"))
+        .set_content_title("New Message")
+        .set_content_text("You have a new message from John")
+        .set_auto_cancel(True)
     )
 
-    # Create a notification with action buttons
-    notification_manager = create_notification(
-        small_icon=get_resource_identifier("icon", "drawable"),
-        channel_id="messages",
-        title="New Message",
-        text="You have a new message",
-        notification_id=2,
-        action_title1="Mark as Read",
-        action_title2="Reply",
-        reply_title="Reply",
-        key_text_reply="reply_key",
-        extras={
-            "action1": ("action", "mark_read"),
-            "reply": ("action", "send_reply")
-        }
-    )
+    # Post the notification
+    manager = NotificationManagerCompat()
+    manager.notify(1, notification)
 
 Note:
     - Requires a notification channel to be created first on Android SDK 26+
-    - Use create_notification_channel() from kvdroid.tools.notification.channel
+    - Use NotificationChannel and NotificationManagerCompat to create channels
       before creating notifications
     - On Android 8.0+ (API 26), notifications must be posted to a valid channel
 """
 
-__all__ = ("create_notification", "get_notification_reply_text", "Notification")
+__all__ = (
+    "NotificationManagerCompat",
+    "get_notification_reply_text",
+    "Notification",
+    "NotificationChannel",
+)
 
 from typing import Union
+
 from android import python_act  # NOQA
-from kvdroid import activity
-from kvdroid.jclass.android import Uri
+
+from kvdroid import activity, require_api
+from kvdroid.jclass.android import (
+    Uri,
+    NotificationChannel as NotificationChannelJava,
+    AudioAttributesBuilder,
+    AudioAttributes,
+)
 from kvdroid.jclass.androidx import (
     NotificationCompat,
     NotificationCompatBuilder,
-    NotificationManagerCompat,
+    NotificationManagerCompat as _NotificationManagerCompat,
     RemoteInput,
 )
-from kvdroid.jclass.java import InputStream
 from kvdroid.tools.graphics import get_bitmap
+from kvdroid.tools.notification.base import Builder, Person
 from kvdroid.tools.notification.constants import (
     Default,
     Foreground,
     Priority,
-    KVDROID_TAP_ACTION_NOTIFICATION,
+    Importance,
 )
-from kvdroid.tools.notification.utils import (
-    _create_intent,
-    _build_notification_content,
-    _build_notification_actions,
-    _set_big_picture,
-    _set_large_icon,
-    Intent,
-)
-from kvdroid.tools.notification.styles import Style, Person
-from kvdroid.tools.notification import Builder
+from kvdroid.tools.notification.styles import Style
+from kvdroid.tools.notification.utils import Intent
+from kvdroid.tools.vibration import VibrationEffect
 
 
 class Notification(Builder):
@@ -109,15 +105,15 @@ class Notification(Builder):
 
     The Notification class is the recommended way to create notifications, offering
     more flexibility and control than the legacy create_notification_old function.
-    Use create_notification() to post the notification after building it.
+    Use NotificationManagerCompat.notify() to post the notification after building it.
 
     Args:
         channel_id (str): The notification channel ID. On Android 8.0+ (API 26),
             notifications must be posted to a valid channel. Create channels using
-            create_notification_channel() from kvdroid.tools.notification.channel.
+            NotificationChannel and NotificationManagerCompat.
 
     Example:
-        >>> from kvdroid.tools.notification.basic import Notification, create_notification
+        >>> from kvdroid.tools.notification.notification import Notification, NotificationManagerCompat
         >>> from kvdroid.tools import get_resource_identifier
         >>> from kvdroid.jclass.android import Color
         >>>
@@ -132,7 +128,8 @@ class Notification(Builder):
         ... )
         >>>
         >>> # Post the notification
-        >>> manager = create_notification(1, notification)
+        >>> manager = NotificationManagerCompat()
+        >>> manager.notify(1, notification)
     """
 
     __slots__ = ("builder",)
@@ -196,7 +193,7 @@ class Notification(Builder):
         Build and return the notification object.
 
         This method finalizes the notification construction and returns the
-        Android Notification object that can be posted using create_notification().
+        Android Notification object.
 
         Returns:
             Notification: The built Android notification object.
@@ -204,6 +201,7 @@ class Notification(Builder):
         Example:
             >>> notification = Notification("channel_id").set_content_title("Title")
             >>> built = notification.build()
+            >>> manager = NotificationManagerCompat()
             >>> manager.notify(1, built)
         """
         return self.builder.build()
@@ -269,27 +267,18 @@ class Notification(Builder):
         self.builder.setColorized(colorized)
         return self
 
-    def set_content_intent(self, intent: Intent):
+    def set_content_intent(self, pending_intent):
         """
-        Set the intent to launch when the notification is tapped.
+        Sets the content intent for the notification. The content intent
+        defines the action to perform when the user interacts with the
+        notification.
 
-        This determines what happens when the user taps the notification body
-        (not the action buttons). Typically opens an activity in your app.
-
-        Args:
-            intent (Intent): Intent object from kvdroid.tools.notification that
-                wraps a PendingIntent to launch when notification is tapped.
-
-        Returns:
-            Notification: Returns self for method chaining.
-
-        Example:
-            >>> from kvdroid.tools.notification.utils import Intent
-            >>> intent = Intent()
-            >>> intent.put_extra("key", "value")
-            >>> notification.set_content_intent(intent)
+        :param pending_intent: The pending intent to be set for the notification.
+            It determines the specific action to be executed when the notification
+            is clicked.
+        :return: The current instance of the class to allow method chaining.
         """
-        self.builder.setContentIntent(intent.get_intent())
+        self.builder.setContentIntent(pending_intent)
         return self
 
     def set_content_text(self, text: str):
@@ -351,27 +340,19 @@ class Notification(Builder):
         self.builder.setDefaults(defaults.value)
         return self
 
-    def set_delete_intent(self, intent: Intent):
+    def set_delete_intent(self, pending_intent):
         """
-        Set the intent to launch when the notification is dismissed.
+        Sets the PendingIntent to be sent when the notification is dismissed.
 
-        This intent is triggered when the user dismisses the notification
-        (swipes it away). Useful for cleanup or tracking dismissal actions.
+        The delete intent is triggered when a notification is cleared by the user
+        either manually or by interacting with the notification.
 
-        Args:
-            intent (Intent): Intent object from kvdroid.tools.notification that
-                wraps a PendingIntent to launch when notification is dismissed.
-
-        Returns:
-            Notification: Returns self for method chaining.
-
-        Example:
-            >>> from kvdroid.tools.notification.utils import Intent
-            >>> delete_intent = Intent()
-            >>> delete_intent.set_action("delete")
-            >>> notification.set_delete_intent(delete_intent)
+        :param pending_intent: The PendingIntent to execute on notification dismissal.
+        :type pending_intent: PendingIntent
+        :return: Returns the current instance for chaining method calls.
+        :rtype: self
         """
-        self.builder.setDeleteIntent(intent.get_intent())
+        self.builder.setDeleteIntent(pending_intent)
         return self
 
     def set_foreground_service_behavior(self, behavior: Foreground):
@@ -394,30 +375,23 @@ class Notification(Builder):
         self.builder.setForegroundServiceBehavior(behavior.value)
         return self
 
-    def set_full_screen_intent(self, intent: Intent, is_pending_intent: bool):
+    def set_full_screen_intent(self, pending_intent, is_pending_intent: bool):
         """
-        Set the intent to launch as a full-screen alert.
+        Sets a full-screen intent for the notification being constructed. This method is typically
+        used to assign an activity that should be launched in full-screen mode when the notification
+        is interacted with. The `pending_intent` specifies the intent to be triggered, and
+        `is_pending_intent` determines whether the intent should act in a pending state.
 
-        When triggered, this notification will launch as a full-screen intent,
-        useful for high-priority alerts like incoming calls or alarms that need
-        immediate user attention.
+        The method modifies the internal state of the notification builder by associating the
+        provided intent and configuration with the full-screen display of the notification.
 
-        Args:
-            intent (Intent): Intent object from kvdroid.tools.notification that
-                wraps a PendingIntent to launch full-screen.
-            is_pending_intent (bool): True if the intent is high priority and should
-                launch immediately.
-
-        Returns:
-            Notification: Returns self for method chaining.
-
-        Example:
-            >>> from kvdroid.tools.notification.utils import Intent
-            >>> full_screen_intent = Intent()
-            >>> full_screen_intent.set_action("alarm")
-            >>> notification.set_full_screen_intent(full_screen_intent, True)
+        :param pending_intent: The intent to execute when the notification is interacted with in
+            full-screen mode.
+        :param is_pending_intent: A boolean flag that indicates whether the intent is considered
+            pending.
+        :return: The updated instance of the notification builder configuration.
         """
-        self.builder.setFullScreenIntent(intent.get_intent(), is_pending_intent)
+        self.builder.setFullScreenIntent(pending_intent, is_pending_intent)
         return self
 
     def set_group(self, group_key: str):
@@ -952,87 +926,280 @@ class Notification(Builder):
         return self
 
 
-def create_notification(notification_id: int, notification: Notification):
-    """
-    Post a notification to the system notification manager.
+@require_api(">=", 26)
+class NotificationChannel:
+    """Fluent builder for Android notification channels (API 26+).
 
-    This is the recommended way to create and display notifications. It takes a
-    Notification object built using the Notification class's builder methods and
-    posts it to the Android notification manager.
-
-    The notification will appear in the device's notification shade and can include
-    rich content, action buttons, reply functionality, and various customization
-    options configured through the Notification builder.
+    Use this class to configure channel properties via chained setter methods
+    and then register it using ``NotificationManagerCompat.create_notification_channel(channel)``.
 
     Args:
-        notification_id (int): A unique integer identifier for this notification.
-            This ID is used to update or cancel the notification later. Using the
-            same ID will replace an existing notification.
-        notification (Notification): The Notification object to post, created using
-            the Notification class builder pattern.
+        channel_id (str): Unique identifier for the channel. Cannot be changed once created.
+        channel_name (str): Human-readable name shown in system settings.
+        importance (Importance): Importance level controlling visibility and alerting.
 
-    Returns:
-        NotificationManagerCompat: The notification manager instance that posted
-            the notification. Use this to update or cancel notifications:
-            - manager.notify(id, notification) to update
-            - manager.cancel(id) to cancel
+    Common setters:
+        - ``set_group(group_id: str)``
+        - ``set_description(description: str)``
+        - ``set_conversation_id(parent_channel_id: str, conversation_id: int)`` (API 30+)
+        - ``set_light_color(light_color: int)``
+        - ``set_lockscreen_visibility(lock_screen_visibility: int)``
+        - ``set_name(name: str)``
+        - ``set_vibration_effect(vibration_effect: VibrationEffect)`` (API 35+)
+        - ``set_vibration_pattern(vibration_pattern: list[int])``
+        - ``set_sound(sound: int)``
+        - ``set_show_badge(show_badge: bool)``
+        - ``enable_lights(enable_lights: bool)``
+        - ``enable_vibration(enable_vibration: bool)``
 
     Example:
-        >>> from kvdroid.tools.notification.basic import Notification, create_notification
-        >>> from kvdroid.tools import get_resource_identifier
+        >>> from kvdroid.tools.notification.notification import NotificationChannel, NotificationManagerCompat
+        >>> from kvdroid.tools.notification.constants import Importance
         >>>
-        >>> # Build a notification with the builder pattern
-        >>> notification = (
-        ...     Notification("messages")
-        ...     .set_small_icon(get_resource_identifier("ic_notification", "drawable"))
-        ...     .set_content_title("New Message")
-        ...     .set_content_text("You have a new message from John")
-        ...     .set_auto_cancel(True)
+        >>> channel = (
+        ...     NotificationChannel("alerts", "Alerts", Importance.HIGH)
+        ...     .set_description("Important alerts and warnings")
+        ...     .set_show_badge(True)
+        ...     .enable_vibration(True)
         ... )
-        >>>
-        >>> # Post the notification
-        >>> manager = create_notification(1, notification)
-        >>>
-        >>> # Later, update the notification
-        >>> updated_notification = (
-        ...     Notification("messages")
-        ...     .set_small_icon(get_resource_identifier("ic_notification", "drawable"))
-        ...     .set_content_title("Messages")
-        ...     .set_content_text("2 new messages")
-        ... )
-        >>> manager.notify(1, updated_notification.build())
-        >>>
-        >>> # Cancel the notification
-        >>> manager.cancel(1)
-
-    Note:
-        - A notification channel must be created before posting notifications on
-          Android 8.0+ (API 26). Use create_notification_channel() from
-          kvdroid.tools.notification.channel.
-        - The notification_id allows you to manage notifications: use the same ID
-          to update an existing notification or cancel it with manager.cancel(id).
-        - This function is preferred over create_notification_old() for new code
-          as it provides more flexibility and follows modern Android patterns.
+        >>> manager = NotificationManagerCompat()
+        >>> manager.create_notification_channel(channel)
     """
-    notification_manager = getattr(NotificationManagerCompat(), "from")(activity)
-    # notificationId is a unique int for each notification that you must define
-    notification_manager.notify(notification_id, notification.build())
-    return notification_manager
+
+    __slots__ = ("channel",)
+
+    def __init__(self, channel_id: str, channel_name: str, importance: Importance):
+        """Initialize a new Android notification channel wrapper.
+
+        Args:
+            channel_id (str): Unique, immutable identifier for the channel.
+            channel_name (str): Human‑readable name shown in system settings.
+            importance (Importance): Importance level controlling alerting/visibility.
+        """
+        self.channel = NotificationChannelJava(
+            channel_id, channel_name, importance.value
+        )
+
+    def set_group(self, group_id: str):
+        """Assign this channel to a notification group.
+
+        Args:
+            group_id (str): The ID of the previously created `NotificationChannelGroup`.
+
+        Returns:
+            NotificationChannel: This instance for method chaining.
+        """
+        self.channel.setGroup(group_id)
+        return self
+
+    def set_description(self, description: str):
+        """Set the user‑visible description of this channel.
+
+        Args:
+            description (str): Human‑readable description shown in system settings.
+
+        Returns:
+            NotificationChannel: This instance for method chaining.
+        """
+        self.channel.setDescription(description)
+        return self
+
+    @require_api(">=", 30)
+    def set_conversation_id(self, parent_channel_id: str, conversation_id: int):
+        """Associate a conversation with this channel (API 30+).
+
+        Args:
+            parent_channel_id (str): The parent channel ID hosting the conversation.
+            conversation_id (int): App‑defined unique conversation identifier.
+
+        Returns:
+            NotificationChannel: This instance for method chaining.
+        """
+        self.channel.setConversationId(parent_channel_id, conversation_id)
+        return self
+
+    def set_light_color(self, light_color: int):
+        """Set the LED light color for notifications posted to this channel.
+
+        Args:
+            light_color (int): ARGB color integer (e.g., 0xFFFF0000 for red).
+
+        Returns:
+            NotificationChannel: This instance for method chaining.
+        """
+        self.channel.setLightColor(light_color)
+        return self
+
+    def set_lockscreen_visibility(self, lock_screen_visibility: int):
+        """Control how notifications are shown on the lock screen.
+
+        Args:
+            lock_screen_visibility (int): One of `Notification.VISIBILITY_*`.
+
+        Returns:
+            NotificationChannel: This instance for method chaining.
+        """
+        self.channel.setLockscreenVisibility(lock_screen_visibility)
+        return self
+
+    def set_name(self, name: str):
+        """Update the user‑visible name of the channel.
+
+        Args:
+            name (str): New name shown in system settings.
+
+        Returns:
+            NotificationChannel: This instance for method chaining.
+
+        Note:
+            Many channel properties (including name) may not take effect after
+            creation on some Android versions. Users can change these in settings.
+        """
+        self.channel.setName(name)
+        return self
+
+    @require_api(">=", 35)
+    def set_vibration_effect(self, vibration_effect: VibrationEffect):
+        """Set a rich `VibrationEffect` for notifications in this channel (API 35+).
+
+        Args:
+            vibration_effect (VibrationEffect): Instance from `kvdroid.tools.vibration`.
+
+        Returns:
+            NotificationChannel: This instance for method chaining.
+        """
+        self.channel.setVibrationEffect(vibration_effect.get_effect())
+        return self
+
+    def set_vibration_pattern(self, vibration_pattern: list[int]):
+        """Set a custom vibration pattern for the channel.
+
+        Args:
+            vibration_pattern (list[int]): Alternating on/off durations in ms.
+
+        Returns:
+            NotificationChannel: This instance for method chaining.
+        """
+        self.channel.setVibrationPattern(vibration_pattern)
+        return self
+
+    def set_sound(self, sound: int):
+        """Set a custom notification sound resource for this channel.
+
+        Args:
+            sound (int): Android raw resource ID (e.g., from `R.raw`).
+
+        Returns:
+            NotificationChannel: This instance for method chaining.
+        """
+        self.channel.setSound(
+            Uri().parse(f"android.resource://{activity.getPackageName()}/{sound}"),
+            AudioAttributesBuilder()
+            .setContentType(AudioAttributes().CONTENT_TYPE_SONIFICATION)
+            .setUsage(AudioAttributes().USAGE_NOTIFICATION)
+            .build(),
+        )
+        return self
+
+    def set_show_badge(self, show_badge: bool):
+        """Enable or disable app icon badges for this channel.
+
+        Args:
+            show_badge (bool): True to allow badges, False to disable.
+
+        Returns:
+            NotificationChannel: This instance for method chaining.
+        """
+        self.channel.setShowBadge(show_badge)
+        return self
+
+    def enable_lights(self, enable_lights: bool):
+        """Enable or disable notification LED lights for this channel.
+
+        Args:
+            enable_lights (bool): True to enable; False to disable.
+
+        Returns:
+            NotificationChannel: This instance for method chaining.
+        """
+        self.channel.enableLights(enable_lights)
+        return self
+
+    def enable_vibration(self, enable_vibration: bool):
+        """Enable or disable vibration for this channel.
+
+        Args:
+            enable_vibration (bool): True to enable; False to disable.
+
+        Returns:
+            NotificationChannel: This instance for method chaining.
+        """
+        self.channel.enableVibration(enable_vibration)
+        return self
 
 
-def cancel_notification(notification_id: int):
-    """Cancel a notification by ID."""
-    getattr(NotificationManagerCompat(), "from")(activity).cancel(notification_id)
+class NotificationManagerCompat:
+    """
+    A wrapper class for Android's NotificationManagerCompat, providing methods to
+    manage notifications and notification channels across different Android versions.
+    """
+
+    def __init__(self, context=None):
+        """
+        Initialize the notification manager.
+
+        Args:
+            context (Context, optional): The Android context to use. Defaults to the current activity.
+        """
+        self.context = context or activity
+        self.__notification_manager = getattr(_NotificationManagerCompat(), "from")(
+            self.context
+        )
+
+    def notify(self, id: int, notification: Union[Notification, object]):
+        """
+        Post a notification to be shown in the status bar.
+
+        Args:
+            id (int): A unique identifier for this notification.
+            notification (Notification): The Notification object to display, or a built Android Notification object.
+        """
+        if hasattr(notification, "build"):
+            notification = notification.build()
+        self.__notification_manager.notify(id, notification)
+
+    def cancel(self, id: int):
+        """
+        Cancel a previously shown notification.
+
+        Args:
+            id (int): The identifier of the notification to cancel.
+        """
+        self.__notification_manager.cancel(id)
+
+    def cancel_all(self):
+        """
+        Cancel all previously shown notifications.
+        """
+        self.__notification_manager.cancelAll()
+
+    def create_notification_channel(self, channel: NotificationChannel):
+        """
+        Create a notification channel.
+
+        Args:
+            channel (NotificationChannel): The NotificationChannel object to create.
+        """
+        self.__notification_manager.createNotificationChannel(channel.channel)
 
 
 def get_notification_reply_text(intent, key_text_reply):
     """
     Extracts user text input from a notification reply action.
 
-    When a notification includes an inline reply action (using key_text_reply and reply_title
-    in create_notification), users can type a response directly in the notification. This
-    function retrieves that text input from the intent received when the reply action is
-    triggered.
+    When a notification includes an inline reply action, users can type a response directly
+    in the notification. This function retrieves that text input from the intent received
+    when the reply action is triggered.
 
     This is commonly used in messaging apps to allow users to respond to messages without
     opening the app. The reply text is extracted from the RemoteInput results attached to
@@ -1046,7 +1213,6 @@ def get_notification_reply_text(intent, key_text_reply):
             user's text input.
         key_text_reply (str):
             The unique key that was used when creating the notification's reply action.
-            This must match the key_text_reply parameter passed to create_notification().
             It's used to identify and retrieve the specific text input from the RemoteInput
             results.
 
@@ -1057,7 +1223,7 @@ def get_notification_reply_text(intent, key_text_reply):
             key is not found in the results.
 
     Example:
-        >>> from kvdroid.tools.notification.basic import get_notification_reply_text
+        >>> from kvdroid.tools.notification.notification import get_notification_reply_text
         >>> # In your activity or broadcast receiver, when reply action is triggered:
         >>> def on_notification_action(intent):
         ...     reply_text = get_notification_reply_text(intent, "reply_key")
@@ -1069,7 +1235,7 @@ def get_notification_reply_text(intent, key_text_reply):
 
     Note:
         - This function should be called when handling notification action intents
-        - The key_text_reply must match exactly with the one used in create_notification
+        - The key_text_reply must match exactly with the one used when building the notification
         - Returns None if the intent doesn't contain RemoteInput results (e.g., if the
           user tapped a regular action button instead of using the reply field)
     """

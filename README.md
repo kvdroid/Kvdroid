@@ -1,4 +1,4 @@
-from kvdroid.tools.notification.constants import PendingIntentFlagKvDroid
+kvdroid
 =========
 
 <!-- GitAds-Verify: FQNUQIK3LDGRA8V91UOY1X8PFDSEBSNR -->
@@ -50,8 +50,7 @@ requirement = https://github.com/kvdroid/Kvdroid/archive/refs/heads/master.zip
 **Step 1: Create a notification channel (required for Android 8.0+)**
 
 ```python
-from kvdroid.tools.notification.channel import NotificationChannel, create_notification_channel
-from kvdroid.tools.notification.constants import Importance
+from kvdroid.tools.notification import NotificationChannel, NotificationManagerCompat, Importance
 
 # Create and configure a notification channel using the builder pattern
 channel = (
@@ -64,13 +63,14 @@ channel = (
 )
 
 # Register the channel with the system
-create_notification_channel(channel)
+n_manager = NotificationManagerCompat()
+n_manager.create_notification_channel(channel)
 ```
 
 **Step 2: Create and send notifications using the new builder API**
 
 ```python
-from kvdroid.tools.notification.basic import Notification, create_notification
+from kvdroid.tools.notification import Notification, NotificationManagerCompat
 from kvdroid.tools import get_resource_identifier
 
 # Build a simple notification using method chaining
@@ -83,7 +83,8 @@ notification = (
 )
 
 # Post the notification
-manager = create_notification(1, notification)
+manager = NotificationManagerCompat()
+manager.notify(1, notification)
 
 # To cancel a notification later:
 # manager.cancel(1)
@@ -92,9 +93,7 @@ manager = create_notification(1, notification)
 **Advanced: Notification with actions and intents**
 
 ```python
-from kvdroid.tools.notification.basic import Notification, create_notification
-from kvdroid.tools.notification.utils import Intent, PendingIntent
-from kvdroid.tools.notification.constants import PendingIntentFlag, Priority
+from kvdroid.tools.notification import Notification, NotificationManagerCompat, Intent, PendingIntent, PendingIntentFlag, Priority
 from kvdroid.tools import get_resource_identifier
 from kvdroid import get_android_sdk_int
 from android import python_act  # noqa
@@ -133,7 +132,8 @@ notification = (
 )
 
 # Post the notification
-manager = create_notification(1, notification)
+manager = NotificationManagerCompat()
+manager.notify(1, notification)
 ```
 
 **Available notification builder methods:**
