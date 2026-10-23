@@ -10,7 +10,6 @@ from kvdroid.jclass.android import (
     BitmapDrawable,
 )
 from kvdroid.jclass.androidx.core.content.res import ResourcesCompat
-from kvdroid.jclass.java import InputStream
 from kvdroid.jclass.java import FileOutputStream
 from kvdroid import activity
 from kvdroid.jclass.android import BitmapFactory
@@ -55,3 +54,36 @@ def bitmap_to_drawable(bitmap):
 def get_drawable(resource_id):
     res = activity.getResources()
     return ResourcesCompat().getDrawable(res, resource_id, None)
+
+
+def compress_image(path_or_bitmap, quality=100, compress_format="jpeg"):
+    if isinstance(path_or_bitmap, str):
+        bitmap = get_bitmap(path_or_bitmap)
+    else:
+        bitmap = path_or_bitmap
+    baos = ByteArrayOutputStream(instantiate=True)
+    if compress_format == "jpeg":
+        bitmap.compress(BitmapCompressFormat().JPEG, quality, baos)
+    else:
+        bitmap.compress(BitmapCompressFormat().PNG, quality, baos)
+    byte_array = baos.toByteArray()
+    return byte_array, BitmapFactory().decodeByteArray(byte_array, 0, len(byte_array))
+
+
+def create_scaled_bitmap(path_or_bitmap, target_size):
+    if isinstance(path_or_bitmap, str):
+        bitmap = get_bitmap(path_or_bitmap)
+    else:
+        bitmap = path_or_bitmap
+
+    width = bitmap.getWidth()
+    height = bitmap.getHeight()
+
+    if width <= target_size >= height:
+        return bitmap
+
+    scale = target_size / max(height, width)
+    new_width = width * scale
+    new_height = height * scale
+
+    return Bitmap().createScaledBitmap(bitmap, new_width, new_height, True)
