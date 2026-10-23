@@ -1,20 +1,44 @@
-[tool.poetry]
+[project]
 name = "kvdroid"
-version = "0.7.0"
-description ="A re-implementation of android java API in python with easy access to some Android functionalitylike Notification,Reading of Contacts, accessing Webview Cookies, etc..."
-authors = ["Yunus Ceyhan <yunus.ceyhn@gmail.com>", "Kenechukwu Akubue <kengoon19@gmail.com>"]
+version = "0.7.2"
+description = "A re-implementation of android java API in python with easy access to some Android functionalitylike Notification,Reading of Contacts, accessing Webview Cookies, etc..."
+authors = [
+    { name = "Yunus Ceyhan", email = "yunus.ceyhn@gmail.com" },
+    { name = "Kenechukwu Akubue", email = "kengoon19@gmail.com" },
+]
+requires-python = ">=3.9,<4"
 readme = "README.md"
-keywords = ['Android', 'Androidx', 'Python', 'Kivy', 'KivyMD', 'KvDroid']
 license = "MIT"
+keywords = [
+    "Android",
+    "Androidx",
+    "Python",
+    "Kivy",
+    "KivyMD",
+    "KvDroid",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = ["pyjnius>=1.7.0,<2"]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-pyjnius = "^1.7.0"
+[dependency-groups]
+dev = [
+    "setuptools>=78.1.1",
+]
 
+[tool.uv]
+default-groups = "all"
 
-[tool.poetry.group.dev.dependencies]
-setuptools = "^77.0.3"
+[tool.uv.build-backend]
+module-root = ""
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.9.18,<0.10.0"]
+build-backend = "uv_build"

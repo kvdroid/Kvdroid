@@ -1,4 +1,5 @@
 from kvdroid.jclass.java import ByteBuffer
+from kvdroid.jclass.android import Bitmap, BitmapConfig
 
 
 def bitmap_to_texture(bitmap):
@@ -24,3 +25,12 @@ def bitmap_to_texture(bitmap):
     texture.blit_buffer(buffer_bytes, colorfmt='rgba', bufferfmt='ubyte')
     texture.flip_vertical()  # Flip the texture vertically to match Kivy's coordinate system
     return texture
+
+
+def texture_to_bitmap(texture):
+    width, height = texture.size
+    pixels = texture.pixels
+    bitmap = Bitmap().createBitmap(width, height, BitmapConfig().ARGB_8888)
+    buffer = ByteBuffer().wrap(pixels)
+    bitmap.copyPixelsFromBuffer(buffer)
+    return bitmap

@@ -3,8 +3,8 @@ from typing import Union
 from kvdroid.cast import cast_object
 from kvdroid.jclass.android import (
     Bitmap,
-    CompressFormat,
-    Config,
+    BitmapCompressFormat,
+    BitmapConfig,
     Canvas,
     AdaptiveIconDrawable,
     BitmapDrawable,
@@ -29,12 +29,12 @@ def save_drawable(drawable, path, name):
     if drawable.isFilterBitmap():
         bitmap = drawable.getBitmap()
     else:
-        bitmap = Bitmap().createBitmap(width, height, Config().ARGB_8888)
+        bitmap = Bitmap().createBitmap(width, height, BitmapConfig().ARGB_8888)
         canvas = Canvas(bitmap)
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
         drawable.draw(canvas)
     out = FileOutputStream(path + name + ".png")
-    bitmap.compress(CompressFormat().PNG, 90, out)
+    bitmap.compress(BitmapCompressFormat().PNG, 90, out)
     return path + name + ".png"
 
 
